@@ -1,0 +1,129 @@
+<template>
+    
+    <div
+        class="d-flex fill-height"
+    >
+        <!-- Section Gauche -->
+        <div 
+            class="w-100 d-none d-sm-none d-md-flex bg-img"
+        >
+
+        </div>
+
+        <!-- Section Droite -->
+        <div
+            class="w-100 d-flex flex-column align-center justify-center"
+        >
+            <v-card 
+                class="px-6 py-8 w-100 bg-background"
+                max-width="450"
+                variant="flat"
+            >
+                <div 
+                    class="w-100 d-flex justify-center"
+                >
+                    <img class="w-25" src="~/assets/img/Notary.png" alt="">
+                </div>
+
+                <v-card-title 
+                    class="text-center font-weight-bold text-h5"
+                >
+                    Connexion
+                </v-card-title>
+
+                <v-form
+                    v-model="form"
+                    @submit.prevent="onSubmit"
+                >
+                    <v-text-field
+                        v-model="email"
+                        :readonly="loading"
+                        :rules="[required]"
+                        color="primary"
+                        label="Email"
+                        placeholder="Entrer votre email"
+                        variant="outlined"
+                        clearable
+                        class="mb-2"
+                    ></v-text-field>
+                    <v-text-field
+                        v-model="password"
+                        :readonly="loading"
+                        :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                        :rules="[required]"
+                        :type="show ? 'text' : 'password'"
+                        color="primary"
+                        label="Mot de passe"
+                        placeholder="Entrer votre mot de passe"
+                        variant="outlined"
+                        clearable
+                        @click:append-inner="show = !show"
+                    ></v-text-field>
+
+                    <br>
+
+                    <v-btn
+                        :disabled="!form"
+                        :loading="loading"
+                        color="primary"
+                        size="large"
+                        type="submit"
+                        variant="elevated"
+                        class="text-none"
+                        block
+                    >
+                        Se connecter
+                    </v-btn>
+                </v-form>
+            </v-card>
+        </div>
+    </div>
+    
+</template>
+
+<script setup>
+
+    const form = ref(false);
+    const email = ref(null);
+    const password = ref(null);
+    const loading = ref(false);
+    const show = ref(false);
+
+    const router = useRouter();
+
+    const onSubmit =  () => {
+
+        if (!form.value) return
+
+        loading.value = true
+
+        setTimeout(() => (loading.value = false), 2000)
+
+        router.push("/dashboard")
+
+    };
+
+    const required = (v) => {
+        return !!v || 'Field is required'
+    };
+
+    definePageMeta({
+        layout: ''
+    })
+
+</script>
+
+<style scoped>
+    .bg-img {
+        /*background: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));*/
+        background-image: url('~/assets/img/bck_img.jpg');
+        background-size: cover;
+        background-position: center;
+        /* height: 100vh; */
+        /* display: flex; */
+        /* justify-content: center;
+        align-items: center; */
+        
+    }
+    
+</style>
