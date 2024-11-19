@@ -46,6 +46,7 @@
                         clearable
                         class="mb-2"
                     ></v-text-field>
+                    
                     <v-text-field
                         v-model="password"
                         :readonly="loading"
@@ -99,7 +100,7 @@
 
         setTimeout(() => (loading.value = false), 2000)
 
-        router.push("/dashboard")
+        router.push("/home")
 
     };
 
