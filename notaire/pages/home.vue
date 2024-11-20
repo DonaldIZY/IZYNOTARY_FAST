@@ -16,7 +16,7 @@
                 >
                     <v-card
                         class="mx-auto rounded-xl"
-                        to="/procedureManagement"
+                        to="/proceduresManagement"
                     >
                         <v-img
                             src="~/assets/img/gest_proc.png"
@@ -31,13 +31,12 @@
                     </v-card>
                 </V-col>
                 
-
                 <v-col
                     cols="4"
                 >
                     <v-card
                         class="mx-auto rounded-xl"
-                        link
+                        to="/customersManagement"
                     >
                         <v-img
                             src="~/assets/img/gest_cli.png"
@@ -57,7 +56,7 @@
                 >
                     <v-card
                         class="mx-auto rounded-xl"
-                        link
+                        to="/dashboard"
                     >
                         <v-img
                             src="~/assets/img/tab_bord.png"
@@ -77,7 +76,7 @@
                 >
                     <v-card
                         class="mx-auto rounded-xl"
-                        link
+                        to="/settings"
                     >
                         <v-img
                             src="~/assets/img/param.png"
@@ -97,7 +96,7 @@
                 >
                     <v-card
                         class="mx-auto rounded-xl"
-                        link
+                        to="/administration"
                     >
                         <v-img
                             src="~/assets/img/admin.png"
