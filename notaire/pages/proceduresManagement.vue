@@ -1,7 +1,6 @@
 <template>
-    <div class="d-flex align-center ga-4 ma-4" >
-        <v-icon icon="mdi-arrow-left" size="36" />
-        <h2>Gestion des procédures</h2>
+    <div class="ma-4" >
+        <back-button title="Gestion des procédures" goBackTo="/home"/>
     </div>
 
     <div class="ma-4">
@@ -15,6 +14,7 @@
                 <v-btn
                     color="primary"
                     class="text-none"
+                    to="/addProcedure"
                 >
                     Créer une procédure
                 </v-btn>
@@ -40,12 +40,23 @@
                                 <v-btn
                                     variant="text"
                                     @click="showDetails(item)"
-                                    color="primary"
+                                    color="primary text-none"
                                 >
                                     
-                                    voir
+                                    Voir
                                 </v-btn>
                         </template>
+
+                        <template v-slot:item.STATUS="{ item }">
+                            <v-chip
+                                :color="item.STATUS == 'Terminée' ? '#63AD19' : item.STATUS == 'En cours' ? '#FFC300' : '#AD1919'"
+                                :text="item.STATUS"
+                                size="small"
+                                variant="flat"
+                                label
+                            ></v-chip>
+                        </template>
+
                     </v-data-table>
                 </v-sheet>
                 
@@ -175,12 +186,12 @@
 
 <script setup>
     const proceduresHeaders = ref([
-        { align: "center", key: "NUM", title: "N°" },
-        { align: "center", key: "CUSTOMER", title: "Client" },
-        { align: "center", key: "PROCEDURE_TYPE", title: "Type de procédure" },
-        { align: "center", key: "CREATE_BY", title: "Créée par" },
-        { align: "center", key: "CREATE_AT", title: "Date de création" },
-        { align: "center", key: "STEP", title: "Étape" },
+        { align: "start", key: "NUM", title: "N°" },
+        { align: "start", key: "CUSTOMER", title: "Client" },
+        { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
+        { align: "start", key: "CREATE_BY", title: "Créée par" },
+        { align: "start", key: "CREATE_AT", title: "Date de création" },
+        { align: "start", key: "STEP", title: "Étape" },
         { align: "center", key: "STATUS", title: "Statut" },
         { align: "center", key: "DETAILS", title: "Détails" },
     ]);
@@ -193,7 +204,7 @@
             CREATE_BY: "User 1",
             CREATE_AT: "2022-01-01",
             STEP: "Step 1",
-            STATUS: "Status 1",
+            STATUS: "Terminée",
         },
         {
             NUM: 2,
@@ -202,7 +213,7 @@
             CREATE_BY: "User 2",
             CREATE_AT: "2022-02-01",
             STEP: "Step 2",
-            STATUS: "Status 2",
+            STATUS: "Arrêtée",
         },
         {
             NUM: 3,
@@ -211,7 +222,7 @@
             CREATE_BY: "User 2",
             CREATE_AT: "2022-02-01",
             STEP: "Step 2",
-            STATUS: "Status 2",
+            STATUS: "En cours",
         },
         //...
     ]);
