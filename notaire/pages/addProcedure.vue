@@ -28,7 +28,7 @@
                 <v-col cols="4">
                     <v-card
                         class="mx-auto rounded-xl"
-                        to=""
+                        to="/companyFormation"
                     >
                         <v-img
                             src="~/assets/img/constSoc.png"
@@ -46,7 +46,7 @@
                 <v-col cols="4">
                     <v-card
                         class="mx-auto rounded-xl"
-                        to=""
+                        to="/modificationCompany"
                     >
                         <v-img
                             src="~/assets/img/modifSoc.png"
@@ -74,7 +74,7 @@
                         ></v-img>
 
                         <v-card-title class="my-3 text-center">
-                            Gestion des procédures
+                            Crédit
                         </v-card-title>
                     </v-card>
                 </v-col>
@@ -82,7 +82,7 @@
                 <v-col cols="4">
                     <v-card
                         class="mx-auto rounded-xl"
-                        to=""
+                        to="/transferOfMovableProperty"
                     >
                         <v-img
                             src="~/assets/img/succBienMob.png"
@@ -100,7 +100,7 @@
                 <v-col cols="4">
                     <v-card
                         class="mx-auto rounded-xl"
-                        to=""
+                        to="transferOfRealEstate"
                     >
                         <v-img
                             src="~/assets/img/succBienImmob.png"
