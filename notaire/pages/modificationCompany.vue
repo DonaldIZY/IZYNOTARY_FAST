@@ -1,6 +1,6 @@
 <template>
     <div class="ma-4" >
-        <back-button title="Procédure de vente" goBackTo="/addProcedure"/>
+        <back-button title="Procédure de modification de société" goBackTo="/addProcedure"/>
     </div>
 
     <div class="ma-4">
@@ -27,7 +27,8 @@
                                     ></v-select>
                                 </v-form>
                                 <v-divider>ou</v-divider>
-                                <v-btn color="primary" class="text-none align-self-center mt-5">Créer le client</v-btn>
+                                <v-btn color="primary" class="text-none align-self-center mt-5" @click="toggleModal">Créer le client</v-btn>
+                                <create-customer-modal :open="open" @update:open="open = $event" />
                             </div>
                             
                         </v-sheet>
@@ -112,80 +113,6 @@
                         </v-sheet>
                     </v-col>
                 </v-row>
-                <v-row>
-                    <v-col cols="12">
-                        <v-sheet 
-                            :elevation="4" 
-                            rounded
-                            height="100%"
-                            class="pa-4"
-                        >
-                            <h4 class="mb-3">Informations du vendeur</h4>
-                            <v-row>
-                                <v-col cols="4">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Nom"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Situation matrimoniale"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                </v-col>
-
-                                <v-col cols="4">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Prénoms"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Numéro de la CNI"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-file-input 
-                                                label="Ajouter une image de la CNI"
-                                                prepend-icon="mdi-id-card"
-                                                variant="outlined"
-                                            ></v-file-input>
-                                        </v-col>
-                                    </v-row>
-                                </v-col>
-
-                                <v-col cols="4">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-select
-                                                label="Sexe"
-                                                :items="['Homme', 'Femme']"
-                                                variant="outlined"
-                                            ></v-select>
-                                        </v-col>
-                                    </v-row>
-                                </v-col>
-                            </v-row>
-                        </v-sheet>
-                    </v-col>
-                </v-row>
               </v-col>
               <v-col
                 cols="6"
@@ -207,10 +134,9 @@
                             
                             <v-text-field
                                 color="primary"
-                                label="CNI du vendeur"
+                                label="CNI du client"
                                 variant="outlined"
                                 hide-details
-                                
                             ></v-text-field>
                             <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
                         
@@ -220,22 +146,8 @@
                             class="d-flex align-center"
                         >
                             
-                            <v-text-field
-                                color="primary"
-                                label="CNI du conjoint"
-                                variant="outlined"
-                                hide-details
-                            ></v-text-field>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                            
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            class="d-flex align-center"
-                        >
-                            
                             <p>
-                                Extrait d'acte de naissance (ou de mariage si le vendeur est marié)
+                                RCCM
                             </p>
                             <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
                              
@@ -246,7 +158,7 @@
                         >
                             
                             <p>
-                                Facture de CIE ou SODECI
+                                Statut
                             </p>
                             <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
                             
@@ -257,44 +169,10 @@
                         >
                             
                             <p>
-                                Attestation de situation fiscale
+                                DNSV
                             </p>
                             <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
                              
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            class="d-flex align-center"
-                        >
-                            
-                            <p>
-                                Titre de propriété (copie du titre foncier, ACD ...)
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                             
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            class="d-flex align-center"
-                        >
-                            
-                            <p>
-                                État foncier
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                             
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            class="d-flex align-center "
-                        >
-                            
-                            <p>
-                                Certificat de localisation
-                            </p>
-                            
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-
                         </v-col>
                     </v-row>    
                         
@@ -306,5 +184,11 @@
 </template>
 
 <script setup>
+
+    const open = ref(false);
+
+    const toggleModal = () => {
+        open.value = !open.value;
+    };
 
 </script>

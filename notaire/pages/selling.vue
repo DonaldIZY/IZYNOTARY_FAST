@@ -27,7 +27,8 @@
                                     ></v-select>
                                 </v-form>
                                 <v-divider>ou</v-divider>
-                                <v-btn color="primary" class="text-none align-self-center mt-5">Créer le client</v-btn>
+                                <v-btn color="primary" class="text-none align-self-center mt-5" @click="toggleModal">Créer le client</v-btn>
+                                <create-customer-modal :open="open" @update:open="open = $event" />
                             </div>
                             
                         </v-sheet>
@@ -306,5 +307,10 @@
 </template>
 
 <script setup>
+    const open = ref(false);
+
+    const toggleModal = () => {
+        open.value = !open.value;
+    };
 
 </script>
