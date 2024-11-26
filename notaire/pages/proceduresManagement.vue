@@ -34,8 +34,10 @@
                     <v-data-table
                         :headers="proceduresHeaders"
                         :items="filteredProcedures"
+                        hover
                         item-value="NUM"
                     >
+                        
                         <template v-slot:item.DETAILS="{ item }">
                                 <v-btn
                                     variant="text"
