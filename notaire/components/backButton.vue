@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex align-center ga-4 " >
-        <v-icon icon="mdi-arrow-left" size="36" @click="goBack"/>
+        <v-icon icon="mdi-arrow-left" size="24" @click="goBack"/>
         <h2>{{ title }}</h2>
     </div>
 </template>

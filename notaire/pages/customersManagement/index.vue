@@ -4,8 +4,10 @@
     </div>
     <div class="ma-4">
 
-        <div class="d-flex justify-end align-center ga-4">
-            <v-btn color="primary" prependIcon="mdi-plus" class="text-none"> Ajouter un client</v-btn>
+        <div class="d-flex align-center ga-4">
+            <v-btn color="primary" prependIcon="mdi-plus" class="text-none" @click="toggleModal"> Ajouter un client</v-btn>
+            <create-customer-modal :open="open" @update:open="open = $event" />
+
             <v-text-field
                 color="primary"
                 v-model="customersSearch"
@@ -17,14 +19,30 @@
             ></v-text-field>
         </div>
         
-
-        <v-data-table
-            :headers="customersHeaders"
-            :items="customers"
-            :search="customersSearch"
-            hover
-        >
-        </v-data-table>
+        <div class="mt-4">
+            <v-data-table
+                :headers="customersHeaders"
+                :items="customers"
+                :search="customersSearch"
+                hover
+                item-value="ID"
+            >
+            <template #item="{ item }">
+                <tr @click="goToCustomerDetails(item)">
+                    <td>{{ item.LAST_NAME }}</td>
+                    <td>{{ item.FIRST_NAME }}</td>
+                    <td>{{ item.EMAIL }}</td>
+                    <td>{{ item.CONTACT }}</td>
+                    <td>{{ item.CURRENT_FILES }}</td>
+                    <td>{{ item.COMPLETED_FILES }}</td>
+                    <td>{{ item.HANGING_FILES }}</td>
+                    <td>{{ item.CLOSED_FILES }}</td>
+                    <td>{{ item.FILES }}</td>
+                </tr>
+            </template>
+            </v-data-table>
+        </div>
+        
     </div>
 </template>
 
@@ -43,17 +61,19 @@
 
     const customers = ref([
         {
+            ID: 1,
             LAST_NAME: "Smith",
             FIRST_NAME: "John",
             EMAIL: "john.smith@example.com",
             CONTACT: "0123456789",
-            CURRENT_FILES: 5,
+            CURRENT_FILES: 6,
             COMPLETED_FILES: 3,
             HANGING_FILES: 2,
             CLOSED_FILES: 1,
             FILES: 12,
         },
         {
+            ID: 2,
             LAST_NAME: "Johnson",
             FIRST_NAME: "Jane",
             EMAIL: "jane.johnson@example.com",
@@ -65,6 +85,7 @@
             FILES: 15,
         },
         {
+            ID: 3,
             LAST_NAME: "Doe",
             FIRST_NAME: "Michael",
             EMAIL: "michael.doe@example.com",
@@ -78,4 +99,16 @@
     ]);
 
     const customersSearch = ref(null);
+
+    const open = ref(false);
+
+    const toggleModal = () => {
+        open.value = !open.value;
+    };
+
+    const router = useRouter();
+
+    const goToCustomerDetails = (customer) => {
+        router.push(`/customersManagement/${customer.ID}`);
+    };
 </script>

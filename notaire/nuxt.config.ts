@@ -23,4 +23,7 @@ export default defineNuxtConfig({
       },
     },
   },
+  devServer: {
+    port: 2610, // Remplacez 3001 par le port que vous souhaitez utiliser
+  }
 })
