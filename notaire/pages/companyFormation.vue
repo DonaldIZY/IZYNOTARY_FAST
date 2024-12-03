@@ -202,6 +202,16 @@
               </v-col>
         </v-row>
     </div>
+
+    <div class="ma-4 d-flex justify-end">
+        <v-btn
+            color="primary"
+            class="text-none"
+        >
+            Enregistrer la procédure
+        </v-btn>
+    </div>
+    
 </template>
 
 <script setup>

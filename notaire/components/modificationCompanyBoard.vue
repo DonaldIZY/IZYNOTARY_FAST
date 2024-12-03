@@ -1,18 +1,9 @@
 <template>
-    <!-- <v-text-field
-        color="primary"
-        v-model="sellingsSearch"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        variant="outlined"
-        hide-details
-        single-line
-    ></v-text-field> -->
     <v-data-table
         :headers="headers"
-        :items="sellings"
-        :search="sellingsSearch"
-        no-data-text="Aucune procédure de vente."
+        :items="modificationCompanys"
+        :search="modificationCompanysSearch"
+        no-data-text="Aucune procédure de modification de société."
         hover
     >
     </v-data-table>
@@ -27,10 +18,10 @@
             title: "Niveau d'avancement",
             children: [
                 { align: "start", key: "SUPPLY_OF_PARTS", title: "Fourniture des pièces" },
-                { align: "start", key: "WRITING_DEED_OF_SALE", title: "Rédaction de l'acte de vente" },
+                { align: "start", key: "DRAFTING_OF_STATUTES", title: "Rédaction des statuts" },
                 { align: "start", key: "SETTLEMENT_OF_FEES", title: "Règlement des frais" },
-                { align: "start", key: "SIGNATURE_DEED_OF_SALE", title: "Signature de l'acte de vente" },
-                { align: "start", key: "SIGNED_DOCUMENT_DEPOSITED", title: "Dépôt de l'acte signé" },
+                { align: "start", key: "SIGNATURE_OF_ACTS", title: "Signature des actes" },
+                { align: "start", key: "SIGNED_DOCUMENT_DEPOSITED", title: "Dépôt des actes signés" },
                 { align: "start", key: "DELIVERABLES", title: "Livrables" },
             ]
         },

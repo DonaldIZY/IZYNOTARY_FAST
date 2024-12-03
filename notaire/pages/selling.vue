@@ -297,20 +297,35 @@
                             <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
 
                         </v-col>
-                    </v-row>    
-                        
+                    </v-row>
                         
                 </v-sheet>
               </v-col>
         </v-row>
     </div>
+
+    <div class="ma-4 d-flex justify-end">
+        <v-btn
+            color="primary"
+            class="text-none"
+        >
+            Enregistrer la procédure
+        </v-btn>
+    </div>
+    
+    
 </template>
 
 <script setup>
     const open = ref(false);
+    const openAddProcedure = ref(false);
 
     const toggleModal = () => {
         open.value = !open.value;
+    };
+
+    const toggleAddProcedureModal = () => {
+        openAddProcedure.value =!openAddProcedure.value;
     };
 
 </script>

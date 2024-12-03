@@ -1,18 +1,9 @@
 <template>
-    <!-- <v-text-field
-        color="primary"
-        v-model="sellingsSearch"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        variant="outlined"
-        hide-details
-        single-line
-    ></v-text-field> -->
     <v-data-table
         :headers="headers"
-        :items="sellings"
-        :search="sellingsSearch"
-        no-data-text="Aucune procédure de vente."
+        :items="transferOfRealEstates"
+        :search="transferOfRealEstatesSearch"
+        no-data-text="Aucune procédure de succession de biens immobiliers."
         hover
     >
     </v-data-table>
@@ -27,10 +18,11 @@
             title: "Niveau d'avancement",
             children: [
                 { align: "start", key: "SUPPLY_OF_PARTS", title: "Fourniture des pièces" },
-                { align: "start", key: "WRITING_DEED_OF_SALE", title: "Rédaction de l'acte de vente" },
                 { align: "start", key: "SETTLEMENT_OF_FEES", title: "Règlement des frais" },
-                { align: "start", key: "SIGNATURE_DEED_OF_SALE", title: "Signature de l'acte de vente" },
-                { align: "start", key: "SIGNED_DOCUMENT_DEPOSITED", title: "Dépôt de l'acte signé" },
+                { align: "start", key: "VALUATION_OF_INDIVIDUAL_PROPERTIES", title: "Évaluation des différents biens immobiliers" },
+                { align: "start", key: "DECLARATION_OF_ESTATE", title: "Déclaration de la succession" },
+                { align: "start", key: "PREPARATION_OF_REAL_ESTATE_CERTIFICATE", title: "Établissement de l'attestation immobilière" },
+                { align: "start", key: "DEPOSIT_OF_REAL_ESTATE_CERTIFICATE", title: "Dépôt de l'attestation immobilière" },
                 { align: "start", key: "DELIVERABLES", title: "Livrables" },
             ]
         },

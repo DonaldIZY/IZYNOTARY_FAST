@@ -5,7 +5,7 @@
     
     <div class="ma-4 d-flex flex-column align-center ga-10" v-if="customer">
         <v-card
-            class="w-50"
+            class="w-100 w-lg-75 w-xl-50"
         >
             <v-card-text>
                 <v-row>
@@ -84,14 +84,14 @@
             </v-btn>
         </v-btn-toggle>
 
-        <selling-board></selling-board>
-        
-        <div><strong>Dossiers en cours :</strong> {{ customer.CURRENT_FILES }}</div>
-        <div><strong>Dossiers terminés :</strong> {{ customer.COMPLETED_FILES }}</div>
-        <div><strong>Dossiers suspendus :</strong> {{ customer.HANGING_FILES }}</div>
-        <div><strong>Dossiers arrêtés :</strong> {{ customer.CLOSED_FILES }}</div>
-        <div><strong>Total des dossiers :</strong> {{ customer.FILES }}</div>
+        <selling-board v-if="text=='selling'"></selling-board>
+        <company-formation-board v-else-if="text=='companyFormation'"></company-formation-board>
+        <modification-company-board v-else-if="text=='modificationCompany'"></modification-company-board>
+        <transfer-of-movable-property-board v-else-if="text=='transferOfMovableProperty'"></transfer-of-movable-property-board>
+        <transfer-of-real-estate-board v-else-if="text=='transferOfRealEstate'"></transfer-of-real-estate-board>
+
     </div>
+    
     <div v-else class="mt-4">
         <v-alert type="error">Client non trouvé</v-alert>
     </div>
