@@ -8,7 +8,6 @@
         <v-card
           prepend-icon="mdi-handshake"
           title="Créer un client"
-          
         >
           <v-card-text >
             <v-row dense>

@@ -162,13 +162,6 @@
                                                 hide-details
                                             ></v-text-field>
                                         </v-col>
-                                        <v-col cols="12">
-                                            <v-file-input 
-                                                label="Ajouter une image de la CNI"
-                                                prepend-icon="mdi-id-card"
-                                                variant="outlined"
-                                            ></v-file-input>
-                                        </v-col>
                                     </v-row>
                                 </v-col>
 
@@ -200,46 +193,24 @@
                 >
                     <h4 class="mb-3">Documents requis pour la vente</h4>
                     <v-row>
-                        <v-col
-                            cols="12"
-                            class="d-flex align-center "
 
+                        <v-col
+                            cols="12"
                         >
                             
-                            <v-text-field
-                                color="primary"
-                                label="CNI du vendeur"
-                                variant="outlined"
-                                hide-details
-                                
-                            ></v-text-field>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                        
+                            <required-document label="CNI du vendeur"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <v-text-field
-                                color="primary"
-                                label="CNI du conjoint"
-                                variant="outlined"
-                                hide-details
-                            ></v-text-field>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                            
+                            <required-document label="CNI du conjoint"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <p>
-                                Extrait d'acte de naissance (ou de mariage si le vendeur est marié)
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                             
+                            <required-document label="Extrait d'acte de naissance ou de mariage"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
@@ -317,15 +288,11 @@
 </template>
 
 <script setup>
+
     const open = ref(false);
-    const openAddProcedure = ref(false);
 
     const toggleModal = () => {
         open.value = !open.value;
-    };
-
-    const toggleAddProcedureModal = () => {
-        openAddProcedure.value =!openAddProcedure.value;
     };
 
 </script>
