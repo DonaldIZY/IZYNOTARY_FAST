@@ -6,10 +6,14 @@
     <div class="ma-4">
         <v-row>
             <v-col
-                cols="6"
+                cols="12"
+                lg="6"
             >
                 <v-row>
-                    <v-col cols="4">
+                    <v-col 
+                        cols="12"
+                        sm="4"
+                    >
                         <v-sheet 
                             :elevation="4" 
                             rounded
@@ -24,17 +28,21 @@
                                         label="Selectionner un client"
                                         :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
                                         variant="outlined"
+                                        hide-details=""
                                     ></v-select>
                                 </v-form>
-                                <v-divider>ou</v-divider>
-                                <v-btn color="primary" class="text-none align-self-center mt-5" @click="toggleModal">Créer le client</v-btn>
+                                <v-divider class="my-5">ou</v-divider>
+                                <v-btn color="primary" class="text-none align-self-center" @click="toggleModal">Créer le client</v-btn>
                                 <create-customer-modal :open="open" @update:open="open = $event" />
                             </div>
                             
                         </v-sheet>
                     </v-col>
 
-                    <v-col cols="8">
+                    <v-col 
+                        cols="12"
+                        sm="8"
+                    >
                         <v-sheet 
                             :elevation="4" 
                             rounded
@@ -43,7 +51,7 @@
                         >
                             <h4 class="mb-3">Aperçu informations du client</h4>
                             <v-form
-                                v-model="form"
+                                
                             >
                                 <v-row>
 
@@ -123,68 +131,72 @@
                         >
                             <h4 class="mb-3">Informations du vendeur</h4>
                             <v-row>
-                                <v-col cols="4">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Nom"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Situation matrimoniale"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                </v-col>
 
-                                <v-col cols="4">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Prénoms"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                color="primary"
-                                                label="Numéro de la CNI"
-                                                variant="outlined"
-                                                hide-details
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
+                                <v-col 
+                                    cols="12"
+                                    sm="4"
+                                >
+                                    <v-text-field
+                                        color="primary"
+                                        label="Nom"
+                                        variant="outlined"
+                                        hide-details
+                                    ></v-text-field>
                                 </v-col>
-
-                                <v-col cols="4">
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-select
-                                                label="Sexe"
-                                                :items="['Homme', 'Femme']"
-                                                variant="outlined"
-                                            ></v-select>
-                                        </v-col>
-                                    </v-row>
+                                <v-col 
+                                    cols="12"
+                                    sm="4"
+                                >
+                                    <v-text-field
+                                        color="primary"
+                                        label="Prénoms"
+                                        variant="outlined"
+                                        hide-details
+                                    ></v-text-field>
                                 </v-col>
+                                <v-col 
+                                    cols="12"
+                                    sm="4"
+                                >
+                                    <v-select
+                                        label="Sexe"
+                                        :items="['Homme', 'Femme']"
+                                        variant="outlined"
+                                        hide-details
+                                    ></v-select>
+                                </v-col>
+                                <v-col 
+                                    cols="12"
+                                    sm="4"
+                                >
+                                    <v-text-field
+                                        color="primary"
+                                        label="Situation matrimoniale"
+                                        variant="outlined"
+                                        hide-details
+                                    ></v-text-field>
+                                </v-col>
+                                <v-col 
+                                    cols="12"
+                                    sm="4"
+                                >
+                                    <v-text-field
+                                        color="primary"
+                                        label="Numéro de la CNI"
+                                        variant="outlined"
+                                        hide-details
+                                    ></v-text-field>
+                                </v-col>
+                    
                             </v-row>
                         </v-sheet>
                     </v-col>
                 </v-row>
-              </v-col>
-              <v-col
-                cols="6"
-
-              >
+            </v-col>
+            <v-col
+                cols="12"
+                lg="6"
+            >
                 <v-sheet 
                     :elevation="4" 
                     rounded
@@ -214,74 +226,52 @@
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <p>
-                                Facture de CIE ou SODECI
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                            
+                            <required-document label="Facture de CIE ou SODECI"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <p>
-                                Attestation de situation fiscale
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                             
+                            <required-document label="Attestation de situation fiscale"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <p>
-                                Titre de propriété (copie du titre foncier, ACD ...)
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                             
+                            <required-document label="Titre de propriété (copie du titre foncier, ACD ...)"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <p>
-                                État foncier
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                             
+                            <required-document label="État foncier"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center "
                         >
                             
-                            <p>
-                                Certificat de localisation
-                            </p>
-                            
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-
+                            <required-document label="Certificat de localisation"></required-document>
                         </v-col>
                     </v-row>
                         
                 </v-sheet>
-              </v-col>
+            </v-col>
         </v-row>
+        
+        
     </div>
 
     <div class="ma-4 d-flex justify-end">
         <v-btn
             color="primary"
             class="text-none"
+            @click="toggleConfModal"
         >
             Enregistrer la procédure
         </v-btn>
+        <confirmation-modal text="Voulez vous enregistrer la procédure de vente ?" :open="openConf" @update:open="openConf = $event"></confirmation-modal>
     </div>
     
     
@@ -290,6 +280,12 @@
 <script setup>
 
     const open = ref(false);
+
+    const openConf = ref(false);
+    
+    const toggleConfModal = () => {
+        openConf.value = !openConf.value;
+    };
 
     const toggleModal = () => {
         open.value = !open.value;

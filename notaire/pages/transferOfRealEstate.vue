@@ -6,10 +6,14 @@
     <div class="ma-4">
         <v-row>
             <v-col
-                cols="6"
+                cols="12"
+                lg="6"
             >
                 <v-row>
-                    <v-col cols="4">
+                    <v-col 
+                        cols="12"
+                        sm="4"
+                    >
                         <v-sheet 
                             :elevation="4" 
                             rounded
@@ -24,17 +28,21 @@
                                         label="Selectionner un client"
                                         :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
                                         variant="outlined"
+                                        hide-details=""
                                     ></v-select>
                                 </v-form>
-                                <v-divider>ou</v-divider>
-                                <v-btn color="primary" class="text-none align-self-center mt-5" @click="toggleModal">Créer le client</v-btn>
+                                <v-divider class="my-5">ou</v-divider>
+                                <v-btn color="primary" class="text-none align-self-center" @click="toggleModal">Créer le client</v-btn>
                                 <create-customer-modal :open="open" @update:open="open = $event" />
                             </div>
                             
                         </v-sheet>
                     </v-col>
 
-                    <v-col cols="8">
+                    <v-col 
+                        cols="12"
+                        sm="8"
+                    >
                         <v-sheet 
                             :elevation="4" 
                             rounded
@@ -113,10 +121,11 @@
                         </v-sheet>
                     </v-col>
                 </v-row>
-              </v-col>
-              <v-col
-                cols="6"
-              >
+            </v-col>
+            <v-col
+                cols="12"
+                lg="6"
+            >
                 <v-sheet 
                     :elevation="4" 
                     rounded
@@ -125,52 +134,30 @@
                 >
                     <h4 class="mb-3">Documents requis pour la vente</h4>
                     <v-row>
-                        <v-col
-                            cols="12"
-                            class="d-flex align-center "
 
+                        <v-col
+                            cols="12"
                         >
                             
-                            <v-text-field
-                                color="primary"
-                                label="CNI des ayants droit"
-                                variant="outlined"
-                                hide-details
-                                
-                            ></v-text-field>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                        
+                            <required-document label="CNI des ayants droit"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <v-text-field
-                                color="primary"
-                                label="CNI du donateur"
-                                variant="outlined"
-                                hide-details
-                            ></v-text-field>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                            
+                            <required-document label="CNI du donateur"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
-                            class="d-flex align-center"
                         >
                             
-                            <p>
-                                Extrait d'acte de naissance des ayants droits
-                            </p>
-                            <v-checkbox-btn class="justify-end" color="#63AD19"></v-checkbox-btn>
-                             
+                            <required-document label="Extrait d'acte de naissance des ayants droits"></required-document>
                         </v-col>
+
                     </v-row>    
-                        
-                        
+                            
                 </v-sheet>
-              </v-col>
+            </v-col>
         </v-row>
     </div>
 </template>

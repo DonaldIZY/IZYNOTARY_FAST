@@ -23,6 +23,7 @@
         </v-app-bar>
         <v-main class="fill-height" >
             <NuxtPage />
+            <v-footer></v-footer>
         </v-main>
         
     </v-layout>
