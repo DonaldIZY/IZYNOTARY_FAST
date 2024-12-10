@@ -171,15 +171,23 @@
         <v-btn
             color="primary"
             class="text-none"
+            @click="toggleConfModal"
         >
             Enregistrer la procédure
         </v-btn>
+        <confirmation-modal text="Voulez vous enregistrer la procédure de modification de société ?" :open="openConf" @update:open="openConf = $event"></confirmation-modal>
     </div>
 </template>
 
 <script setup>
 
     const open = ref(false);
+
+    const openConf = ref(false);
+    
+    const toggleConfModal = () => {
+        openConf.value = !openConf.value;
+    };
 
     const toggleModal = () => {
         open.value = !open.value;

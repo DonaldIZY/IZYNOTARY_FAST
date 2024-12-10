@@ -148,18 +148,34 @@
                             <required-document label="Extrait d'acte de naissance"></required-document>
                         </v-col>
 
-                    </v-row>    
-                        
+                    </v-row>  
                         
                 </v-sheet>
             </v-col>
         </v-row>
+    </div>
+
+    <div class="ma-4 d-flex justify-end">
+        <v-btn
+            color="primary"
+            class="text-none"
+            @click="toggleConfModal"
+        >
+            Enregistrer la procédure
+        </v-btn>
+        <confirmation-modal text="Voulez vous enregistrer la procédure de succession de biens mobiliers ?" :open="openConf" @update:open="openConf = $event"></confirmation-modal>
     </div>
 </template>
 
 <script setup>
 
     const open = ref(false);
+
+    const openConf = ref(false);
+    
+    const toggleConfModal = () => {
+        openConf.value = !openConf.value;
+    };
 
     const toggleModal = () => {
         open.value = !open.value;
