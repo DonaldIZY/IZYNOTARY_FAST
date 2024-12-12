@@ -22,9 +22,7 @@ export class UsersService {
 
 		const hashedPassword = await Password.hashPassword(password);
 
-		const identifier = new Identifier({
-			...hashedPassword
-		});
+		const identifier = new Identifier(hashedPassword);
 
 		const user = new User({
 			...createUserDto, 

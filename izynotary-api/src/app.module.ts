@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { TypeORMConf } from './config/typeorm.conf';
 import { RolesModule } from './roles/roles.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { IdentifierModule } from './identifier/identifier.module';
+import { DatabaseSeeder } from './config/database.seeder';
 
 @Module({
 	imports: [
@@ -16,7 +17,14 @@ import { IdentifierModule } from './identifier/identifier.module';
 		IdentifierModule,
 	],
 	controllers: [],
-	providers: [],
+	providers: [DatabaseSeeder],
 })
 
-export class AppModule {}
+export class AppModule implements OnApplicationBootstrap {
+	constructor(private readonly seeder: DatabaseSeeder) {}
+
+	async onApplicationBootstrap() {
+        await this.seeder.seedPermissions();
+		await this.seeder.seedRoles();
+    }
+}

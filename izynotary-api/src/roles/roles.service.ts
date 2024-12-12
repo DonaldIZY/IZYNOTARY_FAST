@@ -3,19 +3,28 @@ import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Role } from './entities/role.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { EntityManager, In, Repository } from 'typeorm';
+import { Permission } from 'src/permissions/entities/permission.entity';
 
 @Injectable()
 export class RolesService {
 
 	constructor(
-		@InjectRepository(Role)
-		private readonly rolesRepository: Repository<Role>,
+		@InjectRepository(Role) private readonly rolesRepository: Repository<Role>,
+		@InjectRepository(Permission) private readonly permissionsRepository: Repository<Permission>,
 		private readonly entityManager: EntityManager
 	) {}
 
 	async create(createRoleDto: CreateRoleDto) {
         const role = new Role(createRoleDto);
+
+		if (createRoleDto.permissionIds && createRoleDto.permissionIds.length > 0) {
+			const permissions = await this.permissionsRepository.findBy({ 
+				id: In(createRoleDto.permissionIds), 
+			});
+			role.permissions = permissions;
+		}
+		
 		await this.entityManager.save(role);
 	}
 

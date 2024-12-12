@@ -16,9 +16,6 @@ export class Permission {
     @Column()
     description: string;
 
-    @ManyToMany(() => Role, role => role.permissions)
-    roles: Role[];
-
     constructor(permission: Partial<Permission>) {
         Object.assign(this, permission);
     }
