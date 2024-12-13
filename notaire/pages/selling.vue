@@ -109,7 +109,7 @@
                                     >
                                         <v-text-field
                                             color="primary"
-                                            label="Age"
+                                            label="Date de naissance"
                                             variant="outlined"
                                             hide-details
                                         ></v-text-field>

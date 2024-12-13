@@ -41,10 +41,7 @@
                     <v-col
                         cols="6"
                     >
-                        <v-text-field
-                            label="Age"
-                            variant="outlined"
-                        ></v-text-field>
+                        <v-date-input prepend-icon="" label="Date de naissance" variant="outlined" :max="maxDate" :year="new Date(maxDate).getFullYear()"></v-date-input>
                     </v-col>
 
                     <v-col
@@ -121,7 +118,16 @@
 
     const emit = defineEmits(['update:open']);
 
+    const today = new Date();
+    const maxDate = new Date(
+        today.getFullYear() - 18,
+        today.getMonth(),
+        today.getDate()
+    ).toISOString().split('T')[0]; // Format ISO pour Vuetify
+
     const closeModal = () => {
         emit('update:open', false);
     };
+
+    
   </script>

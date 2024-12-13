@@ -38,7 +38,7 @@
                     <v-text-field
                         v-model="email"
                         :readonly="loading"
-                        :rules="[required]"
+                        :rules="[required, emailRule]"
                         color="primary"
                         label="Email"
                         placeholder="Entrer votre email"
@@ -51,7 +51,7 @@
                         v-model="password"
                         :readonly="loading"
                         :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                        :rules="[required]"
+                        :rules="[required, passwordRule]"
                         :type="show ? 'text' : 'password'"
                         color="primary"
                         label="Mot de passe"
@@ -105,11 +105,19 @@
     };
 
     const required = (v) => {
-        return !!v || 'Field is required'
+        return !!v || 'Le champ est requis.';
     };
 
+    const emailRule = (v) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
+    }
+
+    const passwordRule = (v) => {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(v) || 'Veuillez entrer un mot de passe compris de 8 caractères avec au moins un chiffre, une minuscule, une majuscule et un caractère spéciale.';
+    }
+
     definePageMeta({
-        layout: ''
+        layout: '',
     })
 
 </script>
