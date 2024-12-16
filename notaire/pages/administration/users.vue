@@ -1,20 +1,11 @@
 <template>
     <div class="d-flex justify-space-between ma-4" >
         <back-button title="Liste des utilisateurs" goBackTo="/home"/>
-        <v-btn prependIcon="mdi-plus" color="primary" class="text-none">Ajouter un utilisateur</v-btn>
+        <v-btn prependIcon="mdi-plus" color="primary" class="text-none" @click="toggleModal">Ajouter un utilisateur</v-btn>
+        <add-user :open="open" @update:open="open = $event"/>
     </div>
 
     <div class="ma-4">
-        <v-text-field
-            color="primary"
-            v-model="usersSearch"
-            label="Search"
-            prepend-inner-icon="mdi-magnify"
-            variant="outlined"
-            hide-details
-            single-line
-        ></v-text-field>
-
         <v-data-table
             :headers="usersHeaders"
             :items="users"
@@ -63,4 +54,10 @@
     ]);
 
     const usersSearch = ref(null);
+
+    const open = ref(false);
+
+    const toggleModal = () => {
+        open.value = !open.value;
+    };
 </script>

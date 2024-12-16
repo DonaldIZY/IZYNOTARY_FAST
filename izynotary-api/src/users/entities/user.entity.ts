@@ -15,12 +15,6 @@ export class User {
     firstName: string;
 
     @Column()
-    gender: string;
-
-    @Column()
-    birthDate: Date;
-
-    @Column()
     email: string;
 
     @OneToOne(() => Identifier, identifier => identifier.user, { onDelete:'CASCADE' })

@@ -14,8 +14,9 @@
                         cols="6"
                     >
                         <v-text-field
-                                label="Nom"
-                                variant="outlined"
+                            color="primary"
+                            label="Nom"
+                            variant="outlined"
                         ></v-text-field>
                     </v-col>
 
@@ -23,6 +24,7 @@
                         cols="6"
                     >
                         <v-text-field
+                            color="primary"
                             label="Prénoms"
                             variant="outlined"
                         ></v-text-field>
@@ -32,22 +34,24 @@
                         cols="6"
                     >
                     <v-select
-                            label="Sexe"
-                            :items="['Homme', 'Femme']"
-                            variant="outlined"
+                        color="primary"
+                        label="Sexe"
+                        :items="['Homme', 'Femme']"
+                        variant="outlined"
                     ></v-select>
                     </v-col>
 
                     <v-col
                         cols="6"
                     >
-                        <v-date-input prepend-icon="" label="Date de naissance" variant="outlined" :max="maxDate" :year="new Date(maxDate).getFullYear()"></v-date-input>
+                        <v-date-input color="primary" prepend-icon="" label="Date de naissance" variant="outlined" :max="maxDate" :year="new Date(maxDate).getFullYear()"></v-date-input>
                     </v-col>
 
                     <v-col
                         cols="6"
                     >
                         <v-select
+                            color="primary"
                             label="Pièce d'identité"
                             :items="['CNI', 'Passeport']"
                             variant="outlined"
@@ -61,6 +65,7 @@
                                 cols="12"
                             >
                                 <v-text-field
+                                    color="primary"
                                     label="Numéro de la pièce d'identité"
                                     variant="outlined"
                                 ></v-text-field>
@@ -69,7 +74,8 @@
                             <v-col
                                 cols="12"
                             >
-                                <v-file-input 
+                                <v-file-input
+                                    color="primary"
                                     label="Ajouter une image de la CNI"
                                     prepend-icon="mdi-id-card"
                                     variant="outlined"
