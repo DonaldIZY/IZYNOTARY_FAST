@@ -6,13 +6,14 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Identifier } from 'src/identifier/entities/identifier.entity';
 import { Password } from 'src/utils/password.util';
+import { Role } from 'src/roles/entities/role.entity';
 
 @Injectable()
 export class UsersService {
 
 	constructor(
-		@InjectRepository(User)
-		private readonly usersRepository: Repository<User>,
+		@InjectRepository(User) private readonly usersRepository: Repository<User>,
+		@InjectRepository(Role) private readonly rolesRepository: Repository<Role>,
 		private readonly entityManager: EntityManager
 	) {}
 
@@ -20,14 +21,24 @@ export class UsersService {
 
 		const password = await Password.generateRandomPassword(14);
 
+		console.log('Le mot de passe : ',password);
+
 		const hashedPassword = await Password.hashPassword(password);
 
-		const identifier = new Identifier(hashedPassword);
+		const identifier = new Identifier({...hashedPassword});
+
+		const role = await this.rolesRepository.findOneBy({ id: createUserDto.roleId });
+
+		delete createUserDto.roleId;
 
 		const user = new User({
-			...createUserDto, 
-			identifier
+			...createUserDto,
+			role
 		});
+
+		user.identifier = identifier;
+
+		console.log(user);
 
 		await this.entityManager.save(user);
 	}

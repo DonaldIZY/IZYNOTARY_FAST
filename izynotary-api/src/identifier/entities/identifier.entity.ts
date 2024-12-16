@@ -13,10 +13,10 @@ export class Identifier {
     @Column()
     baseHash: string;
 
-    @Column()
+    @Column({nullable: true})
     oldFirst: string;
 
-    @Column()
+    @Column({nullable: true})
     oldSecond: string;
 
     @CreateDateColumn()
@@ -24,9 +24,6 @@ export class Identifier {
 
     @UpdateDateColumn()
     updateAt: Date;
-
-    @OneToOne(() => User, user => user.identifier)
-    user: User;
 
     constructor(identifier: Partial<Identifier>) {
         Object.assign(this, identifier);

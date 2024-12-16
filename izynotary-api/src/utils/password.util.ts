@@ -36,13 +36,13 @@ export class Password {
         return password.join('');
     }
 
-    static async hashPassword(password: string): Promise<{ saltedHash: string; baseHash: string }> {
+    static async hashPassword(password: string): Promise<{ hashedValue: string; baseHash: string }> {
         const saltRounds = 10;
-        const saltedHash = await bcrypt.hash(password, saltRounds);
+        const hashedValue = await bcrypt.hash(password, saltRounds);
 
         const baseHash = crypto.createHash('sha256').update(password).digest('hex'); // Hash sans sel 
 
-        return { saltedHash, baseHash };
+        return { hashedValue, baseHash };
     }
 }
 

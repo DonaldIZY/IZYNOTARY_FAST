@@ -17,7 +17,7 @@ export class User {
     @Column()
     email: string;
 
-    @OneToOne(() => Identifier, identifier => identifier.user, { onDelete:'CASCADE' })
+    @OneToOne(() => Identifier, { cascade: true })
     @JoinColumn()
     identifier: Identifier;
 
