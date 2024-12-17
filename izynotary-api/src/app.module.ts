@@ -7,6 +7,7 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { IdentifierModule } from './identifier/identifier.module';
 import { DatabaseSeeder } from './config/database.seeder';
 import { CustomersModule } from './customers/customers.module';
+import { FoldersModule } from './folders/folders.module';
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { CustomersModule } from './customers/customers.module';
 		PermissionsModule,
 		IdentifierModule,
 		CustomersModule,
+		FoldersModule,
 	],
 	controllers: [],
 	providers: [DatabaseSeeder],
