@@ -8,6 +8,7 @@ import { IdentifierModule } from './identifier/identifier.module';
 import { DatabaseSeeder } from './config/database.seeder';
 import { CustomersModule } from './customers/customers.module';
 import { FoldersModule } from './folders/folders.module';
+import { SalesModule } from './sales/sales.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { FoldersModule } from './folders/folders.module';
 		IdentifierModule,
 		CustomersModule,
 		FoldersModule,
+		SalesModule,
 	],
 	controllers: [],
 	providers: [DatabaseSeeder],
