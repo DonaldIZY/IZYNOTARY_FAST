@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Folder } from "src/folders/entities/folder.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Customer {
@@ -12,7 +13,7 @@ export class Customer {
     @Column()
     firstName: string;
 
-    @Column()
+    @Column({ enum: ["Homme", "Femme"] })
     gender: string;
 
     @Column()
@@ -35,6 +36,9 @@ export class Customer {
     
     @UpdateDateColumn()
     updateAt: Date;
+
+    @OneToMany(() => Folder, folder => folder.customer, { onDelete: "CASCADE" })
+    folders: Folder[];
 
     constructor(customer: Partial<Customer>) {
         Object.assign(this, customer);

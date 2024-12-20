@@ -9,13 +9,13 @@ import { EntityManager, Repository } from 'typeorm';
 export class FoldersService {
 
     constructor(
-        @InjectRepository(Folder)
-        private readonly folderRepository: Repository<Folder>,
+        @InjectRepository(Folder) private readonly folderRepository: Repository<Folder>,
         private readonly entityManager: EntityManager
     ) {}
 
     async create(createFolderDto: CreateFolderDto) {
-        const folder = new Folder(createFolderDto);
+
+        const folder = new Folder({...createFolderDto});
         await this.entityManager.save(folder);
     }
 
@@ -36,4 +36,5 @@ export class FoldersService {
     async remove(id: number) {
         await this.folderRepository.delete(id);
     }
+     
 }
