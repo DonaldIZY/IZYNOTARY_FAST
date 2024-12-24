@@ -11,7 +11,7 @@ export class Folder {
     @Column()
     folderNum: string;
 
-    @Column({ enum: ["Vente", "Constitution de société", "Modification de société", "Succession de biens mobiliers", "Succession de biens immobiliers", "Crédit"] })
+    @Column({ type: "enum", enum: ["Vente", "Constitution de société", "Modification de société", "Succession de biens mobiliers", "Succession de biens immobiliers", "Crédit"] })
     procedureType: string;
 
     @CreateDateColumn()
@@ -29,7 +29,7 @@ export class Folder {
     @Column()
     status: string;
 
-    @Column()
+    @Column({ nullable: true })
     comment: string;
 
     @ManyToOne(() => Customer, customer => customer.folders)

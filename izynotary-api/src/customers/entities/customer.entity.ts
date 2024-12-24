@@ -13,7 +13,7 @@ export class Customer {
     @Column()
     firstName: string;
 
-    @Column({ enum: ["Homme", "Femme"] })
+    @Column({ type: "enum", enum: ["Homme", "Femme"] })
     gender: string;
 
     @Column()

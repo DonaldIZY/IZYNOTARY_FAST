@@ -9,6 +9,7 @@ import { DatabaseSeeder } from './config/database.seeder';
 import { CustomersModule } from './customers/customers.module';
 import { FoldersModule } from './folders/folders.module';
 import { StepsModule } from './steps/steps.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
 	imports: [
@@ -21,6 +22,7 @@ import { StepsModule } from './steps/steps.module';
 		CustomersModule,
 		FoldersModule,
 		StepsModule,
+		AuthModule,
 	],
 	controllers: [],
 	providers: [DatabaseSeeder],

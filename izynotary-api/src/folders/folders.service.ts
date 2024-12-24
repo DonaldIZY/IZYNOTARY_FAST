@@ -5,12 +5,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Folder } from './entities/folder.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { Step } from 'src/steps/entities/step.entity';
+import { Customer } from 'src/customers/entities/customer.entity';
 
 @Injectable()
 export class FoldersService {
 
     constructor(
         @InjectRepository(Folder) private readonly folderRepository: Repository<Folder>,
+        @InjectRepository(Customer) private readonly customerRepository: Repository<Customer>,
         private readonly entityManager: EntityManager
     ) {}
 
@@ -232,7 +234,15 @@ export class FoldersService {
             });
         }
 
-        const folder = new Folder({...createFolderDto});
+        const customer = await this.customerRepository.findOneBy({ id: createFolderDto.customerId });
+
+        const folder = new Folder({
+            ...createFolderDto
+        });
+
+        folder.step = step;
+        folder.customer = customer;
+
         await this.entityManager.save(folder);
     }
 

@@ -44,5 +44,9 @@ export class Password {
 
         return { hashedValue, baseHash };
     }
+
+    async validatePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+        return bcrypt.compare(plainPassword, hashedPassword);
+    }
 }
 
