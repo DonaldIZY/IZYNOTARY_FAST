@@ -23,9 +23,9 @@ export class UsersService {
 
 		console.log('Le mot de passe : ',password);
 
-		const hashedPassword = await Password.hashPassword(password);
+		const hashedValue = await Password.hashPassword(password);
 
-		const identifier = new Identifier({...hashedPassword});
+		const identifier = new Identifier({...hashedValue});
 
 		const role = await this.rolesRepository.findOneBy({ id: createUserDto.roleId });
 
@@ -64,11 +64,16 @@ export class UsersService {
 		await this.usersRepository.delete(id);
 	}
 
-	async findByEmail(email: string) {
-		return await this.usersRepository.findOne({
+	async validateUser(email: string, password: string) {
+		const user = await this.usersRepository.findOne({
 			where: { email },
             relations: { role: true, identifier: true},
 		});
+
+		if (user && (await Password.validatePassword(password, user.identifier.hashedValue))) {
+            return user;
+        }
+		return null;
 	}
   
 }

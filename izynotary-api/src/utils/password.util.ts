@@ -36,16 +36,14 @@ export class Password {
         return password.join('');
     }
 
-    static async hashPassword(password: string): Promise<{ hashedValue: string; baseHash: string }> {
+    static async hashPassword(password: string): Promise<{ hashedValue: string}> {
         const saltRounds = 10;
-        const hashedValue = await bcrypt.hash(password, saltRounds);
+        const hashedValue = await bcrypt.hash(password, saltRounds); 
 
-        const baseHash = crypto.createHash('sha256').update(password).digest('hex'); // Hash sans sel 
-
-        return { hashedValue, baseHash };
+        return { hashedValue };
     }
 
-    async validatePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+    static async validatePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
         return bcrypt.compare(plainPassword, hashedPassword);
     }
 }

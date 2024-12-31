@@ -10,9 +10,6 @@ export class Identifier {
     @Column()
     hashedValue: string;
 
-    @Column()
-    baseHash: string;
-
     @Column({nullable: true})
     oldFirst: string;
 

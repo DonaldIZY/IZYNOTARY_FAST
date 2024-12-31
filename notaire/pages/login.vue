@@ -84,12 +84,28 @@
 
 <script setup>
 
+    // References
     const form = ref(false);
     const email = ref(null);
     const password = ref(null);
     const loading = ref(false);
     const show = ref(false);
 
+    // Rules
+    const required = (v) => {
+        return !!v || 'Le champ est requis.';
+    };
+
+    const emailRule = (v) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
+    }
+
+    const passwordRule = (v) => {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(v) || 'Veuillez entrer un mot de passe compris de 8 caractères avec au moins un chiffre, une minuscule, une majuscule et un caractère spéciale.';
+    }
+
+
+    // Router
     const router = useRouter();
 
     const onSubmit =  () => {
@@ -104,18 +120,7 @@
 
     };
 
-    const required = (v) => {
-        return !!v || 'Le champ est requis.';
-    };
-
-    const emailRule = (v) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
-    }
-
-    const passwordRule = (v) => {
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(v) || 'Veuillez entrer un mot de passe compris de 8 caractères avec au moins un chiffre, une minuscule, une majuscule et un caractère spéciale.';
-    }
-
+    
     definePageMeta({
         layout: '',
     })
