@@ -14,6 +14,7 @@ export default defineNuxtConfig({
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
+    '@pinia/nuxt',
     //...
   ],
   vite: {
@@ -25,5 +26,10 @@ export default defineNuxtConfig({
   },
   devServer: {
     port: 2610, // Remplacez 3001 par le port que vous souhaitez utiliser
+  },
+  runtimeConfig: {
+    public: {
+      baseUrl: process.env.API_BASE_URL,
+    },
   },
 })

@@ -86,8 +86,8 @@
 
     // References
     const form = ref(false);
-    const email = ref(null);
-    const password = ref(null);
+    const email = ref('');
+    const password = ref('');
     const loading = ref(false);
     const show = ref(false);
 
@@ -105,20 +105,50 @@
     }
 
 
+    const config = useRuntimeConfig();
+    const authStore = useAuthStore();
+
     // Router
     const router = useRouter();
 
-    const onSubmit =  () => {
+    const onSubmit = async () => {
 
-        if (!form.value) return
+        // if (!form.value) return
 
-        loading.value = true
+        loading.value = true;
+        
+        try {
+            console.log(`${config.public.baseUrl}/auth/login`);
+            const { data } = await useAsyncData('loginRequest', () =>
+                $fetch(`${config.public.baseUrl}/auth/login`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: email.value,
+                        password: password.value,
+                    }),
+                })
+            );
 
-        setTimeout(() => (loading.value = false), 2000)
+            console.log('Value of data :',data.value);
 
-        router.push("/home")
+            if (data.value?.accessToken) {
+                // Stocker le token, par exemple dans localStorage ou Vuex/Pinia
+                authStore.setToken(data.value.accessToken);
+
+                // Rediriger vers une autre page
+                router.push("/home");
+            }
+        } catch (error) {
+            console.error('Erreur de connexion :', error);
+            alert('Échec de la connexion. Veuillez vérifier vos informations.');
+        } finally {
+            loading.value = false;
+        }
 
     };
+
+
+    
 
     
     definePageMeta({
@@ -128,6 +158,7 @@
 </script>
 
 <style scoped>
+
     .bg-img {
         /*background: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));*/
         background-image: url('~/assets/img/bck_img.jpg');
