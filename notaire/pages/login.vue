@@ -119,8 +119,9 @@
         
         try {
             console.log(`${config.public.baseUrl}/auth/login`);
-            const { data } = await useAsyncData('loginRequest', () =>
-                $fetch(`${config.public.baseUrl}/auth/login`, {
+            const { data } = await useAsyncData(
+                'loginRequest', 
+                () => $fetch(`${config.public.baseUrl}/auth/login`, {
                     method: 'POST',
                     body: JSON.stringify({
                         email: email.value,

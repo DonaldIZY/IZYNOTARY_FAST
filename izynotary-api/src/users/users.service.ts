@@ -44,7 +44,9 @@ export class UsersService {
 	}
 
 	async findAll() {
-		return await this.usersRepository.find();
+		return await this.usersRepository.find({ 
+			relations: { role:true },
+		});
 	}
 
 	async findOne(id: number) {

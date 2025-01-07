@@ -16,6 +16,8 @@
             :headers="permissionsHeaders"
             :items="permissions"
             :search="permissionsSearch"
+            no-data-text="Aucune permission trouvé."
+            items-per-page-text="Permissions par page :"
             hover
         >
         </v-data-table>
@@ -29,23 +31,23 @@
         { align: "start", key: "DESCRIPTION", title: "Description" },
     ]);
 
-    const permissions = ref([
-        {
-            NUM: "1",
-            NAME: "Permission 1",
-            DESCRIPTION: "Description de la permission 1",
-        },
-        {
-            NUM: "2",
-            NAME: "Permission 2",
-            DESCRIPTION: "Description de la permission 2",
-        },
-        {
-            NUM: "3",
-            NAME: "Permission 3",
-            DESCRIPTION: "Description de la permission 3",
-        },
-    ]);
+    const permissions = ref([]);
 
     const permissionsSearch = ref(null);
+
+    const config = useRuntimeConfig();
+
+    const { data: fetchedPermissions, error } = useFetch(`${config.public.baseUrl}/permissions`);
+
+    onMounted(() => {
+        if (fetchedPermissions.value) {
+            permissions.value = fetchedPermissions.value.map((permission, index) => ({
+                NUM: index + 1,
+                NAME: permission.name,
+                DESCRIPTION: permission.description,
+            }));
+        } else if (error.value) {
+            console.error('Erreur lors du chargement des permissions :', error.value);
+        }
+    });
 </script>

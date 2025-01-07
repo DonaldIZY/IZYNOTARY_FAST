@@ -14,6 +14,7 @@
                         cols="6"
                     >
                         <v-text-field
+                                v-model="lastName"
                                 color="primary"
                                 label="Nom"
                                 variant="outlined"
@@ -24,6 +25,7 @@
                         cols="6"
                     >
                         <v-text-field
+                            v-model="firstName"
                             color="primary"
                             label="Prénoms"
                             variant="outlined"
@@ -34,6 +36,7 @@
                         cols="6"
                     >
                         <v-text-field
+                            v-model="email"
                             color="primary"
                             label="Email"
                             variant="outlined"
@@ -45,9 +48,12 @@
                         cols="6"
                     >
                         <v-select
+                            v-model="roleId"
                             color="primary"
                             label="Rôle"
-                            :items="['Administrateur', 'Notaire']"
+                            :items="roles"
+                            item-title="NAME"
+                            item-value="ID"
                             variant="outlined"
                         ></v-select>
                     </v-col>
@@ -73,7 +79,7 @@
                     color="primary"
                     text="Enregistrer"
                     variant="tonal"
-                    @click="closeModal"
+                    @click="handleUser"
                     class="text-none"
                 ></v-btn>
             </v-card-actions>
@@ -95,6 +101,13 @@
         emit('update:open', false);
     };
 
+    const handleUser = () => {
+        const userData = {
+            
+        }
+        closeModal();
+    };
+
     const required = (v) => {
         return !!v || 'Le champ est requis.';
     };
@@ -102,5 +115,20 @@
     const emailRule = (v) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
     }
+
+    const config = useRuntimeConfig();
+    const roles = ref(["Bonjour"]);
+    const { data: fetchedRoles, error } = useFetch(`${config.public.baseUrl}/roles`);
+
+    onMounted(() => {
+        if (fetchedRoles.value) {
+            roles.value = fetchedRoles.value.map((role) => ({
+                ID: role.id,
+                NAME: role.name,
+            }));
+        } else if (error.value) {
+            console.error('Erreur lors du chargement des roles :', error.value);
+        }
+    });
     
   </script> 

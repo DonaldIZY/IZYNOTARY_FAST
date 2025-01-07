@@ -10,6 +10,9 @@
             :headers="usersHeaders"
             :items="users"
             :search="usersSearch"
+            no-data-text="Aucun utilisateur trouvé."
+            items-per-page-text="Utilisateurs par page :"
+             
             hover
         >
         </v-data-table>
@@ -17,6 +20,8 @@
 </template>
 
 <script setup>
+
+    // Références
     const usersHeaders = ref([
         { align: "start", key: "NUM", title: "N°" },
         { align: "start", key: "LAST_NAME", title: "Nom" },
@@ -26,32 +31,7 @@
         { align: "start", key: "ROLE", title: "Rôle" },
     ]);
 
-    const users = ref([
-        {
-            NUM: "1",
-            LAST_NAME: "Doe",
-            FIRST_NAME: "John",
-            EMAIL: "john.doe@example.com",
-            CREATE_AT: "2022-01-01",
-            ROLE: "Administrateur",
-        },
-        {
-            NUM: "2",
-            LAST_NAME: "Smith",
-            FIRST_NAME: "Jane",
-            EMAIL: "jane.smith@example.com",
-            CREATE_AT: "2022-02-01",
-            ROLE: "Clerc",
-        },
-        {
-            NUM: "3",
-            LAST_NAME: "Johnson",
-            FIRST_NAME: "Bob",
-            EMAIL: "bob.johnson@example.com",
-            CREATE_AT: "2022-03-01",
-            ROLE: "Notaire",
-        },
-    ]);
+    const users = ref([]);
 
     const usersSearch = ref(null);
 
@@ -60,4 +40,25 @@
     const toggleModal = () => {
         open.value = !open.value;
     };
+
+    const config = useRuntimeConfig();
+
+    const { data: fetchedUsers, error } = useFetch(`${config.public.baseUrl}/users`);
+
+    onMounted(() => {
+        if (fetchedUsers.value) {
+            users.value = fetchedUsers.value.map((user, index) => ({
+                NUM: index + 1,
+                LAST_NAME: user.lastName,
+                FIRST_NAME: user.firstName,
+                EMAIL: user.email,
+                CREATE_AT: new Date(user.createAt).toLocaleDateString(),
+                ROLE: user.role.name,
+            }));
+        } else if (error.value) {
+            console.error('Erreur lors du chargement des utilisateurs :', error.value);
+        }
+    });
+
+    
 </script>

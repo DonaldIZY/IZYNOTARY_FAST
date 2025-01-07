@@ -16,6 +16,8 @@
             :headers="rolesHeaders"
             :items="roles"
             :search="rolesSearch"
+            no-data-text="Aucun rôle trouvé."
+            items-per-page-text="Rôles par page :"
             hover
         >
         </v-data-table>
@@ -29,23 +31,23 @@
         { align: "start", key: "DESCRIPTION", title: "Description" },
     ]);
 
-    const roles = ref([
-        {
-            NUM: "1",
-            NAME: "Administrateur",
-            DESCRIPTION: "A tout le droit sur l'application",
-        },
-        {
-            NUM: "2",
-            NAME: "Clerc",
-            DESCRIPTION: "Accès limité à certaines fonctionnalités",
-        },
-        {
-            NUM: "3",
-            NAME: "Notaire",
-            DESCRIPTION: "Accès restreint aux données personnelles",
-        }
-    ]);
+    const roles = ref([]);
 
     const rolesSearch = ref(null);
+
+    const config = useRuntimeConfig();
+
+    const { data: fetchedRoles, error } = useFetch(`${config.public.baseUrl}/roles`);
+
+    onMounted(() => {
+        if (fetchedRoles.value) {
+            roles.value = fetchedRoles.value.map((role, index) => ({
+                NUM: index + 1,
+                NAME: role.name,
+                DESCRIPTION: role.description,
+            }));
+        } else if (error.value) {
+            console.error('Erreur lors du chargement des roles :', error.value);
+        }
+    });
 </script>
