@@ -14,7 +14,7 @@
             <v-spacer></v-spacer>
 
             
-            <p class="mx-2 text-overline">Chris Fousseni</p>
+            <p class="mx-2 text-overline"></p>
             
             
             <v-avatar class="mx-2" color="primary">
@@ -37,4 +37,5 @@
     const goToHome = () => {
         router.push("/home");
     };
+
 </script>

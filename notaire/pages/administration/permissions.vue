@@ -37,17 +37,21 @@
 
     const config = useRuntimeConfig();
 
-    const { data: fetchedPermissions, error } = useFetch(`${config.public.baseUrl}/permissions`);
-
-    onMounted(() => {
-        if (fetchedPermissions.value) {
-            permissions.value = fetchedPermissions.value.map((permission, index) => ({
-                NUM: index + 1,
-                NAME: permission.name,
-                DESCRIPTION: permission.description,
-            }));
-        } else if (error.value) {
-            console.error('Erreur lors du chargement des permissions :', error.value);
+    const loadPermissions = async () => {
+        try {
+            const fetchedPermissions = await $fetch(`${config.public.baseUrl}/permissions`);
+            if (fetchedPermissions) {
+                permissions.value = fetchedPermissions.map((permission, index) => ({
+                    NUM: index + 1,
+                    NAME: permission.name,
+                    DESCRIPTION: permission.description,
+                }));
+            }
+        } catch (err) {
+            console.error('Erreur lors du chargement des permissions :', err);
         }
-    });
+    };
+
+    loadPermissions();
+ 
 </script>

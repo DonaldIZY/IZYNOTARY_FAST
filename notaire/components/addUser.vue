@@ -9,6 +9,7 @@
             title="Créer un utilisateur"
         >
             <v-card-text >
+                
                 <v-row dense>
                     <v-col
                         cols="6"
@@ -95,17 +96,40 @@
         },
     });
 
+    const lastName = ref('');
+    const firstName = ref('');
+    const email = ref('');
+    const roleId = ref(null);
+
     const emit = defineEmits(['update:open']);
+
+    const config = useRuntimeConfig();
 
     const closeModal = () => {
         emit('update:open', false);
     };
 
-    const handleUser = () => {
+    const handleUser = async () => {
+
         const userData = {
-            
+            lastName: lastName.value,
+            firstName: firstName.value,
+            email: email.value,
+            roleId: roleId.value,
+        };
+
+        try {
+            const data = await $fetch(`${config.public.baseUrl}/users`, {
+                method: 'POST',
+                body: JSON.stringify(userData),
+            });
+            alert('Utilisateur créé avec succès.');
+            closeModal();
+        } catch (error) {
+            console.error('Erreur lors de la création de l\'utilisateur :', error);
         }
-        closeModal();
+
+        
     };
 
     const required = (v) => {
@@ -116,8 +140,7 @@
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
     }
 
-    const config = useRuntimeConfig();
-    const roles = ref(["Bonjour"]);
+    const roles = ref([]);
     const { data: fetchedRoles, error } = useFetch(`${config.public.baseUrl}/roles`);
 
     onMounted(() => {

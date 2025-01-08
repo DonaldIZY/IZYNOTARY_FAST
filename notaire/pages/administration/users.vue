@@ -43,22 +43,62 @@
 
     const config = useRuntimeConfig();
 
-    const { data: fetchedUsers, error } = useFetch(`${config.public.baseUrl}/users`);
+    const loadUsers = async () => {
+        try {
+            const fetchedUsers = await $fetch(`${config.public.baseUrl}/users`);
+            if (fetchedUsers) {
+                users.value = fetchedUsers.map((user, index) => ({
+                    NUM: index + 1,
+                    LAST_NAME: user.lastName,
+                    FIRST_NAME: user.firstName,
+                    EMAIL: user.email,
+                    CREATE_AT: new Date(user.createAt).toLocaleDateString(),
+                    ROLE: user.role.name,
+                }));
+            }
+        } catch (err) {
+            console.error('Erreur lors du chargement des utilisateurs :', err);
+        }
+    };
 
-    onMounted(() => {
-        if (fetchedUsers.value) {
-            users.value = fetchedUsers.value.map((user, index) => ({
-                NUM: index + 1,
-                LAST_NAME: user.lastName,
-                FIRST_NAME: user.firstName,
-                EMAIL: user.email,
-                CREATE_AT: new Date(user.createAt).toLocaleDateString(),
-                ROLE: user.role.name,
-            }));
-        } else if (error.value) {
-            console.error('Erreur lors du chargement des utilisateurs :', error.value);
+    loadUsers();
+
+    watchEffect(() => {
+        if (!open.value) {
+            loadUsers(); // Recharger les utilisateurs quand le modal est fermé
         }
     });
 
+    //const { data: fetchedUsers, error } = useFetch(`${config.public.baseUrl}/users`);
+
+    // onMounted(() => {
+    //     if (fetchedUsers.value) {
+    //         users.value = fetchedUsers.value.map((user, index) => ({
+    //             NUM: index + 1,
+    //             LAST_NAME: user.lastName,
+    //             FIRST_NAME: user.firstName,
+    //             EMAIL: user.email,
+    //             CREATE_AT: new Date(user.createAt).toLocaleDateString(),
+    //             ROLE: user.role.name,
+    //         }));
+    //     } else if (error.value) {
+    //         console.error('Erreur lors du chargement des utilisateurs :', error.value);
+    //     }
+    // });
+    
+    // watchEffect(() => {
+    //     if (fetchedUsers.value) {
+    //         users.value = fetchedUsers.value.map((user, index) => ({
+    //             NUM: index + 1,
+    //             LAST_NAME: user.lastName,
+    //             FIRST_NAME: user.firstName,
+    //             EMAIL: user.email,
+    //             CREATE_AT: new Date(user.createAt).toLocaleDateString(),
+    //             ROLE: user.role.name,
+    //         }));
+    //     } else if (error.value) {
+    //         console.error('Erreur lors du chargement des utilisateurs :', error.value);
+    //     }
+    // });
     
 </script>

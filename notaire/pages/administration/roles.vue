@@ -37,17 +37,21 @@
 
     const config = useRuntimeConfig();
 
-    const { data: fetchedRoles, error } = useFetch(`${config.public.baseUrl}/roles`);
-
-    onMounted(() => {
-        if (fetchedRoles.value) {
-            roles.value = fetchedRoles.value.map((role, index) => ({
-                NUM: index + 1,
-                NAME: role.name,
-                DESCRIPTION: role.description,
-            }));
-        } else if (error.value) {
-            console.error('Erreur lors du chargement des roles :', error.value);
+    const loadRoles = async () => {
+        try {
+            const fetchedRoles = await $fetch(`${config.public.baseUrl}/roles`);
+            if (fetchedRoles) {
+                roles.value = fetchedRoles.map((role, index) => ({
+                    NUM: index + 1,
+                    NAME: role.name,
+                    DESCRIPTION: role.description,
+                }));
+            }
+        } catch (err) {
+            console.error('Erreur lors du chargement des rôles :', err);
         }
-    });
+    };
+
+    loadRoles();
+
 </script>

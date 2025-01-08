@@ -118,19 +118,14 @@
         loading.value = true;
         
         try {
-            console.log(`${config.public.baseUrl}/auth/login`);
-            const { data } = await useAsyncData(
-                'loginRequest', 
-                () => $fetch(`${config.public.baseUrl}/auth/login`, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        email: email.value,
-                        password: password.value,
-                    }),
-                })
-            );
-
-            console.log('Value of data :',data.value);
+            
+            const data = await $fetch(`${config.public.baseUrl}/auth/login`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    email: email.value,
+                    password: password.value,
+                }),
+            });
 
             if (data.value?.accessToken) {
                 // Stocker le token, par exemple dans localStorage ou Vuex/Pinia

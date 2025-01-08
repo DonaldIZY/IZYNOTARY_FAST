@@ -14,6 +14,7 @@
                         cols="6"
                     >
                         <v-text-field
+                            v-model="lastName"
                             color="primary"
                             label="Nom"
                             variant="outlined"
@@ -24,6 +25,7 @@
                         cols="6"
                     >
                         <v-text-field
+                            v-model="firstName"
                             color="primary"
                             label="Prénoms"
                             variant="outlined"
@@ -34,6 +36,7 @@
                         cols="6"
                     >
                     <v-select
+                        v-model="gender"
                         color="primary"
                         label="Sexe"
                         :items="['Homme', 'Femme']"
@@ -44,13 +47,33 @@
                     <v-col
                         cols="6"
                     >
-                        <v-date-input color="primary" prepend-icon="" label="Date de naissance" variant="outlined" :max="maxDate" :year="new Date(maxDate).getFullYear()"></v-date-input>
+                        <v-date-input
+                            v-model="birthDate" 
+                            color="primary" 
+                            prepend-icon="" 
+                            label="Date de naissance" 
+                            variant="outlined" :max="maxDate" 
+                            :year="new Date(maxDate).getFullYear()"
+                        >
+                        </v-date-input>
+                    </v-col>
+
+                    <v-col
+                        cols="6"
+                    >
+                        <v-text-field
+                            v-model="phone"
+                            color="primary"
+                            label="Téléphone"
+                            variant="outlined"
+                        ></v-text-field>
                     </v-col>
 
                     <v-col
                         cols="6"
                     >
                         <v-select
+                            v-model="identification"
                             color="primary"
                             label="Pièce d'identité"
                             :items="['CNI', 'Passeport']"
@@ -65,6 +88,7 @@
                                 cols="12"
                             >
                                 <v-text-field
+                                    v-model="identificationNumber"
                                     color="primary"
                                     label="Numéro de la pièce d'identité"
                                     variant="outlined"
@@ -75,6 +99,7 @@
                                 cols="12"
                             >
                                 <v-file-input
+                                    v-model="imageOfIdentification"
                                     color="primary"
                                     label="Ajouter une image de la CNI"
                                     prepend-icon="mdi-id-card"
@@ -106,7 +131,7 @@
                     color="primary"
                     text="Enregistrer"
                     variant="tonal"
-                    @click="closeModal"
+                    @click="handleCustomer"
                     class="text-none"
                 ></v-btn>
             </v-card-actions>
@@ -114,15 +139,26 @@
     </v-dialog>
 </template>
 
-  <script setup>
+<script setup>
     const props = defineProps({
         open: {
           type: Boolean,
           default: false,
         },
     });
+    
+    const lastName = ref('');
+    const firstName = ref('');
+    const gender = ref('');
+    const birthDate = ref('');
+    const phone = ref('');
+    const identification = ref('');
+    const identificationNumber = ref('');
+    const imageOfIdentification = ref(null);
 
     const emit = defineEmits(['update:open']);
+
+    const config = useRuntimeConfig();
 
     const today = new Date();
     const maxDate = new Date(
@@ -131,9 +167,33 @@
         today.getDate()
     ).toISOString().split('T')[0]; // Format ISO pour Vuetify
 
+    const handleCustomer = async () => {
+        const customerData = {
+            lastName: lastName.value,
+            firstName: firstName.value,
+            gender: gender.value,
+            birthDate: birthDate.value,
+            phone: phone.value,
+            identification: identification.value,
+            identificationNumber: identificationNumber.value,
+            imageOfIdentification: imageOfIdentification.value,
+        };
+
+        try {
+            const data = await $fetch(`${config.public.baseUrl}/customers`, {
+                method: 'POST',
+                body: JSON.stringify(customerData),
+            });
+            alert('Client créé avec succès.');
+            closeModal();
+        } catch (error) {
+            console.error('Erreur lors de la création du client :', error);
+        }
+    };
+
     const closeModal = () => {
         emit('update:open', false);
     };
 
     
-  </script>
+</script>
