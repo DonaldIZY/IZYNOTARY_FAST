@@ -18,6 +18,8 @@ export class FoldersService {
 
     async create(createFolderDto: CreateFolderDto) {
 
+        const customer = await this.customerRepository.findOneBy({ id: createFolderDto.customerId });
+
         let step;
 
         if (createFolderDto.procedureType == 'Vente') {
@@ -25,7 +27,7 @@ export class FoldersService {
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Non débuté',
+                        status: 'Débuté',
                         action: 'Fourniture des pièces',
                         document: [],
                         comment: '',
@@ -74,11 +76,12 @@ export class FoldersService {
                 ]
             });
         } else if (createFolderDto.procedureType == 'Constitution de société' || createFolderDto.procedureType == 'Modification de société') {
+            
             step = new Step({
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Non débuté',
+                        status: 'Débuté',
                         action: 'Fourniture des pièces',
                         document: [],
                         comment: '',
@@ -131,7 +134,7 @@ export class FoldersService {
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Non débuté',
+                        status: 'Débuté',
                         action: 'Fourniture des pièces',
                         document: [],
                         comment: '',
@@ -176,7 +179,7 @@ export class FoldersService {
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Non débuté',
+                        status: 'Débuté',
                         action: 'Fourniture des pièces',
                         document: [],
                         comment: '',
@@ -233,8 +236,6 @@ export class FoldersService {
                 ]
             });
         }
-
-        const customer = await this.customerRepository.findOneBy({ id: createFolderDto.customerId });
 
         const folder = new Folder({
             ...createFolderDto

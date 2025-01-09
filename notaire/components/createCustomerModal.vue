@@ -52,10 +52,23 @@
                             color="primary" 
                             prepend-icon="" 
                             label="Date de naissance" 
-                            variant="outlined" :max="maxDate" 
+                            variant="outlined" 
+                            :max="maxDate" 
                             :year="new Date(maxDate).getFullYear()"
                         >
                         </v-date-input>
+                    </v-col>
+
+                    <v-col
+                        cols="6"
+                    >
+                        <v-text-field
+                            v-model="email"
+                            color="primary"
+                            label="Email"
+                            variant="outlined"
+                            :rules="[emailRule]"
+                        ></v-text-field>
                     </v-col>
 
                     <v-col
@@ -149,12 +162,17 @@
     
     const lastName = ref('');
     const firstName = ref('');
-    const gender = ref('');
-    const birthDate = ref('');
+    const gender = ref(null);
+    const birthDate = ref(null);
+    const email = ref('');
     const phone = ref('');
-    const identification = ref('');
+    const identification = ref(null);
     const identificationNumber = ref('');
     const imageOfIdentification = ref(null);
+
+    const emailRule = (v) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
+    }
 
     const emit = defineEmits(['update:open']);
 
@@ -168,21 +186,22 @@
     ).toISOString().split('T')[0]; // Format ISO pour Vuetify
 
     const handleCustomer = async () => {
-        const customerData = {
-            lastName: lastName.value,
-            firstName: firstName.value,
-            gender: gender.value,
-            birthDate: birthDate.value,
-            phone: phone.value,
-            identification: identification.value,
-            identificationNumber: identificationNumber.value,
-            imageOfIdentification: imageOfIdentification.value,
-        };
-
+        const customerData = new FormData();
+        
+        customerData.append('lastName', lastName.value)
+        customerData.append('firstName', firstName.value)
+        customerData.append('gender', gender.value)
+        customerData.append('birthDate', birthDate.value)
+        customerData.append('email', email.value)
+        customerData.append('phone', phone.value)
+        customerData.append('identification', identification.value)
+        customerData.append('identificationNumber', identificationNumber.value)
+        customerData.append('imageOfIdentification', imageOfIdentification.value)
+        
         try {
             const data = await $fetch(`${config.public.baseUrl}/customers`, {
                 method: 'POST',
-                body: JSON.stringify(customerData),
+                body: customerData,
             });
             alert('Client créé avec succès.');
             closeModal();

@@ -64,6 +64,7 @@
                                             label="Nom"
                                             variant="outlined"
                                             hide-details
+                                            disabled
                                         ></v-text-field>
                                     </v-col>
 
@@ -76,6 +77,7 @@
                                             label="CNI"
                                             variant="outlined"
                                             hide-details
+                                            disabled
                                         ></v-text-field>
                                     </v-col>
 
@@ -88,6 +90,7 @@
                                             label="Prénom"
                                             variant="outlined"
                                             hide-details
+                                            disabled
                                         ></v-text-field>
                                     </v-col>
 
@@ -100,6 +103,7 @@
                                             label="Sexe"
                                             variant="outlined"
                                             hide-details
+                                            disabled
                                         ></v-text-field>
                                     </v-col>
 
@@ -112,6 +116,7 @@
                                             label="Date de naissance"
                                             variant="outlined"
                                             hide-details
+                                            disabled
                                         ></v-text-field>
                                     </v-col>
 

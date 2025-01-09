@@ -3,6 +3,7 @@ export class CreateCustomerDto {
     firstName: string;
     gender: string;
     birthDate: Date;
+    email: string;
     phone: string;
     identification: string;
     identificationNumber: string;

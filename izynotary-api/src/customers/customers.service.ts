@@ -20,7 +20,7 @@ export class CustomersService {
     }
 
     async findAll() {
-        return await this.customerRepository.find();
+        return await this.customerRepository.find({relations: {folders: true,}});
     }
 
     async findOne(id: number) {

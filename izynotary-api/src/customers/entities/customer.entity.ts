@@ -20,6 +20,9 @@ export class Customer {
     birthDate: Date;
 
     @Column()
+    email: string;
+
+    @Column()
     phone: string;
 
     @Column()

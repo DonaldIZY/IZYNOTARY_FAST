@@ -1,4 +1,4 @@
-<template>
+ X <template>
     <div class="ma-4" >
         <back-button title="Gestion des clients" goBackTo="/home"/>
     </div>
@@ -24,6 +24,8 @@
                 :headers="customersHeaders"
                 :items="customers"
                 :search="customersSearch"
+                no-data-text="Aucun client trouvé."
+                items-per-page-text="Clients par page :"
                 hover
                 item-value="ID"
             >
@@ -32,7 +34,7 @@
                     <td>{{ item.LAST_NAME }}</td>
                     <td>{{ item.FIRST_NAME }}</td>
                     <td>{{ item.EMAIL }}</td>
-                    <td>{{ item.CONTACT }}</td>
+                    <td>{{ item.PHONE }}</td>
                     <td>{{ item.CURRENT_FILES }}</td>
                     <td>{{ item.COMPLETED_FILES }}</td>
                     <td>{{ item.HANGING_FILES }}</td>
@@ -51,7 +53,7 @@
         { align: "start", key: "LAST_NAME", title: "Nom" },
         { align: "start", key: "FIRST_NAME", title: "Prénoms" },
         { align: "start", key: "EMAIL", title: "Email" },
-        { align: "start", key: "CONTACT", title: "Contact" },
+        { align: "start", key: "PHONE", title: "Téléphone" },
         { align: "start", key: "CURRENT_FILES", title: "Dossiers en cours" },
         { align: "start", key: "COMPLETED_FILES", title: "Dossiers terminés" },
         { align: "start", key: "HANGING_FILES", title: "Dossiers suspendus" },
@@ -59,44 +61,7 @@
         { align: "start", key: "FILES", title: "Dossiers" },
     ]);
 
-    const customers = ref([
-        {
-            ID: 1,
-            LAST_NAME: "Smith",
-            FIRST_NAME: "John",
-            EMAIL: "john.smith@example.com",
-            CONTACT: "0123456789",
-            CURRENT_FILES: 6,
-            COMPLETED_FILES: 3,
-            HANGING_FILES: 2,
-            CLOSED_FILES: 1,
-            FILES: 12,
-        },
-        {
-            ID: 2,
-            LAST_NAME: "Johnson",
-            FIRST_NAME: "Jane",
-            EMAIL: "jane.johnson@example.com",
-            CONTACT: "9876543210",
-            CURRENT_FILES: 7,
-            COMPLETED_FILES: 5,
-            HANGING_FILES: 3,
-            CLOSED_FILES: 0,
-            FILES: 15,
-        },
-        {
-            ID: 3,
-            LAST_NAME: "Doe",
-            FIRST_NAME: "Michael",
-            EMAIL: "michael.doe@example.com",
-            CONTACT: "1234567890",
-            CURRENT_FILES: 1,
-            COMPLETED_FILES: 0,
-            HANGING_FILES: 0,
-            CLOSED_FILES: 1,
-            FILES: 2,
-        },
-    ]);
+    const customers = ref([]);
 
     const customersSearch = ref(null);
 
@@ -111,4 +76,38 @@
     const goToCustomerDetails = (customer) => {
         router.push(`/customersManagement/${customer.ID}`);
     };
+
+    const config = useRuntimeConfig();
+
+    const loadCustomer = async () => {
+        try {
+            const fetchedCustomers = await $fetch(`${config.public.baseUrl}/customers`);
+            
+            if (fetchedCustomers) {
+                customers.value = fetchedCustomers.map((customer) => ({
+                    ID: customer.id,
+                    LAST_NAME: customer.lastName,
+                    FIRST_NAME: customer.firstName,
+                    EMAIL: customer.email,
+                    PHONE: customer.phone,
+                    CURRENT_FILES: 0,
+                    COMPLETED_FILES: 0,
+                    HANGING_FILES: 0,
+                    CLOSED_FILES: 0,
+                    FILES: customer.folders.length,
+                }));
+                
+            }
+        } catch (err) {
+            console.error('Erreur lors du chargement des clients :', err);
+        }
+    };
+
+    loadCustomer();
+
+    watchEffect(() => {
+        if (!open.value) {
+            loadCustomer();
+        }
+    });
 </script>
