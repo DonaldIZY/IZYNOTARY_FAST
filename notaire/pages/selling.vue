@@ -354,4 +354,6 @@
             identificationNumber.value = selectedCustomer.value.IDENTIFICATION_NUMBER;
         }
     });
+
+    
 </script>

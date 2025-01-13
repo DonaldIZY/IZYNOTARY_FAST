@@ -20,13 +20,10 @@ export class Folder {
     @UpdateDateColumn()
     updateAt: Date;
 
-    @Column({ type: "json" })
-    requiredFiles: any[];
-
     @Column()
     progression: number;
 
-    @Column()
+    @Column({ type: "enum", enum: ["En cours", "Suspendue", "Arrêtée", "Terminée"] })
     status: string;
 
     @Column({ nullable: true })

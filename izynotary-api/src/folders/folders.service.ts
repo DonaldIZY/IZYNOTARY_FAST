@@ -83,7 +83,7 @@ export class FoldersService {
                         stepNum: '1',
                         status: 'Débuté',
                         action: 'Fourniture des pièces',
-                        document: [],
+                        document: createFolderDto.requiredFiles,
                         comment: '',
                         editBy: ''
                     },

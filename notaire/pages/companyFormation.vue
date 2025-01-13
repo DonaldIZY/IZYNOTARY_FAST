@@ -150,37 +150,37 @@
                             cols="12"
                         >
                             
-                            <required-document label="CNI du client"></required-document>
+                            <required-document label="CNI du client" v-model="customerCNI"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Casier judiciaire"></required-document>
+                            <required-document label="Casier judiciaire" v-model="criminalRecord"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Bail"></required-document>
+                            <required-document label="Bail" v-model="lease"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Croquis de la situation géographique"></required-document>
+                            <required-document label="Croquis de la situation géographique" v-model="sketchOfGeoLocation"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Fiche à renseigner de la société à constituer"></required-document>
+                            <required-document label="Fiche à renseigner de la société à constituer" v-model="formForCompanyFormation"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Capital à libérer"></required-document>
+                            <required-document label="Capital à libérer" v-model="capitalToBeReleased"></required-document>
                         </v-col>
                         
                     </v-row>
@@ -194,7 +194,7 @@
         <v-btn
             color="primary"
             class="text-none"
-            @click="toggleConfModal"
+            @click="handleProcedure"
         >
             Enregistrer la procédure
         </v-btn>
@@ -220,6 +220,13 @@
     const birthDate = ref('');
     const gender = ref('');
     const identificationNumber = ref('');
+
+    const customerCNI = ref(null);
+    const criminalRecord = ref(null);
+    const lease = ref(null);
+    const sketchOfGeoLocation = ref(null);
+    const formForCompanyFormation = ref(null);
+    const capitalToBeReleased = ref(null);
     
     const toggleConfModal = () => {
         openConf.value = !openConf.value;
@@ -269,4 +276,42 @@
             identificationNumber.value = selectedCustomer.value.IDENTIFICATION_NUMBER;
         }
     });
+
+    const handleProcedure = async () => {
+
+        const procedureData = new FormData();
+
+        const today = new Date();
+        const day = String(today.getDate()).padStart(2, '0');
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+        const year = today.getFullYear();
+
+        const formattedDate = `${day}${month}${year}`;
+        
+        procedureData.append('folderNum',  'CS'+formattedDate );
+        procedureData.append('procedureType', 'Constitution de société');
+        procedureData.append('requiredFiles', {
+            'customerCNI': customerCNI.value,
+            'criminalRecord': criminalRecord.value,
+            'lease': lease.value,
+            'sketchOfGeoLocation': sketchOfGeoLocation.value,
+            'formForCompanyFormation': formForCompanyFormation.value,
+            'capitalToBeReleased': capitalToBeReleased.value
+        });
+        procedureData.append('progression', '1/6');
+        procedureData.append('status', 'En cours');
+        procedureData.append('customerId', selectedCustomer.value.ID);
+        
+        try {
+            const date = await $fetch(`${config.public.baseUrl}/folders`, {
+                method: 'POST',
+                body: procedureData
+            });
+            alert('Procédure créée avec succès.');
+            
+        } catch (error) {
+            console.error('Erreur lors de la création de la procédure :', error);
+        }
+        
+    };
 </script>
