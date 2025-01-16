@@ -5,11 +5,13 @@ import * as fs from 'fs';
 
 async function bootstrap() {
 
-  const uploadDir = join(__dirname, '..','uploads');
-
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
+  const uploadDir = join(__dirname, '..', 'uploads');
+  const customerDir = join(uploadDir, 'customers');
+  const procedureDir = join(uploadDir, 'procedures');
+  
+  fs.mkdirSync(customerDir, { recursive: true });
+  fs.mkdirSync(procedureDir, { recursive: true });
+  
   
   const app = await NestFactory.create(AppModule);
 

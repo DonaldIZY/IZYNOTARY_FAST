@@ -27,7 +27,7 @@ export class FoldersService {
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Débuté',
+                        status: 'Terminée',
                         action: 'Fourniture des pièces',
                         document: [],
                         comment: '',
@@ -81,7 +81,7 @@ export class FoldersService {
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Débuté',
+                        status: 'Terminée',
                         action: 'Fourniture des pièces',
                         document: createFolderDto.requiredFiles,
                         comment: '',

@@ -20,7 +20,7 @@ export class Folder {
     @UpdateDateColumn()
     updateAt: Date;
 
-    @Column()
+    @Column({ type: "decimal", precision: 5, scale: 2 })
     progression: number;
 
     @Column({ type: "enum", enum: ["En cours", "Suspendue", "Arrêtée", "Terminée"] })

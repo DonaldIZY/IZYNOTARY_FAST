@@ -198,6 +198,7 @@
         customerData.append('identificationNumber', identificationNumber.value)
         customerData.append('imageOfIdentification', imageOfIdentification.value)
         
+        console.log(customerData.get('imageOfIdentification'));
         try {
             const data = await $fetch(`${config.public.baseUrl}/customers`, {
                 method: 'POST',

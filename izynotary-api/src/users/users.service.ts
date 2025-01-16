@@ -63,7 +63,7 @@ export class UsersService {
 	}
 
 	async remove(id: number) {
-		await this.usersRepository.delete(id);
+		(await this.usersRepository.delete(id));
 	}
 
 	async validateUser(email: string, password: string) {

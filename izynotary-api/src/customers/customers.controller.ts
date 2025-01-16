@@ -13,7 +13,7 @@ export class CustomersController {
     @Post()
     @UseInterceptors(FileInterceptor('imageOfIdentification', {
         storage: diskStorage({
-            destination: './uploads', // Dossier de destination
+            destination: './uploads/customers', // Dossier de destination
             filename: (req, file, callback) => {
                 const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
                 const ext = extname(file.originalname);

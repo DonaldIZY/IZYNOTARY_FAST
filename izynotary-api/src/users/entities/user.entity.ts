@@ -17,7 +17,7 @@ export class User {
     @Column()
     email: string;
 
-    @OneToOne(() => Identifier, { cascade: true })
+    @OneToOne(() => Identifier, { cascade: true, onDelete: "CASCADE" })
     @JoinColumn()
     identifier: Identifier;
 
@@ -27,7 +27,7 @@ export class User {
     @UpdateDateColumn()
     updateAt: Date;
 
-    @ManyToOne(() => Role, role => role.users)
+    @ManyToOne(() => Role, role => role.users, { onDelete: "CASCADE" })
     role: Role;
 
     constructor(user: Partial<User>) {
