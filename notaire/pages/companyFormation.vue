@@ -150,37 +150,37 @@
                             cols="12"
                         >
                             
-                            <required-document label="CNI du client" v-model="customerCNI"></required-document>
+                            <required-document label="CNI du client" v-model:file="customerCNI"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Casier judiciaire" v-model="criminalRecord"></required-document>
+                            <required-document label="Casier judiciaire" v-model:file="criminalRecord"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Bail" v-model="lease"></required-document>
+                            <required-document label="Bail" v-model:file="lease"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Croquis de la situation géographique" v-model="sketchOfGeoLocation"></required-document>
+                            <required-document label="Croquis de la situation géographique" v-model:file="sketchOfGeoLocation"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Fiche à renseigner de la société à constituer" v-model="formForCompanyFormation"></required-document>
+                            <required-document label="Fiche à renseigner de la société à constituer" v-model:file="formForCompanyFormation"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Capital à libérer" v-model="capitalToBeReleased"></required-document>
+                            <required-document label="Capital à libérer" v-model:file="capitalToBeReleased"></required-document>
                         </v-col>
                         
                     </v-row>
@@ -288,19 +288,26 @@
 
         const formattedDate = `${day}${month}${year}`;
         
-        procedureData.append('folderNum',  'CS'+formattedDate );
+        procedureData.append('folderNum',  'CS-'+formattedDate );
         procedureData.append('procedureType', 'Constitution de société');
-        procedureData.append('requiredFiles', {
-            'customerCNI': customerCNI.value,
-            'criminalRecord': criminalRecord.value,
-            'lease': lease.value,
-            'sketchOfGeoLocation': sketchOfGeoLocation.value,
-            'formForCompanyFormation': formForCompanyFormation.value,
-            'capitalToBeReleased': capitalToBeReleased.value
-        });
-        procedureData.append('progression', '1/6');
+        procedureData.append('progression', 1/6);
         procedureData.append('status', 'En cours');
         procedureData.append('customerId', selectedCustomer.value.ID);
+        
+        const requiredFiles = {
+            customerCNI: customerCNI.value,
+            criminalRecord: criminalRecord.value,
+            lease: lease.value,
+            sketchOfGeoLocation: sketchOfGeoLocation.value,
+            formForCompanyFormation: formForCompanyFormation.value,
+            capitalToBeReleased: capitalToBeReleased.value
+        };
+
+        for (const key in requiredFiles) {
+            if (requiredFiles[key]) {
+                procedureData.append(`requiredFiles[${key}]`, requiredFiles[key]);
+            }
+        }
         
         try {
             const date = await $fetch(`${config.public.baseUrl}/folders`, {

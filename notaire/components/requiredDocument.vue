@@ -5,7 +5,7 @@
       :label="label"
       variant="outlined"
       hide-details
-      v-model="internalValue"
+      v-model="file"
       accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt"
       @change="onFileChange"
     ></v-file-input>
@@ -15,13 +15,17 @@
       color="primary"
       @click="toggleModal"
       class="text-none"
-      :disabled="!internalValue"
+      :disabled="!file"
     >
       Aperçu
     </v-btn>
 
     <!-- Dialog pour prévisualisation -->
-    <v-dialog v-model="open" width="50%" class="ma-4">
+    <v-dialog
+      v-model="open"
+      width="50%"
+      class="ma-4"
+    >
       <v-card>
         <v-card-title>{{ label }}</v-card-title>
         <v-card-text>
@@ -54,95 +58,79 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import mammoth from 'mammoth'; // Assurez-vous d'avoir installé mammoth.js : `npm install mammoth`
 
-const props = defineProps({
-  modelValue: {
-    type: File, // ou [File, null] si vous voulez autoriser null
-    default: null,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-});
+  const props = defineProps({
+    label: {
+      type: String,
+      required: true,
+    },
+  });
 
-const emit = defineEmits(['update:modelValue']);
+  const emit = defineEmits(['update:file']);
 
-const open = ref(false);
-const internalValue = ref(props.modelValue); // Valeur interne pour synchroniser avec v-model
-const previewContent = ref(null); // Contenu pour la prévisualisation
-const fileType = ref(null); // Type de fichier détecté
+  const open = ref(false);
+  const file = ref(null);
+  const previewContent = ref(null);
+  const fileType = ref(null);
 
-// Surveiller les changements de la prop modelValue
-watch(() => props.modelValue, (newValue) => {
-  internalValue.value = newValue;
-});
+  const toggleModal = () => {
+    open.value = !open.value;
+  };
 
-// Surveiller les changements de la valeur interne et émettre l'événement
-watch(internalValue, (newValue) => {
-  emit('update:modelValue', newValue);
-});
-
-// Fonction pour ouvrir/fermer le modal
-const toggleModal = () => {
-  open.value = !open.value;
-};
-
-// Fonction pour gérer les fichiers
-const onFileChange = () => {
-  // Nettoyer les données précédentes
-  if (previewContent.value && fileType.value === 'pdf') {
-    URL.revokeObjectURL(previewContent.value); // Révoquer l'URL blob précédente
-  }
-  previewContent.value = null;
-  fileType.value = null;
-
-  if (internalValue.value) {
-    const file = internalValue.value;
-
-    // Détecter le type de fichier
-    const fileExtension = file.name.split('.').pop().toLowerCase();
-
-    if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
-      fileType.value = 'image';
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        previewContent.value = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    } else if (fileExtension === 'pdf') {
-      fileType.value = 'pdf';
-      previewContent.value = URL.createObjectURL(file);
-    } else if (fileExtension === 'txt') {
-      fileType.value = 'text';
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        previewContent.value = e.target.result;
-      };
-      reader.readAsText(file);
-    } else if (fileExtension === 'docx') {
-      fileType.value = 'docx';
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        const arrayBuffer = e.target.result;
-        try {
-          const result = await mammoth.convertToHtml({ arrayBuffer });
-          previewContent.value = result.value; // Contenu HTML converti
-        } catch (error) {
-          console.error('Erreur lors de la lecture du fichier Word :', error);
-          previewContent.value = 'Impossible de lire ce fichier Word.';
-        }
-      };
-      reader.readAsArrayBuffer(file); // Lire le fichier en tant que buffer
-    } else if (fileExtension === 'doc') {
-      fileType.value = 'doc';
-      previewContent.value = URL.createObjectURL(file); // Fournit un lien de téléchargement
-    } else {
-      fileType.value = null;
-      previewContent.value = null;
+  const onFileChange = async () => {
+    if (previewContent.value && fileType.value === 'pdf') {
+      URL.revokeObjectURL(previewContent.value);
     }
-  }
-};
+    previewContent.value = null;
+    fileType.value = null;
+
+    if (file.value) {
+      const selectFile = file.value;
+      const fileExtension = selectFile.name.split('.').pop().toLowerCase();
+
+      try {
+        if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+          fileType.value = 'image';
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewContent.value = e.target.result;
+          };
+          reader.readAsDataURL(selectFile);
+        } else if (fileExtension === 'pdf') {
+          fileType.value = 'pdf';
+          previewContent.value = URL.createObjectURL(file);
+        } else if (fileExtension === 'txt') {
+          fileType.value = 'text';
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            previewContent.value = e.target.result;
+          };
+          reader.readAsText(selectFile);
+        } else if (fileExtension === 'docx') {
+          fileType.value = 'docx';
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            const arrayBuffer = e.target.result;
+            const result = await mammoth.convertToHtml({ arrayBuffer });
+            previewContent.value = result.value;
+          };
+          reader.readAsArrayBuffer(selectFile);
+        } else if (fileExtension === 'doc') {
+          fileType.value = 'doc';
+          previewContent.value = URL.createObjectURL(selectFile);
+        } else {
+          fileType.value = null;
+          previewContent.value = 'Type de fichier non supporté.';
+        }
+
+        emit('update:file', selectFile);
+      } catch (error) {
+        console.error('Erreur lors de la prévisualisation du fichier :', error);
+        previewContent.value = 'Erreur lors du traitement du fichier.';
+      }
+
+      emit('update:file', file.value)
+    
+    }
+  };
 </script>

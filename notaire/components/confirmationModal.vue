@@ -29,7 +29,7 @@
                     color="primary"
                     text="Valider"
                     variant="tonal"
-                    @click="closeModal"
+                    @click="submitModal"
                     class="text-none"
                 ></v-btn>
             </v-card-actions>
@@ -47,11 +47,20 @@
             type: String,
             default: "",
         },
+        submit: {
+            type: Function,
+            default: () => {},
+        },
     });
 
     const emit = defineEmits(['update:open']);
 
     const closeModal = () => {
+        emit('update:open', false);
+    };
+
+    const submitModal = () => {
+        props.submit();
         emit('update:open', false);
     };
 </script>
