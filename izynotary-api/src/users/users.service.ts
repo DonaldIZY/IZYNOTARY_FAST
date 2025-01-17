@@ -63,7 +63,16 @@ export class UsersService {
 	}
 
 	async remove(id: number) {
-		(await this.usersRepository.delete(id));
+		const user = await this.usersRepository.findOne({
+			where: { id },
+			relations: { identifier: true }, // Charge explicitement l'identifier
+		});
+	
+		if (!user) {
+			throw new Error("Utilisateur non trouvé");
+		}
+	
+		await this.usersRepository.remove(user);
 	}
 
 	async validateUser(email: string, password: string) {

@@ -102,10 +102,17 @@
     const roleId = ref(null);
 
     const emit = defineEmits(['update:open']);
-
     const config = useRuntimeConfig();
 
+    const resetForm = () => {
+        lastName.value = '';
+        firstName.value = '';
+        email.value = '';
+        roleId.value = null;
+    };
+
     const closeModal = () => {
+        resetForm();
         emit('update:open', false);
     };
 

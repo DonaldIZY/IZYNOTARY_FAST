@@ -248,7 +248,7 @@ export class FoldersService {
     }
 
     async findAll() {
-        return await this.folderRepository.find();
+        return await this.folderRepository.find({relations: {customer: true}});
     }
 
     async findOne(id: number) {

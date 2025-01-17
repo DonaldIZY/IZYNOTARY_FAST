@@ -25,11 +25,19 @@
                     mdi-pencil
                 </v-icon>
                 <v-icon
+                    class="me-2"
                     size="small"
                     color="primary"
                     @click="toggleConfModal(item)"
                 >
                     mdi-delete
+                </v-icon>
+                <v-icon
+                    size="small"
+                    color="primary"
+                    @click="changePassword(item)"
+                >
+                    mdi-lock-reset
                 </v-icon>
             </template>
         </v-data-table>
@@ -109,4 +117,7 @@
         }
     };
     
+    const editUser = async (id) => {
+
+    };
 </script>

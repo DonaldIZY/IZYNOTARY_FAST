@@ -34,6 +34,9 @@
                     <v-data-table
                         :headers="proceduresHeaders"
                         :items="filteredProcedures"
+                        no-data-text="Aucune procédure trouvé."
+                        items-per-page-text="Procédures par page :"
+                        page-text
                         hover
                         item-value="NUM"
                     >
@@ -187,47 +190,21 @@
 </template>
 
 <script setup>
+
+    const config = useRuntimeConfig();
+
     const proceduresHeaders = ref([
         { align: "start", key: "NUM", title: "N°" },
         { align: "start", key: "CUSTOMER", title: "Client" },
         { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
         { align: "start", key: "CREATE_BY", title: "Créée par" },
         { align: "start", key: "CREATE_AT", title: "Date de création" },
-        { align: "start", key: "STEP", title: "Étape" },
+        { align: "start", key: "PROGRESSION", title: "Progression" },
         { align: "center", key: "STATUS", title: "Statut" },
         { align: "center", key: "DETAILS", title: "Détails" },
     ]);
 
-    const procedures = ref([
-        {
-            NUM: 1,
-            CUSTOMER: "Client 1",
-            PROCEDURE_TYPE: "Type 1",
-            CREATE_BY: "User 1",
-            CREATE_AT: "2022-01-01",
-            STEP: "Step 1",
-            STATUS: "Terminée",
-        },
-        {
-            NUM: 2,
-            CUSTOMER: "Client Kouasssi",
-            PROCEDURE_TYPE: "Type 2",
-            CREATE_BY: "User 2",
-            CREATE_AT: "2022-02-01",
-            STEP: "Step 2",
-            STATUS: "Arrêtée",
-        },
-        {
-            NUM: 3,
-            CUSTOMER: "Kouasssi Client",
-            PROCEDURE_TYPE: "Type 2",
-            CREATE_BY: "User 2",
-            CREATE_AT: "2022-02-01",
-            STEP: "Step 2",
-            STATUS: "En cours",
-        },
-        //...
-    ]);
+    const procedures = ref([]);
 
     const searchCNI = ref(null);
     const searchNum = ref(null);
@@ -257,5 +234,27 @@
         searchEndDate.value = null;
         searchStatus.value = null;
     };
+
+    const loadProcedures = async () => {
+        try {
+        
+            const fetchedProcedures = await $fetch(`${config.public.baseUrl}/folders`);
+            if (fetchedProcedures) {
+                procedures.value = fetchedProcedures.map((procedure, index) => ({
+                    NUM: index + 1,
+                    CUSTOMER: procedure.customer.lastName + " " + procedure.customer.firstName,
+                    PROCEDURE_TYPE: procedure.procedureType,
+                    CREATE_BY: '',
+                    CREATE_AT: new Date(procedure.createAt).toLocaleDateString(),
+                    PROGRESSION: (procedure.progression*100)+"%",
+                    STATUS: procedure.status,
+                }));
+            }
+        } catch (err) {
+            console.error('Erreur lors du chargement des procédures : ', err);
+        }
+    };
     
+    loadProcedures();
+
 </script>
