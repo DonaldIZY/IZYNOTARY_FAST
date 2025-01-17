@@ -8,12 +8,12 @@
     borderColor: {
       type: String,
       required: true
+    },
+    parentDoor: {
+      type: String,
+      required: true
     }
   });
-
-  const styleObject = {
-    "borderColor": props.borderColor
-  }
 
 </script>
 
@@ -39,8 +39,12 @@
 </style>
 
 <template>
-  <div class="stepDate" :style="styleObject">
+  <div v-if="parentDoor == 'not started'" class="stepDate" :style="{borderColor: borderColor, opacity: 0.5}">
     <img src="../assets/img/calendarfilled.png" />
     <span>16/01/2025</span>
+  </div>
+  <div v-else class="stepDate" :style="{borderColor: borderColor}">
+    <img src="../assets/img/calendarfilled.png" />
+    <span >16/01/2025</span>
   </div>
 </template>
