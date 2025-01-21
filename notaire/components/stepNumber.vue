@@ -15,15 +15,10 @@
     }
   });
 
-  const styleObject = {
-    "background": props.stepBackgroundColor,
-    "color": props.stepTextColor
-  };
-
 </script>
 
 <template>
-  <div class="stepNumber" :style="styleObject" >{{ stepNumber }}</div>
+  <div class="stepNumber" :style="{background: stepBackgroundColor, color: stepTextColor}" >{{ stepNumber }}</div>
 </template>
 
 <style scoped>

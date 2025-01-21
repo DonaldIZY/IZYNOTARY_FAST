@@ -25,7 +25,9 @@
       return "check.png";
     }else if(val == "current") {
       return "recycle.png";
-    }else{
+    }else if(val == "canceled") {
+      return "close.png";
+    }else if(val == "suspended") {
       return "dash.png";
     }
   }
@@ -33,11 +35,11 @@
 </script>
 
 <template>
-  <div v-if="parentDoor == 'not started'" class="stepProgressionIcon" :style="{background: stepBackgroundColor, opacity: 0.5}" >
-    <img :src="getImagePathFromStatus(parentDoor)" />
+  <div v-if="parentDoor == 'not started'" class="stepProgressionIcon" :style="{background: 'rgb(225, 225, 225)'}" >
+    <!-- <img :src="getImagePathFromStatus(parentDoor)" /> -->
   </div>
   <div v-else="parentDoor" class="stepProgressionIcon" :style="{background: stepBackgroundColor}" >
-    <img :src="getImagePathFromStatus(parentDoor)" />
+    <img  :src="getImagePathFromStatus(parentDoor)" />
   </div>
 </template>
 
