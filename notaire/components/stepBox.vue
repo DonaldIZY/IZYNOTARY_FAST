@@ -30,6 +30,10 @@
     date: {
       type: String,
       required: true
+    },
+    first: {
+      type: Boolean,
+      required: false
     }
   });
 
@@ -43,7 +47,7 @@
     }else if(val == "canceled") {
       return "red";
     }else if(val == "suspended") {
-      return "orangered";
+      return "purple";
     }
   }
 
@@ -51,7 +55,7 @@
 
 <template>
   <div class="stepBox">
-    <step-number :stepNumber="number" :stepBackgroundColor="statusToColor(status)" :stepTextColor="status == 'done' ? 'white' : 'black'" />
+    <step-number :stepNumber="number" :stepBackgroundColor="statusToColor(status)" :stepTextColor="status != 'not started' ? 'white' : 'black'" />
 
     <div class="stepText" :style="{borderColor: statusToColor(status)}" >
       <step-icon :stepBackgroundColor="statusToColor(status)" :image-path="icon" :parentDoor="status" />
@@ -69,17 +73,22 @@
       </div>
       <div class="triangle" :style="{borderTopColor: statusToColor(status)}"></div>
     </div>
-    <step-progress-icon :imagePath="progressIcon" :parent-door="status" :stepBackgroundColor="statusToColor(status)" />
+    <div class="line"></div>
+    <div v-if="!first" class="arrow"></div>
+    <step-progress-icon :parent-door="status" :stepBackgroundColor="statusToColor(status)" />
     <step-date :date="date" :borderColor="statusToColor(status)" :parentDoor="status" />
   </div>
 </template>
 
 <style scoped>
   .stepBox {
-    width: clamp(200px, 100%, 280px);
+    width: clamp(250px, 100%, 300px);
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 3rem 0.8rem;
+    /* border: 1px solid red; */
+    position: relative;
   }
 
   .stepText {
@@ -93,16 +102,23 @@
   }
 
   .stepText h2 {
-    font-size: 1.1rem;
+    width: 100%;
+    font-size: 0.9rem;
     text-align: center;
+    /* text-wrap: nowrap; */
+    overflow: hidden;
+    line-height: 1.3rem;
+    height: 4rem;
   }
 
   .subStepBox {
     padding: 1rem 0;
     display: flex;
+    width: 100%;
+    height: 15rem;
     flex-direction: column;
     gap: 1.2rem;
-    height: 15rem;
+    overflow-y: auto;
   }
   
   .triangle {
@@ -115,5 +131,45 @@
     bottom: 0;
     left: 50%;
     transform: translate(-50%, calc(1.5rem + 5px));
+  }
+
+  .line {
+    width: 100%;
+    height: 1px;
+    background: black;
+    position: absolute;
+    left: 0;
+    top: 81%;
+    z-index: -2;
+  }
+
+  .arrow {
+    width: 1px;
+    height: 1px;
+    background: black;
+    position: absolute;
+    left: 44%;
+    top: 81%;
+    z-index: -2;
+    transform: rotate(45deg);
+  }
+
+  .arrow::after, .arrow::before {
+    content: "";
+    display: block;
+    background: black;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .arrow::before {
+    width: 0.6rem;
+    height: 1px;
+  }
+
+  .arrow::after {
+    width: 1px;
+    height: 0.6rem;
   }
 </style>

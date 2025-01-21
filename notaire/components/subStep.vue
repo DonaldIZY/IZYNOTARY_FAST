@@ -30,18 +30,23 @@
     <input v-if="parentDoor == 'not started' || status == 'none'" disabled="true" :name="inputName" type="checkbox" :style="styleObject" />
     <input v-else-if="status == 'done'" :name="inputName" type="checkbox" :style="styleObject" checked /> 
     <input v-else :name="inputName" type="checkbox" :style="styleObject" />
-    <span>{{ text }}</span>
+    <p>{{ text }}</p>
   </div>
 </template>
 
 <style scoped>
   .subStep {
     display: flex;
+    width: 100%;
     align-items: center;
     gap: 10px;
   }
 
-  .subStep span {
+  .subStep p {
+    width: 100%;
+    min-width: 185px;
     font-size: 0.9rem;
+    /* text-wrap: nowrap; */
+    overflow-x: hidden;
   }
 </style>
