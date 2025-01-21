@@ -29,7 +29,7 @@ export class FoldersService {
                         stepNum: '1',
                         status: 'Terminée',
                         action: 'Fourniture des pièces',
-                        document: [],
+                        document: createFolderDto.requiredFiles,
                         comment: '',
                         editBy: ''
                     },
@@ -134,9 +134,9 @@ export class FoldersService {
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Débuté',
+                        status: 'Terminée',
                         action: 'Fourniture des pièces',
-                        document: [],
+                        document: createFolderDto.requiredFiles,
                         comment: '',
                         editBy: ''
                     },
@@ -174,14 +174,14 @@ export class FoldersService {
                     }
                 ]
             });
-        } else if (createFolderDto.procedureType == 'Succession de biens immobiliers ') {
+        } else if (createFolderDto.procedureType == 'Succession de biens immobiliers') {
             step = new Step({
                 steps: [
                     {
                         stepNum: '1',
-                        status: 'Débuté',
+                        status: 'Terminée',
                         action: 'Fourniture des pièces',
-                        document: [],
+                        document: createFolderDto.requiredFiles,
                         comment: '',
                         editBy: ''
                     },

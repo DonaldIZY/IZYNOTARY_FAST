@@ -10,7 +10,7 @@ import { extname } from 'path';
 export class FoldersController {
     constructor(private readonly foldersService: FoldersService) {}
 
-    @Post()
+    @Post('companyFormation')
     @UseInterceptors(
         FileFieldsInterceptor(
             [
@@ -33,11 +33,124 @@ export class FoldersController {
             },
         ),
     )
-    async create(
+    async createCompanyFormation(
         @UploadedFiles() files: Record<string, Express.Multer.File[]>,
         @Body() createFolderDto: CreateFolderDto
     ) {
-        console.log('📂 Fichiers reçus:', files);
+
+        // Construction de l'objet requiredFiles avec les chemins des fichiers
+        const uploadedFiles = {};
+        Object.keys(files).forEach((key) => {
+            uploadedFiles[key.replace('requiredFiles[', '').replace(']', '')] = `/uploads/procedures/${files[key][0].filename}`;
+        });
+
+        // Assignation du champ requiredFiles au DTO
+        createFolderDto.requiredFiles = uploadedFiles;
+
+        // Sauvegarde dans la base de données via le service
+        return this.foldersService.create(createFolderDto);
+    }
+
+    @Post('companyModification')
+    @UseInterceptors(
+        FileFieldsInterceptor(
+            [
+                { name: 'requiredFiles[customerCNI]', maxCount: 1 },
+                { name: 'requiredFiles[RCCM]', maxCount: 1 },
+                { name: 'requiredFiles[status]', maxCount: 1 },
+                { name: 'requiredFiles[DNSV]', maxCount: 1 },
+            ],
+            {
+                storage: diskStorage({
+                    destination: './uploads/procedures',
+                    filename: (req, file, callback) => {
+                        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                        const ext = extname(file.originalname);
+                        callback(null, `${file.fieldname.replace('requiredFiles[', '').replace(']', '')}-${uniqueSuffix}${ext}`);
+                    },
+                }),
+            },
+        ),
+    )
+    async createCompanyModification(
+        @UploadedFiles() files: Record<string, Express.Multer.File[]>,
+        @Body() createFolderDto: CreateFolderDto
+    ) {
+
+        // Construction de l'objet requiredFiles avec les chemins des fichiers
+        const uploadedFiles = {};
+        Object.keys(files).forEach((key) => {
+            uploadedFiles[key.replace('requiredFiles[', '').replace(']', '')] = `/uploads/procedures/${files[key][0].filename}`;
+        });
+
+        // Assignation du champ requiredFiles au DTO
+        createFolderDto.requiredFiles = uploadedFiles;
+
+        // Sauvegarde dans la base de données via le service
+        return this.foldersService.create(createFolderDto);
+    }
+
+    @Post('transferOfMovableProperty')
+    @UseInterceptors(
+        FileFieldsInterceptor(
+            [
+                { name: 'requiredFiles[customerCNI]', maxCount: 1 },
+                { name: 'requiredFiles[birthCertificate]', maxCount: 1 },
+            ],
+            {
+                storage: diskStorage({
+                    destination: './uploads/procedures',
+                    filename: (req, file, callback) => {
+                        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                        const ext = extname(file.originalname);
+                        callback(null, `${file.fieldname.replace('requiredFiles[', '').replace(']', '')}-${uniqueSuffix}${ext}`);
+                    },
+                }),
+            },
+        ),
+    )
+    async createTransferOfMovableProperty(
+        @UploadedFiles() files: Record<string, Express.Multer.File[]>,
+        @Body() createFolderDto: CreateFolderDto
+    ) {
+
+        // Construction de l'objet requiredFiles avec les chemins des fichiers
+        const uploadedFiles = {};
+        Object.keys(files).forEach((key) => {
+            uploadedFiles[key.replace('requiredFiles[', '').replace(']', '')] = `/uploads/procedures/${files[key][0].filename}`;
+        });
+
+        // Assignation du champ requiredFiles au DTO
+        createFolderDto.requiredFiles = uploadedFiles;
+
+        // Sauvegarde dans la base de données via le service
+        return this.foldersService.create(createFolderDto);
+    }
+
+    @Post('transferOfRealEstate')
+    @UseInterceptors(
+        FileFieldsInterceptor(
+            [
+                { name: 'requiredFiles[cniOfRightsHolders]', maxCount: 1 },
+                { name: 'requiredFiles[cniOfTheDonor]', maxCount: 1 },
+                { name: 'requiredFiles[birthCertificateOfTheRightsHolders]', maxCount: 1 },
+            ],
+            {
+                storage: diskStorage({
+                    destination: './uploads/procedures',
+                    filename: (req, file, callback) => {
+                        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                        const ext = extname(file.originalname);
+                        callback(null, `${file.fieldname.replace('requiredFiles[', '').replace(']', '')}-${uniqueSuffix}${ext}`);
+                    },
+                }),
+            },
+        ),
+    )
+    async createTransferOfRealEstate(
+        @UploadedFiles() files: Record<string, Express.Multer.File[]>,
+        @Body() createFolderDto: CreateFolderDto
+    ) {
 
         // Construction de l'objet requiredFiles avec les chemins des fichiers
         const uploadedFiles = {};

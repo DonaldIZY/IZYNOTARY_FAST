@@ -23,7 +23,7 @@
                             <h4 class="mb-3">Informations du client</h4>
                             <div class="d-flex flex-column justify-center">
                                 <v-form>
-                                    <v-select
+                                    <v-combobox
                                         v-model="customerId"
                                         color="primary"
                                         label="Selectionner un client"
@@ -31,8 +31,8 @@
                                         item-title="NAME"
                                         item-value="ID"
                                         variant="outlined"
-                                        hide-details=""
-                                    ></v-select>
+                                        hide-details
+                                    ></v-combobox>
                                 </v-form>
                                 <v-divider class="my-5">ou</v-divider>
                                 <v-btn color="primary" class="text-none align-self-center" @click="toggleModal">Créer le client</v-btn>
@@ -163,7 +163,7 @@
                             cols="12"
                         >
                             
-                            <required-document label="Statut" v-model:file="statut"></required-document>
+                            <required-document label="Statut" v-model:file="status"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
@@ -211,7 +211,7 @@
 
     const customerCNI = ref(null);
     const RCCM = ref(null);
-    const statut = ref(null);
+    const status = ref(null);
     const DNSV = ref(null);
         
     const toggleConfModal = () => {
@@ -275,7 +275,7 @@
         const formattedDate = `${day}${month}${year}`;
 
         procedureData.append('folderNum',  'CS-'+formattedDate );
-        procedureData.append('procedureType', 'Constitution de société');
+        procedureData.append('procedureType', 'Modification de société');
         procedureData.append('progression', 1/6);
         procedureData.append('status', 'En cours');
         procedureData.append('customerId', selectedCustomer.value.ID);
@@ -283,7 +283,7 @@
         const requiredFiles = {
             customerCNI: customerCNI.value,
             RCCM: RCCM.value,
-            statut: statut.value,
+            status: status.value,
             DNSV: DNSV.value,
         };
 
@@ -294,7 +294,7 @@
         }
 
         try {
-            const date = await $fetch(`${config.public.baseUrl}/folders`, {
+            const date = await $fetch(`${config.public.baseUrl}/folders/companyModification`, {
                 method: 'POST',
                 body: procedureData
             });

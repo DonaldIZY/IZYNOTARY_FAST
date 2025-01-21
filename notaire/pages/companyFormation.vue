@@ -31,7 +31,7 @@
                                         item-title="NAME"
                                         item-value="ID"
                                         variant="outlined"
-                                        hide-details=""
+                                        hide-details
                                     ></v-combobox>
                                 </v-form>
                                 <v-divider class="my-5">ou</v-divider>
@@ -310,7 +310,7 @@
         }
         
         try {
-            const date = await $fetch(`${config.public.baseUrl}/folders`, {
+            const date = await $fetch(`${config.public.baseUrl}/folders/companyFormation`, {
                 method: 'POST',
                 body: procedureData
             });
