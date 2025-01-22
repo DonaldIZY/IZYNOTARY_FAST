@@ -277,6 +277,22 @@
         }
     });
 
+    const resetFields = () => {
+        customerId.value = null;
+        selectedCustomer.value = null;
+        firstName.value = '';
+        lastName.value = '';
+        birthDate.value = '';
+        gender.value = '';
+        identificationNumber.value = '';
+        customerCNI.value = null;
+        criminalRecord.value = null;
+        lease.value = null;
+        sketchOfGeoLocation.value = null;
+        formForCompanyFormation.value = null;
+        capitalToBeReleased.value = null;
+    };
+
     const handleProcedure = async () => {
 
         const procedureData = new FormData();
@@ -315,6 +331,7 @@
                 body: procedureData
             });
             alert('Procédure créée avec succès.');
+            resetFields();
             
         } catch (error) {
             console.error('Erreur lors de la création de la procédure :', error);

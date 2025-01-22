@@ -1,21 +1,20 @@
 <template>
     <v-dialog
-        v-model="props.open"
+        v-model="$props.open"
         max-width="600"
     >
-
         <v-card
-            prepend-icon="mdi-account"
-            title="Créer un utilisateur"
+            prepend-icon="mdi-account-edit"
+            title="Modifier un utilisateur"
         >
-            <v-card-text >
-                
+            <v-card-text>
+
                 <v-row dense>
                     <v-col
                         cols="6"
                     >
                         <v-text-field
-                                v-model="lastName"
+                                v-model="user.lastName"
                                 color="primary"
                                 label="Nom"
                                 variant="outlined"
@@ -26,7 +25,7 @@
                         cols="6"
                     >
                         <v-text-field
-                            v-model="firstName"
+                            v-model="user.firstName"
                             color="primary"
                             label="Prénoms"
                             variant="outlined"
@@ -37,7 +36,7 @@
                         cols="6"
                     >
                         <v-text-field
-                            v-model="email"
+                            v-model="user.email"
                             color="primary"
                             label="Email"
                             variant="outlined"
@@ -49,7 +48,7 @@
                         cols="6"
                     >
                         <v-select
-                            v-model="roleId"
+                            v-model="user.roleId"
                             color="primary"
                             label="Rôle"
                             :items="roles"
@@ -61,7 +60,6 @@
                     
                 </v-row>
 
-            
             </v-card-text>
 
             <v-divider></v-divider>
@@ -84,60 +82,31 @@
                     class="text-none"
                 ></v-btn>
             </v-card-actions>
-        </v-card>  
+        </v-card>
     </v-dialog>
 </template>
 
-  <script setup>
+<script setup>
     const props = defineProps({
-        open: {
-          type: Boolean,
-          default: false,
-        },
+        open: false,
+        userData: Object,
     });
 
-    const lastName = ref('');
-    const firstName = ref('');
-    const email = ref('');
-    const roleId = ref(null);
+    const roles = ref([]);
 
-    const emit = defineEmits(['update:open']);
+    const user = reactive({
+     });
+
+    const emit = defineEmits(["update:open", "save"]);
+
     const config = useRuntimeConfig();
 
-    const resetForm = () => {
-        lastName.value = '';
-        firstName.value = '';
-        email.value = '';
-        roleId.value = null;
-    };
+    
 
     const closeModal = () => {
-        resetForm();
-        emit('update:open', false);
+        emit("update:open", false);
     };
 
-    const handleUser = async () => {
-
-        const userData = {
-            lastName: lastName.value,
-            firstName: firstName.value,
-            email: email.value,
-            roleId: roleId.value,
-        };
-
-        try {
-            const data = await $fetch(`${config.public.baseUrl}/users`, {
-                method: 'POST',
-                body: JSON.stringify(userData),
-            });
-            alert('Utilisateur créé avec succès.');
-            closeModal();
-        } catch (error) {
-            console.error('Erreur lors de la création de l\'utilisateur :', error);
-        }
-
-        
-    };
 
     const required = (v) => {
         return !!v || 'Le champ est requis.';
@@ -147,7 +116,7 @@
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
     }
 
-    const roles = ref([]);
+    
     const { data: fetchedRoles, error } = useFetch(`${config.public.baseUrl}/roles`);
 
     onMounted(() => {
@@ -160,5 +129,23 @@
             console.error('Erreur lors du chargement des roles :', error.value);
         }
     });
-    
-  </script> 
+
+    const handleUser = async () => {
+
+        try {
+
+            const data = await fetch(`${config.public.baseUrl}/users/${user.id}`, {
+                method: 'PUT',
+                body: user,
+            });
+            alert('Utilisateur modifié avec succès.');
+            closeModal();
+
+        } catch (error) {
+            console.error('Erreur lors de la modification de l\'utilisateur :', error);
+        }
+
+
+    };
+
+</script>

@@ -2,7 +2,7 @@
     <div class="d-flex justify-space-between ma-4" >
         <back-button title="Liste des utilisateurs" goBackTo="/home"/>
         <v-btn prependIcon="mdi-plus" color="primary" class="text-none" @click="toggleModal">Ajouter un utilisateur</v-btn>
-        <add-user :open="open" @update:open="open = $event"/>
+        <modal-add-user :open="open" @update:open="open = $event"/>
     </div>
 
     <div class="ma-4">
@@ -15,12 +15,15 @@
             page-text
             hover
         >
+            <template v-slot:item.ROLE="{ item }">
+                {{ item.ROLE.name }}
+            </template>
             <template v-slot:item.actions="{ item }">
                 <v-icon
                     class="me-2"
                     size="small"
                     color="primary"
-                    @click="editItem(item)"
+                    @click="toggleEditModal(item)"
                 >
                     mdi-pencil
                 </v-icon>
@@ -41,6 +44,7 @@
                 </v-icon>
             </template>
         </v-data-table>
+        <modal-edit-user :open="openEdit" :userData="selectedUser" @update:open="openEdit = $event" />
         <confirmation-modal text="Vous allez supprimer un utilisateur. Continuer?" :open="openConf" @update:open="openConf = $event" :submit="() => deleteUser(selectedUser.ID)"/>
     </div>
 </template>
@@ -63,6 +67,7 @@
     const usersSearch = ref(null);
     const open = ref(false);
     const openConf = ref(false);
+    const openEdit = ref(false);
     const selectedUser = ref(null);
 
     const toggleModal = () => {
@@ -70,9 +75,13 @@
     };
 
     const toggleConfModal = (item) => {
-        selectedUser.value = item;
-        console.log(selectedUser.value); 
+        selectedUser.value = item; 
         openConf.value = !openConf.value;
+    };
+
+    const toggleEditModal = (item) => {
+        selectedUser.value = item;
+        openEdit.value =!openEdit.value;
     };
 
     const loadUsers = async () => {
@@ -86,7 +95,7 @@
                     FIRST_NAME: user.firstName,
                     EMAIL: user.email,
                     CREATE_AT: new Date(user.createAt).toLocaleDateString(),
-                    ROLE: user.role.name,
+                    ROLE: user.role,
                 }));
             }
         } catch (err) {
@@ -117,7 +126,4 @@
         }
     };
     
-    const editUser = async (id) => {
-
-    };
 </script>

@@ -255,6 +255,19 @@
         }
     });
 
+    const resetFields = () => {
+        customerId.value = null;
+        selectedCustomer.value = null;
+        firstName.value = '';
+        lastName.value = '';
+        birthDate.value = '';
+        gender.value = '';
+        identificationNumber.value = '';
+        cniOfRightsHolders.value = null;
+        cniOfTheDonor.value = null;
+        birthCertificateOfTheRightsHolders.value = null;
+    };
+
     const handleProcedure = async () => {
 
         const procedureData = new FormData();
@@ -290,6 +303,7 @@
                 body: procedureData
             });
             alert('Procédure créée avec succès.');
+            resetFields();
             
         } catch (error) {
             console.error('Erreur lors de la création de la procédure :', error);

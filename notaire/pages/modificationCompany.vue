@@ -263,6 +263,20 @@
         }
     });
 
+    const resetFields = () => {
+        customerId.value = null;
+        selectedCustomer.value = null;
+        firstName.value = '';
+        lastName.value = '';
+        birthDate.value = '';
+        gender.value = '';
+        identificationNumber.value = '';
+        customerCNI.value = null;
+        RCCM.value = null;
+        status.value = null;
+        DNSV.value = null;
+    };
+
     const handleProcedure = async () => {
 
         const procedureData = new FormData();
@@ -299,6 +313,7 @@
                 body: procedureData
             });
             alert('Procédure créée avec succès.');
+            resetFields();
             
         } catch (error) {
             console.error('Erreur lors de la création de la procédure :', error);
