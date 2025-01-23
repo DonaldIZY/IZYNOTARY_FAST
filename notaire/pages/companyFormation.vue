@@ -31,7 +31,7 @@
                                         item-title="NAME"
                                         item-value="ID"
                                         variant="outlined"
-                                        hide-details=""
+                                        hide-details
                                     ></v-combobox>
                                 </v-form>
                                 <v-divider class="my-5">ou</v-divider>
@@ -277,6 +277,22 @@
         }
     });
 
+    const resetFields = () => {
+        customerId.value = null;
+        selectedCustomer.value = null;
+        firstName.value = '';
+        lastName.value = '';
+        birthDate.value = '';
+        gender.value = '';
+        identificationNumber.value = '';
+        customerCNI.value = null;
+        criminalRecord.value = null;
+        lease.value = null;
+        sketchOfGeoLocation.value = null;
+        formForCompanyFormation.value = null;
+        capitalToBeReleased.value = null;
+    };
+
     const handleProcedure = async () => {
 
         const procedureData = new FormData();
@@ -310,11 +326,12 @@
         }
         
         try {
-            const date = await $fetch(`${config.public.baseUrl}/folders`, {
+            const date = await $fetch(`${config.public.baseUrl}/folders/companyFormation`, {
                 method: 'POST',
                 body: procedureData
             });
             alert('Procédure créée avec succès.');
+            resetFields();
             
         } catch (error) {
             console.error('Erreur lors de la création de la procédure :', error);

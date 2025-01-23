@@ -8,7 +8,6 @@
             
             <v-col
                 cols="12"
-                lg="8"
                 class="d-flex justify-end"
             >
                 <v-btn
@@ -22,50 +21,6 @@
         </v-row>
         
         <v-row>
-            
-            <v-col
-                cols="12"
-                lg="8"
-            >
-                
-                <v-sheet :elevation="4" rounded class="pa-4">
-                    <h4 class="mb-3">Liste des procédures</h4>
-                    
-                    <v-data-table
-                        :headers="proceduresHeaders"
-                        :items="filteredProcedures"
-                        no-data-text="Aucune procédure trouvée"
-                        items-per-page-text="Procédures par page :"
-                        page-text
-                        hover
-                        item-value="NUM"
-                    >
-                        
-                        <template v-slot:item.DETAILS="{ item }">
-                                <v-btn
-                                    variant="text"
-                                    @click="showDetails(item)"
-                                    color="primary text-none"
-                                >
-                                    
-                                    Voir
-                                </v-btn>
-                        </template>
-
-                        <template v-slot:item.STATUS="{ item }">
-                            <v-chip
-                                :color="item.STATUS == 'Terminée' ? '#63AD19' : item.STATUS == 'En cours' ? '#FFC300' : '#AD1919'"
-                                :text="item.STATUS"
-                                size="small"
-                                variant="flat"
-                                label
-                            ></v-chip>
-                        </template>
-
-                    </v-data-table>
-                </v-sheet>
-                
-            </v-col>
 
             <v-col
                 cols="12"
@@ -183,6 +138,51 @@
                     </v-form>
                 </v-sheet>
             </v-col>
+
+            <v-col
+                cols="12"
+                lg="8"
+            >
+                
+                <v-sheet :elevation="4" rounded class="pa-4">
+                    <h4 class="mb-3">Liste des procédures</h4>
+                    
+                    <v-data-table
+                        :headers="proceduresHeaders"
+                        :items="filteredProcedures"
+                        no-data-text="Aucune procédure trouvé."
+                        items-per-page-text="Procédures par page :"
+                        page-text
+                        hover
+                        item-value="NUM"
+                    >
+                        
+                        <template v-slot:item.DETAILS="{ item }">
+                                <v-btn
+                                    variant="text"
+                                    @click="showDetails(item)"
+                                    color="primary text-none"
+                                >
+                                    
+                                    Voir
+                                </v-btn>
+                        </template>
+
+                        <template v-slot:item.STATUS="{ item }">
+                            <v-chip
+                                :color="item.STATUS == 'Terminée' ? '#63AD19' : item.STATUS == 'En cours' ? '#FFC300' : '#AD1919'"
+                                :text="item.STATUS"
+                                size="small"
+                                variant="flat"
+                                label
+                            ></v-chip>
+                        </template>
+
+                    </v-data-table>
+                </v-sheet>
+                
+            </v-col>
+
         </v-row>
     </div>
     
