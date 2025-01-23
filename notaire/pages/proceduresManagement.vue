@@ -150,23 +150,31 @@
                     <v-data-table
                         :headers="proceduresHeaders"
                         :items="filteredProcedures"
-                        no-data-text="Aucune procédure trouvé."
+                        no-data-text="Aucune procédure trouvée."
                         items-per-page-text="Procédures par page :"
                         page-text
                         hover
                         item-value="NUM"
                     >
                         
-                        <template v-slot:item.DETAILS="{ item }">
+                        <template v-slot:item.ACTIONS="{ item }">
                                 <v-btn
                                     variant="text"
-                                    @click="showDetails(item)"
-                                    color="primary text-none"
+                                    @click=""
+                                    color="primary text-none" 
+                                    :to="redirectRegardingProcedure(item)"
                                 >
                                     
                                     Voir
                                 </v-btn>
+                                <v-btn variant="text" color="primary text-none" @click="openModal" >
+                                Modifier
+                            </v-btn>
                         </template>
+
+                    
+
+                        
 
                         <template v-slot:item.STATUS="{ item }">
                             <v-chip
@@ -186,7 +194,7 @@
         </v-row>
     </div>
     
-    
+    <modal-edit-procedureStep :show="dialog" @close-modal="closeModal" @submit="updateProcedure" />
 </template>
 
 <script setup>
@@ -201,7 +209,7 @@
         { align: "start", key: "CREATE_AT", title: "Date de création" },
         { align: "start", key: "PROGRESSION", title: "Progression" },
         { align: "center", key: "STATUS", title: "Statut" },
-        { align: "center", key: "DETAILS", title: "Détails" },
+        { align: "center", key: "ACTIONS", title: "Actions" },
     ]);
 
     const procedures = ref([]);
@@ -239,6 +247,7 @@
         try {
         
             const fetchedProcedures = await $fetch(`${config.public.baseUrl}/folders`);
+
             if (fetchedProcedures) {
                 procedures.value = fetchedProcedures.map((procedure, index) => ({
                     NUM: index + 1,
@@ -257,4 +266,35 @@
     
     loadProcedures();
 
+    const dialog = ref(false);
+    
+    const openModal = () => {
+        dialog.value = true;
+    }
+
+    const closeModal = () => {
+        dialog.value = false;
+    }
+
+    const redirectRegardingProcedure = (procedure) => {
+        console.log("procedure details : ", procedure);
+        let type = procedure.PROCEDURE_TYPE;
+
+        if(type.toLowerCase() == "constitution de société") {
+            return "/companyIncorporationDetails";
+        }else if(type.toLowerCase() == "modification de société") {
+            return "/companyModificationDetails";
+        }else if(type.toLowerCase() == "succession de biens immobiliers") {
+            return "/realEstateDetails";
+        }else if(type.toLowerCase() == "succession de biens mobiliers") {
+            return "/personalPropertyDetails";
+        }else if(type.toLowerCase() == "vente") {
+            return "/salesDetails";
+        }
+
+    }
+
+    const updateProcedure = async (val) => { //function to send data to the back to update procedure step
+
+    };
 </script>

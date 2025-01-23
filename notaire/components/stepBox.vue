@@ -15,10 +15,6 @@
       type: String,
       required: true
     },
-    progressIcon: {
-      type: String,
-      required: true
-    },
     listOfSubStep: {
       type: Array,
       required: true
