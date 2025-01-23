@@ -34,7 +34,7 @@
                     <v-data-table
                         :headers="proceduresHeaders"
                         :items="filteredProcedures"
-                        no-data-text="Aucune procédure trouvé."
+                        no-data-text="Aucune procédure trouvée"
                         items-per-page-text="Procédures par page :"
                         page-text
                         hover
