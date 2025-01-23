@@ -88,64 +88,76 @@
 
 <script setup>
     const props = defineProps({
-        open: false,
-        userData: Object,
+        open: Boolean,
+        userData: Object, // Données de l'utilisateur à modifier
     });
 
+    const emit = defineEmits(["update:open"]);
+
+    const config = useRuntimeConfig();
     const roles = ref([]);
 
     const user = reactive({
-     });
+        id: null,
+        lastName: "",
+        firstName: "",
+        email: "",
+        roleId: null,
+    });
 
-    const emit = defineEmits(["update:open", "save"]);
+    // Met à jour `user` lorsque `userData` change
+    watchEffect(() => {
+        if (props.userData) {
+            user.id = props.userData.ID;
+            user.lastName = props.userData.LAST_NAME;
+            user.firstName = props.userData.FIRST_NAME;
+            user.email = props.userData.EMAIL;
+            user.roleId = props.userData.ROLE?.id;
+        }
+    });
 
-    const config = useRuntimeConfig();
-
-    
-
-    const closeModal = () => {
-        emit("update:open", false);
-    };
-
-
-    const required = (v) => {
-        return !!v || 'Le champ est requis.';
-    };
-
-    const emailRule = (v) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || 'Veuillez entrer une adresse email valide.';
-    }
-
-    
+    // Récupération des rôles
     const { data: fetchedRoles, error } = useFetch(`${config.public.baseUrl}/roles`);
 
-    onMounted(() => {
+    watchEffect(() => {
         if (fetchedRoles.value) {
             roles.value = fetchedRoles.value.map((role) => ({
                 ID: role.id,
                 NAME: role.name,
             }));
         } else if (error.value) {
-            console.error('Erreur lors du chargement des roles :', error.value);
+            console.error("Erreur lors du chargement des rôles :", error.value);
         }
     });
 
+    // Validation
+    const required = (v) => !!v || "Le champ est requis.";
+    const emailRule = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "Veuillez entrer une adresse email valide.";
+
+    // Fermeture du modal
+    const closeModal = () => {
+        emit("update:open", false);
+    };
+
+    // Enregistrement des modifications
     const handleUser = async () => {
-
         try {
-
-            const data = await fetch(`${config.public.baseUrl}/users/${user.id}`, {
-                method: 'PUT',
-                body: user,
+            const response = await fetch(`${config.public.baseUrl}/users/${user.id}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(user),
             });
-            alert('Utilisateur modifié avec succès.');
+
+            if (!response.ok) throw new Error("Erreur lors de la modification");
+
+            alert("Utilisateur modifié avec succès.");
+            emit('userUpdated');
             closeModal();
-
         } catch (error) {
-            console.error('Erreur lors de la modification de l\'utilisateur :', error);
+            console.error("Erreur lors de la modification de l'utilisateur :", error);
         }
-
-
     };
 
 </script>

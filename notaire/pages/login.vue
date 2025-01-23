@@ -101,7 +101,7 @@
     }
 
     const passwordRule = (v) => {
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(v) || 'Veuillez entrer un mot de passe compris de 8 caractères avec au moins un chiffre, une minuscule, une majuscule et un caractère spéciale.';
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{8,}$/.test(v) || 'Veuillez entrer un mot de passe compris de 8 caractères avec au moins un chiffre, une minuscule, une majuscule et un caractère spéciale.';
     }
 
 

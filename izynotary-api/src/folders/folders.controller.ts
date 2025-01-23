@@ -27,12 +27,14 @@ export class FoldersController {
                     filename: (req, file, callback) => {
                         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
                         const ext = extname(file.originalname);
+                        
                         callback(null, `${file.fieldname.replace('requiredFiles[', '').replace(']', '')}-${uniqueSuffix}${ext}`);
                     },
                 }),
             },
         ),
     )
+    
     async createCompanyFormation(
         @UploadedFiles() files: Record<string, Express.Multer.File[]>,
         @Body() createFolderDto: CreateFolderDto
