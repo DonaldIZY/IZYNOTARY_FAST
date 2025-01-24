@@ -57,7 +57,7 @@
       status="not started" 
       icon="debit-card2.png" 
       date="17/01/2025" 
-      :listOfSubStep="listOfCanceledStep" 
+      :listOfSubStep="[{text: 'Règlement des frais', status: '', inputName: 'reglement'}]" 
     />
     <step-box 
       :number="4" 
@@ -73,7 +73,7 @@
       status="not started" 
       icon="document.png" 
       date="17/01/2025" 
-      :listOfSubStep="listOfStep" 
+      :listOfSubStep="[{text: 'Dépôt de l\'acte signé', status: '', inputName: 'depot'}]" 
     />
     <step-box 
       :number="6" 
@@ -81,7 +81,7 @@
       status="not started" 
       icon="letter.png" 
       date="17/01/2025" 
-      :listOfSubStep="listOfStep" 
+      :listOfSubStep="[{text: 'acte', status: '', inputName: 'acte'}]" 
     />
   </div>
 </template>
