@@ -3,6 +3,7 @@ import { CreatePermissionDto } from "src/permissions/dto/create-permission.dto";
 import { Permission } from "src/permissions/entities/permission.entity";
 import { CreateRoleDto } from "src/roles/dto/create-role.dto";
 import { Role } from "src/roles/entities/role.entity";
+import { User } from "src/users/entities/user.entity";
 import { DataSource, In } from "typeorm";
 
 @Injectable()
@@ -58,4 +59,25 @@ export class DatabaseSeeder {
         }
         console.log('Roles successfully seeded!');
     }
+
+    // async seedSuperUser() {
+    //     const userRepository = this.dataSource.getRepository(User);
+    //     const roleRepository = this.dataSource.getRepository(Role);
+
+    //     const existingUser = await userRepository.findOne({ where: { email: 'admin@example.com' } });
+
+    //     if (existingUser) {
+    //         console.log('Super utilisateur existe déjà.');
+    //         return;
+    //     }
+
+    //     const role = await roleRepository.findOne({ where: { name: 'Administrateur' } });
+
+    //     if (!role) {
+    //         console.error("Le rôle 'Administrateur' n'existe pas. Veuillez le créer d'abord.");
+    //         return;
+    //     }
+
+    //     const password =
+    // }
 } 

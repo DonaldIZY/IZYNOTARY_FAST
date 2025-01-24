@@ -26,7 +26,7 @@ export class User {
     @UpdateDateColumn()
     updateAt: Date;
 
-    @ManyToOne(() => Role, role => role.users)
+    @ManyToOne(() => Role, role => role.users, { onUpdate: "CASCADE" })
     role: Role;
 
     constructor(user: Partial<User>) {

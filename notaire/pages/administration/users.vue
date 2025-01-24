@@ -44,7 +44,7 @@
                 </v-icon>
             </template>
         </v-data-table>
-        <modal-edit-user :open="openEdit" :userData="selectedUser" @update:open="openEdit = $event" />
+        <modal-edit-user :open="openEdit" :userData="selectedUser" @update:open="openEdit = $event" @userUpdated="loadUsers" />
         <confirmation-modal text="Vous allez supprimer un utilisateur. Continuer?" :open="openConf" @update:open="openConf = $event" :submit="() => deleteUser(selectedUser.ID)"/>
     </div>
 </template>
@@ -113,7 +113,6 @@
 
     const deleteUser = async (id) => {
         try {
-            console.log(id);
             await $fetch(`${config.public.baseUrl}/users/${id}`, {
                 method: 'DELETE',
             });

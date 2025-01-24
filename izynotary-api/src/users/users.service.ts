@@ -58,7 +58,16 @@ export class UsersService {
 
 	async update(id: number, updateUserDto: UpdateUserDto) {
 		const user = await this.usersRepository.findOneBy({ id });
-		Object.assign(user, updateUserDto);
+		console.log(user);
+
+		user.lastName = updateUserDto.lastName;
+		user.firstName = updateUserDto.firstName;
+		user.email = updateUserDto.email;
+
+		if (updateUserDto.roleId) {
+			user.role = await this.rolesRepository.findOneBy({ id: updateUserDto.roleId });
+		}
+
 		await this.entityManager.save(user);
 	}
 
