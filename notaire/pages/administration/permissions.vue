@@ -3,7 +3,7 @@
         <back-button title="Liste des permissions" goBackTo="/home"/>
     </div>
     <div class="ma-4">
-        <v-text-field
+        <!-- <v-text-field
             color="primary"
             v-model="permissionsSearch"
             label="Search"
@@ -11,14 +11,15 @@
             variant="outlined"
             hide-details
             single-line
-        ></v-text-field>
+        ></v-text-field> -->
         <v-data-table
             :headers="permissionsHeaders"
             :items="permissions"
             :search="permissionsSearch"
-            no-data-text="Aucune permission trouvé."
+            no-data-text="Aucune permission trouvée."
             items-per-page-text="Permissions par page :"
             hover
+            class="customTable1"
         >
         </v-data-table>
     </div>
@@ -55,3 +56,7 @@
     loadPermissions();
  
 </script>
+
+<style>
+@import url("~/assets/css/table.css");
+</style>
