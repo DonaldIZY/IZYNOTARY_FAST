@@ -29,16 +29,16 @@
   <div class="perso">
     
     <step-box 
-      number="1" 
+      :number="1" 
       title="Fourniture de pièces" 
       status="current" 
       icon="document-file.png" 
       date="17/01/2025" 
       :listOfSubStep="documentToSupply" 
-      first={true}
+      :first="true"
     />
     <step-box 
-      number="2" 
+      :number="2" 
       title="Demande auprès de la banque" 
       status="not started" 
       icon="bank.png" 
@@ -46,7 +46,7 @@
       :listOfSubStep="[{text: 'Acte de vente', status: '', inputName: 'acte'}]" 
     />
     <step-box 
-      number="3" 
+      :number="3" 
       title="Elaboration de la lettre de succession" 
       status="not started" 
       icon="debit-card2.png" 
@@ -54,7 +54,7 @@
       :listOfSubStep="[{text: 'Règlement des frais', status: '', inputName: 'reglement'}]" 
     />
     <step-box 
-      number="4" 
+      :number="4" 
       title="Signature de la lettre de constitution" 
       status="not started" 
       icon="autograph.png" 
@@ -62,7 +62,7 @@
       :listOfSubStep="[{text: 'Déclaration de la succession auprès de la DGI', status: '', inputName: 'signature'}]" 
     />
     <step-box 
-      number="5" 
+      :number="5" 
       title="Dépôt auprès de la banque" 
       status="not started" 
       icon="document.png" 
@@ -70,7 +70,7 @@
       :listOfSubStep="[{text: 'Dépôt des pièces requises par la banque', status: '', inputName: 'depot'}]" 
     />
     <step-box 
-      number="6" 
+      :number="6" 
       title="Livrables" 
       status="not started" 
       icon="letter.png" 

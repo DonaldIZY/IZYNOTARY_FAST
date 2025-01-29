@@ -150,23 +150,31 @@
                     <v-data-table
                         :headers="proceduresHeaders"
                         :items="filteredProcedures"
-                        no-data-text="Aucune procédure trouvé."
+                        no-data-text="Aucune procédure trouvée."
                         items-per-page-text="Procédures par page :"
                         page-text
                         hover
                         item-value="NUM"
                     >
                         
-                        <template v-slot:item.DETAILS="{ item }">
+                        <template v-slot:item.ACTIONS="{ item }">
                                 <v-btn
                                     variant="text"
-                                    @click="showDetails(item)"
-                                    color="primary text-none"
+                                    @click=""
+                                    color="primary text-none" 
+                                    :to="redirectRegardingProcedure(item)"
                                 >
                                     
                                     Voir
                                 </v-btn>
+                                <v-btn variant="text" color="primary text-none" @click="openModal(item.PROCEDURE_TYPE)" >
+                                Modifier
+                            </v-btn>
                         </template>
+
+                    
+
+                        
 
                         <template v-slot:item.STATUS="{ item }">
                             <v-chip
@@ -186,7 +194,7 @@
         </v-row>
     </div>
     
-    
+    <modal-edit-procedureStep :show="dialog" @close-modal="closeModal" @submit="updateProcedure" :procedure-data="selectedProcedure" />
 </template>
 
 <script setup>
@@ -201,7 +209,7 @@
         { align: "start", key: "CREATE_AT", title: "Date de création" },
         { align: "start", key: "PROGRESSION", title: "Progression" },
         { align: "center", key: "STATUS", title: "Statut" },
-        { align: "center", key: "DETAILS", title: "Détails" },
+        { align: "center", key: "ACTIONS", title: "Actions" },
     ]);
 
     const procedures = ref([]);
@@ -239,6 +247,9 @@
         try {
         
             const fetchedProcedures = await $fetch(`${config.public.baseUrl}/folders`);
+
+            console.log("fetchedProcedures : ", fetchedProcedures);
+
             if (fetchedProcedures) {
                 procedures.value = fetchedProcedures.map((procedure, index) => ({
                     NUM: index + 1,
@@ -257,4 +268,176 @@
     
     loadProcedures();
 
+    const dialog = ref(false);
+    const selectedProcedure = ref({});
+    
+    const openModal = (val) => {
+        setTimeout(() => {
+                dialog.value = true;
+            }, 250);
+        console.log("val : ", val);
+        if(val.trim().toLowerCase() == "constitution de société") {
+            selectedProcedure.value = fakeCompanyIncorporation;  
+        }else if(val.trim().toLowerCase() == "vente"){
+            selectedProcedure.value = fakeSales;
+        }else{
+            selectedProcedure.value = {};
+            dialog.value = false;
+        }
+        
+    }
+
+    const closeModal = () => {
+        dialog.value = false;
+        // selectedProcedure.value = {};
+    }
+
+    const redirectRegardingProcedure = (procedure) => {
+        console.log("procedure details : ", procedure);
+        let type = procedure.PROCEDURE_TYPE;
+
+        if(type.toLowerCase() == "constitution de société") {
+            return "/companyIncorporationDetails";
+        }else if(type.toLowerCase() == "modification de société") {
+            return "/companyModificationDetails";
+        }else if(type.toLowerCase() == "succession de biens immobiliers") {
+            return "/realEstateDetails";
+        }else if(type.toLowerCase() == "succession de biens mobiliers") {
+            return "/personalPropertyDetails";
+        }else if(type.toLowerCase() == "vente") {
+            return "/salesDetails";
+        }
+
+    }
+
+    const updateProcedure = async (val) => { //function to send data to the back to update procedure step
+
+    };
+
+    const fakeCompanyIncorporation = {
+        createdAt: "",
+        id: "",
+        procedureType: "Constitution de société",
+        status: "En cours",
+        steps: [
+        {
+            stepNum: '1',
+            status: 'Terminée',
+            action: 'Fourniture des pièces',
+            documents: {
+                CNI: "",
+                facture: "",
+                attestation: ""
+            },
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '2',
+            status: 'Terminée',
+            action: 'Rédaction des statuts',
+            documents: {
+                facture: "",
+                attestation: ""
+            },
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '3',
+            status: 'Non débuté',
+            action: 'Règlement total ou partiel des frais',
+            documents: {},
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '4',
+            status: 'Non débuté',
+            action: 'Signature des actes',
+            documents: {},
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '5',
+            status: 'Non débuté',
+            action: 'Dépôt des actes signés',
+            documents: {},
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '6',
+            status: 'Non débuté',
+            action: 'Livrables',
+            documents: {},
+            comment: '',
+            editBy: ''
+        }
+        ]
+    };
+
+    const fakeSales = {
+        createdAt: "",
+        id: "",
+        procedureType: "Vente",
+        status: "En cours",
+        steps: [
+        {
+            stepNum: '1',
+            status: 'Terminée',
+            action: 'Fourniture des pièces',
+            documents: {
+                CNI: "",
+                facture: "",
+                attestation: "",
+            },
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '2',
+            status: 'Terminée',
+            action: 'Rédaction l\'acte de vente',
+            documents: {
+                CNI: "",
+            },
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '3',
+            status: 'Non débuté',
+            action: 'Règlement total ou partiel des frais',
+            documents: {},
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '4',
+            status: 'Non débuté',
+            action: 'Signature de l\'acte de vente',
+            documents: {},
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '5',
+            status: 'Non débuté',
+            action: 'Dépôt de l\'acte signé',
+            documents: {},
+            comment: '',
+            editBy: ''
+        },
+        {
+            stepNum: '6',
+            status: 'Non débuté',
+            action: 'Livrables',
+            documents: {},
+            comment: '',
+            editBy: ''
+        }
+        ] 
+    }
 </script>

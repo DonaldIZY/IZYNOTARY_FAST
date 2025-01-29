@@ -2,10 +2,6 @@
 <script setup>
 //images should be in the public directory to be handled easily
   const props = defineProps({
-    imagePath: {
-      type: String,
-      required: true
-    },
     stepBackgroundColor: {
       type: String,
       required: true

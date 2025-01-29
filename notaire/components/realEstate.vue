@@ -29,16 +29,16 @@
   <div class="perso">
     
     <step-box 
-      number="1" 
+      :number="1" 
       title="Fourniture de pièces" 
       status="current" 
       icon="document-file.png" 
       date="17/01/2025" 
       :listOfSubStep="documentToSupply" 
-      first={true}
+      :first="true"
     />
     <step-box 
-      number="2" 
+      :number="2" 
       title="Règlement des frais" 
       status="not started" 
       icon="debit-card2.png" 
@@ -46,7 +46,7 @@
       :listOfSubStep="[{text: 'Règlement des frais', status: '', inputName: 'reglement'}]" 
     />
     <step-box 
-      number="3" 
+      :number="3" 
       title="Evaluation des différents biens immobiliers" 
       status="not started" 
       icon="estimation.png" 
@@ -54,7 +54,7 @@
       :listOfSubStep="[{text: 'Evaluation des différents biens immobiliers', status: '', inputName: 'evaluation'}]" 
     />
     <step-box 
-      number="4" 
+      :number="4" 
       title="Déclaration de la succession auprès de la DGI" 
       status="not started" 
       icon="declaration.png" 
@@ -62,7 +62,7 @@
       :listOfSubStep="[{text: 'Déclaration de la succession auprès de la DGI', status: '', inputName: 'declaration'}]" 
     />
     <step-box 
-      number="5" 
+      :number="5" 
       title="Etablissement de l'attestation immobilière" 
       status="not started" 
       icon="certification.png" 
@@ -70,7 +70,7 @@
       :listOfSubStep="[{text: 'Établissement de l\'attestation immobilière', status: '', inputName: 'etablissement'}]" 
     />
     <step-box 
-      number="6" 
+      :number="6" 
       title="Dépôt de l'attestation immobilière" 
       status="not started" 
       icon="document.png" 
@@ -78,7 +78,7 @@
       :listOfSubStep="[{text: 'Dépôt de l\'attestation immobilière auprès de la DGI', status: '', inputName: 'depot'}]" 
     />
     <step-box 
-      number="7" 
+      :number="7" 
       title="Livrables" 
       status="not started" 
       icon="letter.png" 
