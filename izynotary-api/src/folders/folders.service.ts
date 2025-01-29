@@ -86,38 +86,38 @@ export class FoldersService {
                         "documents": {
                             "customerCNI": {
                                 "name": "CNI du client",
-                                "path": createFolderDto.requiredFiles[0] ? createFolderDto.requiredFiles[0] : '',
-                                "filled": createFolderDto.requiredFiles[0] ? true : false,
+                                "path": createFolderDto.requiredFiles.customerCNI ? createFolderDto.requiredFiles.customerCNI : '',
+                                "filled": createFolderDto.requiredFiles.customerCNI ? true : false,
                                 "editBy": ''
                             },
                             "criminalRecord": {
                                 "name": "Casier judiciaire",
-                                "path": createFolderDto.requiredFiles[1] ? createFolderDto.requiredFiles[1] : '',
-                                "filled": createFolderDto.requiredFiles[1] ? true : false,
+                                "path": createFolderDto.requiredFiles.criminalRecord ? createFolderDto.requiredFiles.criminalRecord : '',
+                                "filled": createFolderDto.requiredFiles.criminalRecord ? true : false,
                                 "editBy": ''
                             },
                             "lease": {
                                 "name": "Bail",
-                                "path": createFolderDto.requiredFiles[2] ? createFolderDto.requiredFiles[2] : '',
-                                "filled": createFolderDto.requiredFiles[2] ? true : false,
+                                "path": createFolderDto.requiredFiles.lease ? createFolderDto.requiredFiles.lease : '',
+                                "filled": createFolderDto.requiredFiles.lease ? true : false,
                                 "editBy": ''
                             },
                             "sketchOfGeoLocation": {
                                 "name": "Croquis de la situation géographique",
-                                "path": createFolderDto.requiredFiles[3] ? createFolderDto.requiredFiles[3] : '',
-                                "filled": createFolderDto.requiredFiles[3] ? true : false,
+                                "path": createFolderDto.requiredFiles.sketchOfGeoLocation ? createFolderDto.requiredFiles.sketchOfGeoLocation : '',
+                                "filled": createFolderDto.requiredFiles.sketchOfGeoLocation ? true : false,
                                 "editBy": ''
                             },
                             "formForCompanyFormation": {
                                 "name": "Fiche à renseigner de la société à consulter",
-                                "path": createFolderDto.requiredFiles[4] ? createFolderDto.requiredFiles[4] : '',
-                                "filled": createFolderDto.requiredFiles[4] ? true : false,
+                                "path": createFolderDto.requiredFiles.formForCompanyFormation ? createFolderDto.requiredFiles.formForCompanyFormation : '',
+                                "filled": createFolderDto.requiredFiles.formForCompanyFormation ? true : false,
                                 "editBy": ''
                             },
                             "capitalToBeReleased": {
                                 "name": "Capital à libérer",
-                                "path": createFolderDto.requiredFiles[5] ? createFolderDto.requiredFiles[5] : '',
-                                "filled": createFolderDto.requiredFiles[5] ? true : false,
+                                "path": createFolderDto.requiredFiles.capitalToBeReleased ? createFolderDto.requiredFiles.capitalToBeReleased : '',
+                                "filled": createFolderDto.requiredFiles.capitalToBeReleased ? true : false,
                                 "editBy": ''
                             },
 

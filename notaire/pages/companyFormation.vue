@@ -296,18 +296,27 @@
     const handleProcedure = async () => {
 
         const procedureData = new FormData();
-
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
-        const year = today.getFullYear();
-
-        const formattedDate = `${day}${month}${year}`;
         
-        procedureData.append('folderNum',  'CS-'+formattedDate );
+
+        const folders = await $fetch(`${config.public.baseUrl}/folders`);
+
+        const count = folders.length;
+        if (isNaN(count)) {
+            console.error("Erreur : count est NaN");
+            return;
+        }
+
+        procedureData.append('folderNum',  procedureNumGenerator('Constitution de société', count));
         procedureData.append('procedureType', 'Constitution de société');
         procedureData.append('progression', 1/6);
         procedureData.append('status', 'En cours');
+
+        if (!selectedCustomer.value || !selectedCustomer.value.ID) {
+            console.error("Erreur : Aucun client sélectionné");
+            return;
+        }
+
+
         procedureData.append('customerId', selectedCustomer.value.ID);
         
         const requiredFiles = {
@@ -321,17 +330,17 @@
 
         for (const key in requiredFiles) {
             if (requiredFiles[key]) {
-                procedureData.append(`requiredFiles[${key}]`, requiredFiles[key]);
+                procedureData.append(`${key}`, requiredFiles[key]);
             }
         }
         
         try {
-            const date = await $fetch(`${config.public.baseUrl}/folders/companyFormation`, {
+            const data = await $fetch(`${config.public.baseUrl}/folders/companyFormation`, {
                 method: 'POST',
                 body: procedureData
             });
             alert('Procédure créée avec succès.');
-            resetFields();
+            // resetFields();
             
         } catch (error) {
             console.error('Erreur lors de la création de la procédure :', error);
