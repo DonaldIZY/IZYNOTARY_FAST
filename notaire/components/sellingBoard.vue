@@ -1,19 +1,12 @@
 <template>
-    <!-- <v-text-field
-        color="primary"
-        v-model="sellingsSearch"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        variant="outlined"
-        hide-details
-        single-line
-    ></v-text-field> -->
+
     <v-data-table
         :headers="headers"
         :items="sellings"
         :search="sellingsSearch"
         no-data-text="Aucune procédure de vente."
         hover
+        class="customTable2"
     >
     </v-data-table>
 </template>
@@ -38,3 +31,7 @@
         { align: "start", key: "STATUS", title: "Statut" },
     ]);
 </script>
+
+<style>
+@import url("~/assets/css/table.css");
+</style>

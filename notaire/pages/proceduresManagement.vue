@@ -155,6 +155,7 @@
                         page-text
                         hover
                         item-value="NUM"
+                        class="customTable1"
                     >
                         
                         <template v-slot:item.ACTIONS="{ item }">

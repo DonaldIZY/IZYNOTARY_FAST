@@ -28,6 +28,7 @@
                 items-per-page-text="Clients par page :"
                 hover
                 item-value="ID"
+                class="customTable1"
             >
             <template #item="{ item }">
                 <tr @click="goToCustomerDetails(item)">
@@ -111,3 +112,7 @@
         }
     });
 </script>
+
+<style>
+@import url("~/assets/css/table.css");
+</style>

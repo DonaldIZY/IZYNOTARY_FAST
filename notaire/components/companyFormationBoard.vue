@@ -5,6 +5,7 @@
         :search="companyFormationsSearch"
         no-data-text="Aucune procédure de constitution de société."
         hover
+        class="customTable2"
     >
     </v-data-table>
 </template>
@@ -29,3 +30,7 @@
         { align: "start", key: "STATUS", title: "Statut" },
     ]);
 </script>
+
+<style>
+@import url("~/assets/css/table.css");
+</style>
