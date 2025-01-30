@@ -5,6 +5,7 @@
         :search="transferOfRealEstatesSearch"
         no-data-text="Aucune procédure de succession de biens immobiliers."
         hover
+        class="customTable2"
     >
     </v-data-table>
 </template>
@@ -30,3 +31,7 @@
         { align: "start", key: "STATUS", title: "Statut" },
     ]);
 </script>
+
+<style>
+@import url("~/assets/css/table.css");
+</style>
