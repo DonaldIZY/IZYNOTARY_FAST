@@ -321,17 +321,21 @@
             var dataToSend = new FormData();
 
             dataToSend.append("action", val.action);
+            dataToSend.append("folderNum", val.action);
+            dataToSend.append("procedureType", val.procedureType);
+            
 
             for(const fileKey of Object.keys(val.documents)) {
                 dataToSend.append(fileKey, val.documents[fileKey]);
             }
 
-            for(const [key, value] of dataToSend.entries()) {
-                console.log(key, value);
-            }
+            // for(const [key, value] of dataToSend.entries()) {
+            //     console.log(key, value);
+            // }
+
             const resultOfProcedureUpdate = await $fetch(`${config.public.baseUrl}/steps/update/${val.id}`, {
               method: "PATCH",
-            //   headers: {"Content-Type": "application/json"},
+              headers: {"Content-Type": "application/json"},
               body: dataToSend //JSON.stringify({id: val.id, steps: val.steps, contact: val.customer.phone, folderNum: val.folderNum, procedureType: val.PROCEDURE_TYPE})
             });
 

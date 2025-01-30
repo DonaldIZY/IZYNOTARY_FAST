@@ -65,7 +65,7 @@
               color="primary"
               text="Enregistrer"
               variant="tonal"
-              @click="$emit('submit', newProcedureData)"
+              @click="$emit('submit', {...newProcedureData, contact: procedureData.customer.phone, folderNum: procedureData.folderNum, procedureType: procedureData.PROCEDURE_TYPE })"
               class="text-none"
           ></v-btn>
       </v-card-actions>
