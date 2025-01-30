@@ -15,6 +15,8 @@
   const emit = defineEmits(["closeModal", "submit"]);
 
   const procedureData = toRef(props, "data");
+
+  const newProcedureData = reactive({});
   
 </script>
 
@@ -32,8 +34,16 @@
 
       <v-card-text>
         <v-tabs-window v-model="tab" >
-          <v-tabs-window-item v-for="step in procedureData.steps.filter(elem => ['terminée', 'en cours'].includes(elem.status.toLowerCase()))" :value="step.action">
-            <v-file-input v-for="doc in Object.keys(step.documents)" name="test" :label="doc" variant="outlined" prepend-inner-icon="mdi-file" />
+          <v-tabs-window-item v-for="step in procedureData.steps.filter(elem => ['terminée', 'en cours'].includes(elem.status.toLowerCase()))" :value="step.action" >
+            <v-file-input v-for="doc in Object.keys(step.documents)" name="test" :label="doc" variant="outlined" prepend-inner-icon="mdi-file" v-on:update:model-value="(file) => {
+              // newProcedureData[]
+              if(newProcedureData.action == step.action) {
+                newProcedureData.documents[doc] = file;
+              }else{
+                newProcedureData = {action: step.action, documents: { [doc] : file }};
+              }
+              // console.log('input file : ', file, 'input name : ', doc, 'step : ', step);
+            }" />
           </v-tabs-window-item>
         </v-tabs-window>
 
@@ -55,7 +65,7 @@
               color="primary"
               text="Enregistrer"
               variant="tonal"
-              @click="$emit('submit', procedureData)"
+              @click="$emit('submit', newProcedureData)"
               class="text-none"
           ></v-btn>
       </v-card-actions>

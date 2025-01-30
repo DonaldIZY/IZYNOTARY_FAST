@@ -63,8 +63,7 @@ Votre document <nom du document est maintenant disponible>`;
         const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 
         let a = await fetch(smsUrl);
-
-        console.log("sms response: ", a);
+        console.log("sms response : ", a);
     }
 
     async remove(id: number) {
