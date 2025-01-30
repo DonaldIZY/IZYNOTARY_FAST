@@ -168,7 +168,7 @@
                                     
                                     Voir
                                 </v-btn>
-                                <v-btn variant="text" color="primary text-none" @click="openModal(item.PROCEDURE_TYPE)" >
+                                <v-btn variant="text" color="primary text-none" @click="openModal(item)" >
                                 Modifier
                             </v-btn>
                         </template>
@@ -195,7 +195,7 @@
         </v-row>
     </div>
     
-    <modal-edit-procedureStep :show="dialog" @close-modal="closeModal" @submit="updateProcedure" :procedure-data="selectedProcedure" />
+    <modal-edit-procedureStep :show="dialog" @close-modal="closeModal" @submit="updateProcedure" :data="selectedProcedure" />
 </template>
 
 <script setup>
@@ -260,6 +260,10 @@
                     CREATE_AT: new Date(procedure.createAt).toLocaleDateString(),
                     PROGRESSION: (procedure.progression*100)+"%",
                     STATUS: procedure.status,
+                    steps: procedure.step.steps,
+                    customer: procedure.customer,
+                    id: procedure.id,
+                    folderNum: procedure.folderNum
                 }));
             }
         } catch (err) {
@@ -273,19 +277,17 @@
     const selectedProcedure = ref({});
     
     const openModal = (val) => {
-        setTimeout(() => {
-                dialog.value = true;
-            }, 250);
-        console.log("val : ", val);
-        if(val.trim().toLowerCase() == "constitution de société") {
+        dialog.value = true;
+        /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
             selectedProcedure.value = fakeCompanyIncorporation;  
-        }else if(val.trim().toLowerCase() == "vente"){
+        }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
             selectedProcedure.value = fakeSales;
         }else{
             selectedProcedure.value = {};
             dialog.value = false;
-        }
-        
+        }*/ 
+        selectedProcedure.value = val;
+        console.log("selectedValue : ", selectedProcedure.value); 
     }
 
     const closeModal = () => {
@@ -311,8 +313,20 @@
 
     }
 
-    const updateProcedure = async (val) => { //function to send data to the back to update procedure step
+    const updateProcedure = async (val) => { 
+        try {
+            console.log("data to send : ", val);
+            const resultOfProcedureUpdate = await $fetch(`${config.public.baseUrl}/steps/update/${val.id}`, {
+              method: "PATCH",
+              headers: {"Content-Type": "application/json"},
+              body: JSON.stringify({id: val.id, steps: val.steps, contact: val.customer.phone, folderNum: val.folderNum, procedureType: val.PROCEDURE_TYPE})
+            });
 
+            console.log("back response : ", resultOfProcedureUpdate);
+
+        } catch (err) {
+            console.error('Erreur lors de la mise à jour de la procédure : ', err);
+        }
     };
 
     const fakeCompanyIncorporation = {

@@ -4,7 +4,7 @@
       type: Boolean,
       required: true
     },
-    procedureData: {
+    data: {
       type: Object,
       // required: true
     }
@@ -12,9 +12,10 @@
 
   const tab = defineModel(); 
 
-  // const emit = defineEmits(["onCloseModal"]);
+  const emit = defineEmits(["closeModal", "submit"]);
 
-
+  const procedureData = toRef(props, "data");
+  
 </script>
 
 <template>
@@ -25,15 +26,14 @@
       v-model="tab" 
       color="#ad1919"
     >
-      <v-tab v-for="step in procedureData.steps.filter(elem => ['terminée', 'en cours'].includes(elem.status.toLowerCase()))" :value="step.action"> {{ step.action }} </v-tab>
-      <!-- <v-tab value="two">Etape 2</v-tab>
-      <v-tab value="three">Etape 3</v-tab> -->
+      <v-tab v-for="step in procedureData.steps.filter(elem => ['terminée', 'en cours'].includes(elem.status.toLowerCase()))" :value="step.action"  > {{ step.action }} </v-tab>
+
     </v-tabs>
 
       <v-card-text>
         <v-tabs-window v-model="tab" >
-          <v-tabs-window-item :value="tab">
-            <v-file-input v-for="doc in Object.keys(procedureData.steps.find((elem => elem.action == tab)).documents)" name="test" :label="doc" variant="outlined" prepend-inner-icon="mdi-file" />
+          <v-tabs-window-item v-for="step in procedureData.steps.filter(elem => ['terminée', 'en cours'].includes(elem.status.toLowerCase()))" :value="step.action">
+            <v-file-input v-for="doc in Object.keys(step.documents)" name="test" :label="doc" variant="outlined" prepend-inner-icon="mdi-file" />
           </v-tabs-window-item>
         </v-tabs-window>
 
@@ -55,7 +55,7 @@
               color="primary"
               text="Enregistrer"
               variant="tonal"
-              @click="$emit('submit')"
+              @click="$emit('submit', procedureData)"
               class="text-none"
           ></v-btn>
       </v-card-actions>
