@@ -1,0 +1,40 @@
+/*.v-data-table td {
+border: 1px solid gray;
+}*/
+
+/*style pour le tableau en générale*/
+.customTable1 {
+  border-radius: 0.3rem !important;
+}
+
+.customTable1 th {
+  background-color: #e0e0e0;
+  color: #000000;
+  font-weight: 500 !important;
+}
+
+/*style pour le tableau pour les détails clients*/
+.customTable2 {
+  border-radius: 0.3rem !important;
+}
+
+.customTable2 th {
+  background-color: #ad1919;
+  color: #fff;
+  font-weight: 500 !important;
+}
+
+.customTable2 thead tr:nth-child(2) th {
+  background-color: #e0e0e0;
+  color: #000000;
+  font-weight: 500 !important;
+}
+
+/*style pour les bandes (tableau à bandes)*/
+.v-data-table tbody tr:nth-child(even) {
+  background-color: #f5f5f5; /* Gris clair */
+}
+
+.v-data-table tbody tr:nth-child(odd) {
+  background-color: #fff; /* Fond blanc */
+}

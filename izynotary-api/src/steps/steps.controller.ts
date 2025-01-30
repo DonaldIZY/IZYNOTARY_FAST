@@ -27,8 +27,16 @@ export class StepsController {
         return this.stepsService.update(+id, updateStepDto);
     }
 
+    @Patch('update/:id')
+    async updateTwo(@Param('id') id: string, @Body() updateStepDto: UpdateStepDto) {
+        return this.stepsService.updateTwo(+id, updateStepDto);
+    }
+
     @Delete(':id')
     async remove(@Param('id') id: string) {
         return this.stepsService.remove(+id);
     }
 }
+
+
+

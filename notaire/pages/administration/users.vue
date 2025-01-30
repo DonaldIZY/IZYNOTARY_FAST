@@ -14,6 +14,7 @@
             items-per-page-text="Utilisateurs par page :"
             page-text
             hover
+            class="customTable1"
         >
             <template v-slot:item.ROLE="{ item }">
                 {{ item.ROLE.name }}
@@ -126,3 +127,7 @@
     };
     
 </script>
+
+<style>
+@import url("~/assets/css/table.css");
+</style>

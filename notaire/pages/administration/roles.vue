@@ -3,7 +3,7 @@
         <back-button title="Liste des rôles" goBackTo="/home"/>
     </div>
     <div class="ma-4">
-        <v-text-field
+        <!-- <v-text-field
             color="primary"
             v-model="rolesSearch"
             label="Search"
@@ -11,7 +11,7 @@
             variant="outlined"
             hide-details
             single-line
-        ></v-text-field>
+        ></v-text-field> -->
         <v-data-table
             :headers="rolesHeaders"
             :items="roles"
@@ -19,6 +19,7 @@
             no-data-text="Aucun rôle trouvé."
             items-per-page-text="Rôles par page :"
             hover
+            class="customTable1"
         >
         </v-data-table>
     </div>
@@ -55,3 +56,7 @@
     loadRoles();
 
 </script>
+
+<style>
+@import url("~/assets/css/table.css");
+</style>
