@@ -291,6 +291,8 @@
         sketchOfGeoLocation.value = null;
         formForCompanyFormation.value = null;
         capitalToBeReleased.value = null;
+
+
     };
 
     const handleProcedure = async () => {
@@ -310,13 +312,6 @@
         procedureData.append('procedureType', 'Constitution de société');
         procedureData.append('progression', 1/6);
         procedureData.append('status', 'En cours');
-
-        if (!selectedCustomer.value || !selectedCustomer.value.ID) {
-            console.error("Erreur : Aucun client sélectionné");
-            return;
-        }
-
-
         procedureData.append('customerId', selectedCustomer.value.ID);
         
         const requiredFiles = {

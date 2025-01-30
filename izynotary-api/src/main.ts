@@ -10,7 +10,7 @@ async function bootstrap() {
   const customerDir = join(uploadDir, 'customers');
 
   const procedureDir = join(uploadDir, 'procedures');
-  const sellinngDir = join(procedureDir, 'sellings');
+  const sellinngDir = join(procedureDir, 'selling');
   const companyFormationDir = join(procedureDir, 'companyFormation');
   const companyModificationDir = join(procedureDir, 'companyModification');
   const transferOfMovablePropertyDir = join(procedureDir, 'transferOfMovableProperty');

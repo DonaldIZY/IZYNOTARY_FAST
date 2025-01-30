@@ -127,9 +127,11 @@
                 }),
             });
 
-            if (data.value?.accessToken) {
+            if (data?.accessToken) {
                 // Stocker le token, par exemple dans localStorage ou Vuex/Pinia
-                authStore.setToken(data.value.accessToken);
+                console.log(data.accessToken);
+                authStore.setToken(data.accessToken);
+                
 
                 // Rediriger vers une autre page
                 router.push("/home");
