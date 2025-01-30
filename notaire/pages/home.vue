@@ -12,10 +12,10 @@
               src="~/assets/img/gest_proc.png"
               class="mb-3 mt-2 mx-2 rounded-lg"
               cover
-              alt="Gestion des actes notariés"
+              alt="Gestion des procédures"
             ></v-img>
             <v-card-title class="titleCardText my-1 text-center">
-              Actes notariés
+              Gestion des procédures
             </v-card-title>
           </v-card>
         </v-col>
@@ -30,7 +30,7 @@
             ></v-img>
 
             <v-card-title class="titleCardText my-1 text-center">
-              Clients
+              Gestion des clients
             </v-card-title>
           </v-card>
         </v-col>
