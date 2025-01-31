@@ -58,10 +58,10 @@ export class StepsController {
             return result;
           }
 
-          req.body.procedureType = formatProcedureType(req.body.procedureType);
+        //   req.body.procedureType = formatProcedureType(req.body.procedureType);
 
           const folderNum = req.body.folderNum; // Récupération du numéro de dossier
-          const uploadPath = `./uploads/procedures/${req.body.procedureType}/${folderNum}`;
+          const uploadPath = `./uploads/procedures/${formatProcedureType(req.body.procedureType)}/${folderNum}`;
 
           // Vérifier et créer le dossier si nécessaire
           if (!fs.existsSync(uploadPath)) {
@@ -87,13 +87,15 @@ export class StepsController {
 
         // Construction de l'objet uploadedFiles avec les chemins des fichiers
         const uploadedFiles = {};
+        var filenameList = [];
         files.forEach((file) => {
             uploadedFiles[file.fieldname] = `/uploads/procedures/${updateStepDto.procedureType}/${updateStepDto.folderNum}/${file.filename}`;
+            filenameList.push(file.fieldname);
         });
 
         // Assignation du champ uploadedFiles au DTO
         updateStepDto.uploadedFiles = uploadedFiles;
-        
+        updateStepDto.documents = filenameList;
 
         console.log("Final folder: ", updateStepDto);
 

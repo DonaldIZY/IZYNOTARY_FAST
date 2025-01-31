@@ -6,4 +6,5 @@ export class UpdateStepDto extends PartialType(CreateStepDto) {
   folderNum:string;
   procedureType:string;
   uploadedFiles: any;
+  documents: any;
 }
