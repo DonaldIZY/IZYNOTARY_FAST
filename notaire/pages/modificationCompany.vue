@@ -226,7 +226,8 @@
 
     const loadCustomers = async () => {
         try {
-            const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
+            const testUrl = "http://serverizynotary.izydr.net";
+            const fetchCustomers = await $fetch(`${testUrl/*config.public.baseUrl*/}/customers`);
             if (fetchCustomers) {
                 customers.value = fetchCustomers.map((customer) => ({
                     ID: customer.id,
@@ -281,14 +282,15 @@
 
         const procedureData = new FormData();
 
-        const today = new Date();
-        const day = String(today.getDate()).padStart(2, '0');
-        const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
-        const year = today.getFullYear();
+        const folders = await $fetch(`${config.public.baseUrl}/folders`);
 
-        const formattedDate = `${day}${month}${year}`;
+        const count = folders.length;
+        if (isNaN(count)) {
+            console.error("Erreur : count est NaN");
+            return;
+        }
 
-        procedureData.append('folderNum',  'CS-'+formattedDate );
+        procedureData.append('folderNum',  procedureNumGenerator('Modification de société', count));
         procedureData.append('procedureType', 'Modification de société');
         procedureData.append('progression', 1/6);
         procedureData.append('status', 'En cours');
@@ -303,7 +305,7 @@
 
         for (const key in requiredFiles) {
             if (requiredFiles[key]) {
-                procedureData.append(`requiredFiles[${key}]`, requiredFiles[key]);
+                procedureData.append(`${key}`, requiredFiles[key]);
             }
         }
 
@@ -313,7 +315,7 @@
                 body: procedureData
             });
             alert('Procédure créée avec succès.');
-            resetFields();
+            //resetFields();
             
         } catch (error) {
             console.error('Erreur lors de la création de la procédure :', error);

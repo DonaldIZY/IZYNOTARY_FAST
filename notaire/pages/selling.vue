@@ -148,6 +148,7 @@
                                     sm="4"
                                 >
                                     <v-text-field
+                                        v-model="sellerLastName"
                                         color="primary"
                                         label="Nom"
                                         variant="outlined"
@@ -159,6 +160,7 @@
                                     sm="4"
                                 >
                                     <v-text-field
+                                        v-model="sellerFirstName"
                                         color="primary"
                                         label="Prénoms"
                                         variant="outlined"
@@ -170,6 +172,7 @@
                                     sm="4"
                                 >
                                     <v-select
+                                        v-model="sellerGender"
                                         label="Sexe"
                                         :items="['Homme', 'Femme']"
                                         variant="outlined"
@@ -181,6 +184,7 @@
                                     sm="4"
                                 >
                                     <v-text-field
+                                        v-model="sellerMaritalStatus"
                                         color="primary"
                                         label="Situation matrimoniale"
                                         variant="outlined"
@@ -192,6 +196,7 @@
                                     sm="4"
                                 >
                                     <v-text-field
+                                        v-model="sellerCNINumber"
                                         color="primary"
                                         label="Numéro de la CNI"
                                         variant="outlined"
@@ -221,49 +226,49 @@
                             cols="12"
                         >
                             
-                            <required-document label="CNI du vendeur"></required-document>
+                            <required-document label="CNI du vendeur" v-model:file="sellerCNI"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="CNI du conjoint"></required-document>
+                            <required-document label="CNI du conjoint" v-model:file="partnerCNI"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Extrait d'acte de naissance ou de mariage"></required-document>
+                            <required-document label="Extrait d'acte de naissance ou de mariage" v-model:file="certificateOfBirthOrMarriage"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Facture de CIE ou SODECI"></required-document>
+                            <required-document label="Facture de CIE ou SODECI" v-model:file="CIEOrSODECIInvoice"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Attestation de situation fiscale"></required-document>
+                            <required-document label="Attestation de situation fiscale" v-model:file="taxStatusCertificate"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Titre de propriété (copie du titre foncier, ACD ...)"></required-document>
+                            <required-document label="Titre de propriété (copie du titre foncier, ACD ...)" v-model:file="titleDeed"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="État foncier"></required-document>
+                            <required-document label="État foncier" v-model:file="landRegistry"></required-document>
                         </v-col>
                         <v-col
                             cols="12"
                         >
                             
-                            <required-document label="Certificat de localisation"></required-document>
+                            <required-document label="Certificat de localisation" v-model:file="certificateOfLocation"></required-document>
                         </v-col>
                     </v-row>
                         
@@ -305,7 +310,22 @@
     const birthDate = ref('');
     const gender = ref('');
     const identificationNumber = ref('');
-    
+
+    const sellerLastName = ref('');
+    const sellerFirstName = ref('');
+    const sellerGender = ref('');
+    const sellerMaritalStatus = ref('');
+    const sellerCNINumber = ref('');
+
+    const sellerCNI = ref(null);
+    const partnerCNI = ref(null);
+    const certificateOfBirthOrMarriage = ref(null);
+    const CIEOrSODECIInvoice = ref(null);
+    const taxStatusCertificate = ref(null);
+    const titleDeed = ref(null);
+    const landRegistry = ref(null);
+    const certificateOfLocation = ref(null);
+
     const toggleConfModal = () => {
         openConf.value = !openConf.value;
     };
@@ -316,9 +336,11 @@
 
     const config = useRuntimeConfig();
 
+    const testUrl = "http://serverizynotary.izydr.net";
+
     const loadCustomers = async () => {
         try {
-            const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
+            const fetchCustomers = await $fetch(`${testUrl/*config.public.baseUrl*/}/customers`);
             if (fetchCustomers) {
                 customers.value = fetchCustomers.map((customer) => ({
                     ID: customer.id,
@@ -355,5 +377,75 @@
         }
     });
 
+    const resetFields = () => {
+        customerId.value = null;
+        selectedCustomer.value = null;
+        firstName.value = '';
+        lastName.value = '';
+        birthDate.value = '';
+        gender.value = '';
+        identificationNumber.value = '';
+        sellerLastName.value = '';
+        sellerFirstName.value = '';
+        sellerGender.value = '';
+        sellerMaritalStatus.value = '';
+        sellerCNINumber.value = '';
+        sellerCNI.value = null;
+        partnerCNI.value = null;
+        certificateOfBirthOrMarriage.value = null;
+        CIEOrSODECIInvoice.value = null;
+        taxStatusCertificate.value = null;
+        titleDeed.value = null;
+        landRegistry.value = null;
+        certificateOfLocation.value = null;
+    };
+
+    const handleProcedure = async () => {
+        const procedureData = new FormData();
+
+        const folders = await $fetch(`${testUrl/*conf.public.baseUrl*/}/folders`);
+
+        const count = folders.length;
+        if (isNaN(count)) {
+            console.error("Erreur : count est NaN");
+            return;
+        }
+
+        procedureData.append('folderNum',  procedureNumGenerator('Vente', count));
+        procedureData.append('procedureType', 'Vente');
+        procedureData.append('progression', 1/6);
+        procedureData.append('status', 'En cours');
+        procedureData.append('customerId', selectedCustomer.value.ID);
+    
+        const requiredFiles = {
+            sellerCNI: sellerCNI.value,
+            partnerCNI: partnerCNI.value,
+            certificateOfBirthOrMarriage: certificateOfBirthOrMarriage.value,
+            CIEOrSODECIInvoice: CIEOrSODECIInvoice.value,
+            taxStatusCertificate: taxStatusCertificate.value,
+            titleDeed: titleDeed.value,
+            landRegistry: landRegistry.value,
+            certificateOfLocation: certificateOfLocation.value
+        }
+
+        for (const key in requiredFiles) {
+            if (requiredFiles[key]) {
+                procedureData.append(`${key}`, requiredFiles[key]);
+            }
+        }
+
+        try {
+            
+            const date = await $fetch(`${testUrl/*config.public.baseUrl*/}/folders/selling`, {
+                method: 'POST',
+                body: procedureData
+            });
+            alert('Procédure créée avec succès.');
+            //resetFields();
+            
+        } catch (error) {
+            console.error('Erreur lors de la création de la procédure :', error);
+        }
+    };
     
 </script>

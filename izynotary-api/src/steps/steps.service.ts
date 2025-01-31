@@ -57,14 +57,13 @@ export class StepsService {
         var message = 
 `Acte notarié de ${updateStepDto.procedureType}
 Numéro : ${updateStepDto.folderNum}.
-Votre document <nom du document est maintenant disponible>`;
+${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.join(", ") + "sont " : "votre documnent " + updateStepDto.documents[0] + " est " } maintenant disponible.`;
 
         var encodedMessage = encodeURIComponent(message);
         const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 
         let a = await fetch(smsUrl);
-
-        console.log("sms response: ", a);
+        console.log("sms response : ", a);
     }
 
     async remove(id: number) {

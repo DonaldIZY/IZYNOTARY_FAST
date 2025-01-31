@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Identifier } from 'src/identifier/entities/identifier.entity';
 import { Password } from 'src/utils/password.util';
 import { Role } from 'src/roles/entities/role.entity';
+import { EmailService } from 'src/mail/email.service';
 
 @Injectable()
 export class UsersService {
@@ -14,8 +15,10 @@ export class UsersService {
 	constructor(
 		@InjectRepository(User) private readonly usersRepository: Repository<User>,
 		@InjectRepository(Role) private readonly rolesRepository: Repository<Role>,
-		private readonly entityManager: EntityManager
+		private readonly entityManager: EntityManager,
+		private readonly emailService: EmailService
 	) {}
+
 
 	async create(createUserDto: CreateUserDto) {
 
@@ -41,6 +44,24 @@ export class UsersService {
 		console.log(user);
 
 		await this.entityManager.save(user);
+
+		// 📨 Envoi de l'e-mail de bienvenue
+		await this.emailService.sendEmail(
+			user.email,
+			'Bienvenue sur IzyNotary !',
+			`Bonjour ${user.lastName} ${user.firstName} votre compte a été créé.`,
+			`
+			<p>Votre compte a été créé avec succès.</p>
+			<p>Voici vos informations de connexion :</p>
+			<ul>
+			  <li><strong>Email :</strong> ${user.email}</li>
+			</ul>
+			<ul>
+			  <li><strong>Mot de passe :</strong> ${password}</li>
+			</ul>
+			<p>Merci d'utiliser IzyNotary ! 🚀</p>
+		  `
+		  );
 	}
 
 	async findAll() {

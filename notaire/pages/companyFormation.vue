@@ -238,9 +238,11 @@
 
     const config = useRuntimeConfig();
 
+    const testUrl = "http://serverizynotary.izydr.net";
+
     const loadCustomers = async () => {
         try {
-            const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
+            const fetchCustomers = await $fetch(`${testUrl/*config.public.baseUrl*/}/customers`);
             if (fetchCustomers) {
                 customers.value = fetchCustomers.map((customer) => ({
                     ID: customer.id,
@@ -291,14 +293,15 @@
         sketchOfGeoLocation.value = null;
         formForCompanyFormation.value = null;
         capitalToBeReleased.value = null;
+
+
     };
 
     const handleProcedure = async () => {
 
         const procedureData = new FormData();
-        
-
-        const folders = await $fetch(`${config.public.baseUrl}/folders`);
+    
+        const folders = await $fetch(`${testUrl/*config.public.baseUrl*/}/folders`);
 
         const count = folders.length;
         if (isNaN(count)) {
@@ -310,13 +313,6 @@
         procedureData.append('procedureType', 'Constitution de société');
         procedureData.append('progression', 1/6);
         procedureData.append('status', 'En cours');
-
-        if (!selectedCustomer.value || !selectedCustomer.value.ID) {
-            console.error("Erreur : Aucun client sélectionné");
-            return;
-        }
-
-
         procedureData.append('customerId', selectedCustomer.value.ID);
         
         const requiredFiles = {
@@ -335,7 +331,7 @@
         }
         
         try {
-            const data = await $fetch(`${config.public.baseUrl}/folders/companyFormation`, {
+            const data = await $fetch(`${testUrl/*config.public.baseUrl*/}/folders/companyFormation`, {
                 method: 'POST',
                 body: procedureData
             });
