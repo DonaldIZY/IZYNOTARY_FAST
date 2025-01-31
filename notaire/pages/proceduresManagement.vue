@@ -318,7 +318,7 @@
     const updateProcedure = async (val) => { 
         
         try {
-            console.log("data to send : ", val);
+            console.log("data to send before change to formadata : ", val);
 
             var dataToSend = new FormData();
 
