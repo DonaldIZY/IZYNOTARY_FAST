@@ -190,7 +190,7 @@
 </template>
 
 <script setup>
-const config = useRuntimeConfig();
+const testUrl = "http://serverizynotary.izydr.net";
 
 const proceduresHeaders = ref([
   { align: "start", key: "NUM", title: "N°" },
@@ -205,7 +205,7 @@ const proceduresHeaders = ref([
 
 const procedures = ref([]);
 
-const searchProcedureType = ref(null);
+const searchCNI = ref(null);
 const searchNum = ref(null);
 const searchCustomer = ref(null);
 const searchStartDate = ref(null);
@@ -215,9 +215,8 @@ const form = ref(null);
 
 const filteredProcedures = computed(() => {
   return procedures.value.filter((item) => {
-    const matchesProcedureType =
-      !searchProcedureType.value ||
-      item.PROCEDURE_TYPE.toString().includes(searchProcedureType.value);
+    const matchesCNI =
+      !searchCNI.value || item.NUM.toString().includes(searchCNI.value);
     const matchesNum =
       !searchNum.value || item.NUM.toString().includes(searchNum.value);
     const matchesCustomer =
@@ -227,19 +226,24 @@ const filteredProcedures = computed(() => {
       !searchStartDate.value ||
       new Date(item.CREATE_AT).toISOString().slice(0, 10) >=
         searchStartDate.value;
+    const matchesEndDate =
+      !searchEndDate.value ||
+      new Date(item.CREATE_AT).toISOString().slice(0, 10) <=
+        searchEndDate.value;
     const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
     return (
-      matchesProcedureType &&
+      matchesCNI &&
       matchesNum &&
       matchesCustomer &&
       matchesStartDate &&
+      matchesEndDate &&
       matchesStatus
     );
   });
 });
 
 const clearFilters = () => {
-  searchProcedureType.value = null;
+  searchCNI.value = null;
   searchNum.value = null;
   searchCustomer.value = null;
   searchStartDate.value = null;
@@ -249,7 +253,9 @@ const clearFilters = () => {
 
 const loadProcedures = async () => {
   try {
-    const fetchedProcedures = await $fetch(`${config.public.baseUrl}/folders`);
+    const fetchedProcedures = await $fetch(
+      `${testUrl /*config.public.baseUrl*/}/folders`
+    );
 
     console.log("fetchedProcedures : ", fetchedProcedures);
 
@@ -282,13 +288,13 @@ const selectedProcedure = ref({});
 const openModal = (val) => {
   dialog.value = true;
   /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
-            selectedProcedure.value = fakeCompanyIncorporation;  
-        }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
-            selectedProcedure.value = fakeSales;
-        }else{
-            selectedProcedure.value = {};
-            dialog.value = false;
-        }*/
+         selectedProcedure.value = fakeCompanyIncorporation;  
+     }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
+         selectedProcedure.value = fakeSales;
+     }else{
+         selectedProcedure.value = {};
+         dialog.value = false;
+     }*/
   selectedProcedure.value = val;
   console.log("selectedValue : ", selectedProcedure.value);
 };
@@ -317,153 +323,36 @@ const redirectRegardingProcedure = (procedure) => {
 
 const updateProcedure = async (val) => {
   try {
-    console.log("data to send : ", val);
+    console.log("data to send before change to formadata : ", val);
+
+    var dataToSend = new FormData();
+
+    dataToSend.append("action", val.action);
+    dataToSend.append("folderNum", val.folderNum);
+    dataToSend.append("procedureType", val.procedureType);
+    dataToSend.append("contact", val.contact);
+
+    for (const fileKey of Object.keys(val.documents)) {
+      dataToSend.append(fileKey, val.documents[fileKey]);
+    }
+
+    // for(const [key, value] of dataToSend.entries()) {
+    //     console.log(key, value);
+    // }
+
     const resultOfProcedureUpdate = await $fetch(
-      `${config.public.baseUrl}/steps/update/${val.id}`,
+      `${testUrl /*config.public.baseUrl*/}/steps/update/${val.id}`,
       {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id: val.id,
-          steps: val.steps,
-          contact: val.customer.phone,
-          folderNum: val.folderNum,
-          procedureType: val.PROCEDURE_TYPE,
-        }),
+        //   headers: {"Content-Type": "application/json"},
+        body: dataToSend,
       }
     );
 
-    console.log("back response : ", resultOfProcedureUpdate);
+    // console.log("back response : ", resultOfProcedureUpdate);
   } catch (err) {
     console.error("Erreur lors de la mise à jour de la procédure : ", err);
   }
-};
-
-const fakeCompanyIncorporation = {
-  createdAt: "",
-  id: "",
-  procedureType: "Constitution de société",
-  status: "En cours",
-  steps: [
-    {
-      stepNum: "1",
-      status: "Terminée",
-      action: "Fourniture des pièces",
-      documents: {
-        CNI: "",
-        facture: "",
-        attestation: "",
-      },
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "2",
-      status: "Terminée",
-      action: "Rédaction des statuts",
-      documents: {
-        facture: "",
-        attestation: "",
-      },
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "3",
-      status: "Non débuté",
-      action: "Règlement total ou partiel des frais",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "4",
-      status: "Non débuté",
-      action: "Signature des actes",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "5",
-      status: "Non débuté",
-      action: "Dépôt des actes signés",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "6",
-      status: "Non débuté",
-      action: "Livrables",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-  ],
-};
-
-const fakeSales = {
-  createdAt: "",
-  id: "",
-  procedureType: "Vente",
-  status: "En cours",
-  steps: [
-    {
-      stepNum: "1",
-      status: "Terminée",
-      action: "Fourniture des pièces",
-      documents: {
-        CNI: "",
-        facture: "",
-        attestation: "",
-      },
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "2",
-      status: "Terminée",
-      action: "Rédaction l'acte de vente",
-      documents: {
-        CNI: "",
-      },
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "3",
-      status: "Non débuté",
-      action: "Règlement total ou partiel des frais",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "4",
-      status: "Non débuté",
-      action: "Signature de l'acte de vente",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "5",
-      status: "Non débuté",
-      action: "Dépôt de l'acte signé",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-    {
-      stepNum: "6",
-      status: "Non débuté",
-      action: "Livrables",
-      documents: {},
-      comment: "",
-      editBy: "",
-    },
-  ],
 };
 </script>
 
