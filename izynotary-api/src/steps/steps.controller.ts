@@ -1,41 +1,108 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles} from '@nestjs/common';
+import { AnyFilesInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 import { StepsService } from './steps.service';
 import { CreateStepDto } from './dto/create-step.dto';
 import { UpdateStepDto } from './dto/update-step.dto';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import * as fs from 'fs';
+
 
 @Controller('steps')
 export class StepsController {
-    constructor(private readonly stepsService: StepsService) {}
+  constructor(private readonly stepsService: StepsService) {}
 
-    @Post()
-    async create(@Body() createStepDto: CreateStepDto) {
-        return this.stepsService.create(createStepDto);
-    }
+  @Post()
+  async create(@Body() createStepDto: CreateStepDto) {
+    return this.stepsService.create(createStepDto);
+  }
 
-    @Get()
-    async findAll() {
-        return this.stepsService.findAll();
-    }
+  @Get()
+  async findAll() {
+    return this.stepsService.findAll();
+  }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string) {
-        return this.stepsService.findOne(+id);
-    }
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return this.stepsService.findOne(+id);
+  }
 
-    @Patch(':id')
-    async update(@Param('id') id: string, @Body() updateStepDto: UpdateStepDto) {
-        return this.stepsService.update(+id, updateStepDto);
-    }
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateStepDto: UpdateStepDto) {
+    return this.stepsService.update(+id, updateStepDto);
+  }
 
-    @Patch('update/:id')
-    async updateTwo(@Param('id') id: string, @Body() updateStepDto: UpdateStepDto) {
-        return this.stepsService.updateTwo(+id, updateStepDto);
-    }
+  @Patch('update/:id')
+  @UseInterceptors(
+    AnyFilesInterceptor({
+      storage: diskStorage({
+        destination: (req, file, cb) => {
 
-    @Delete(':id')
-    async remove(@Param('id') id: string) {
-        return this.stepsService.remove(+id);
-    }
+          function formatProcedureType (val: String) {
+            let result: String;
+
+            if(val.toLowerCase() == "constitution de société") {
+                result = "companyFormation";
+            }else if(val.toLowerCase() == "modification de société") {
+                result = "companyModification";
+            }/*else if(val.toLowerCase() == "constitution de société") {
+
+            }else if(val.toLowerCase() == "constitution de société") {
+
+            }else if(val.toLowerCase() == "constitution de société") {
+
+            }else if(val.toLowerCase() == "constitution de société") {
+
+            }*/
+
+            return result;
+          }
+
+          req.body.procedureType = formatProcedureType(req.body.procedureType);
+
+          const folderNum = req.body.folderNum; // Récupération du numéro de dossier
+          const uploadPath = `./uploads/procedures/${req.body.procedureType}/${folderNum}`;
+
+          // Vérifier et créer le dossier si nécessaire
+          if (!fs.existsSync(uploadPath)) {
+            fs.mkdirSync(uploadPath, { recursive: true });
+          }
+
+          cb(null, uploadPath);
+        },
+        filename: (req, file, cb) => {
+          const ext = extname(file.originalname);
+          cb(null, `${file.fieldname}${ext}`);
+        },
+      }),
+    }),
+  )
+  
+  async updateTwo(
+    @Param('id') id: string,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Body() updateStepDto: UpdateStepDto,
+  ) {
+    console.log('FILES : ',files)
+
+        // Construction de l'objet uploadedFiles avec les chemins des fichiers
+        const uploadedFiles = {};
+        files.forEach((file) => {
+            uploadedFiles[file.fieldname] = `/uploads/procedures/${updateStepDto.procedureType}/${updateStepDto.folderNum}/${file.filename}`;
+        });
+
+        // Assignation du champ uploadedFiles au DTO
+        updateStepDto.uploadedFiles = uploadedFiles;
+
+        console.log("Final folder: ", updateStepDto);
+
+    return this.stepsService.updateTwo(+id, updateStepDto);
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    return this.stepsService.remove(+id);
+  }
 }
 
 

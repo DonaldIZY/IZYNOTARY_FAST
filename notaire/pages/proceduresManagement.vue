@@ -202,6 +202,8 @@
 
     const config = useRuntimeConfig();
 
+    const testUrl = "http://serverizynotary.izydr.net";
+
     const proceduresHeaders = ref([
         { align: "start", key: "NUM", title: "N°" },
         { align: "start", key: "CUSTOMER", title: "Client" },
@@ -247,7 +249,7 @@
     const loadProcedures = async () => {
         try {
         
-            const fetchedProcedures = await $fetch(`${config.public.baseUrl}/folders`);
+            const fetchedProcedures = await $fetch(`${testUrl/*config.public.baseUrl*/}/folders`);
 
             console.log("fetchedProcedures : ", fetchedProcedures);
 
@@ -333,9 +335,9 @@
             //     console.log(key, value);
             // }
 
-            const resultOfProcedureUpdate = await $fetch(`${config.public.baseUrl}/steps/update/${val.id}`, {
+            const resultOfProcedureUpdate = await $fetch(`${testUrl/*config.public.baseUrl*/}/steps/update/${val.id}`, {
               method: "PATCH",
-              headers: {"Content-Type": "application/json"},
+            //   headers: {"Content-Type": "application/json"},
               body: dataToSend //JSON.stringify({id: val.id, steps: val.steps, contact: val.customer.phone, folderNum: val.folderNum, procedureType: val.PROCEDURE_TYPE})
             });
 
