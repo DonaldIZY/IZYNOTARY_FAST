@@ -338,7 +338,7 @@
             const resultOfProcedureUpdate = await $fetch(`${testUrl/*config.public.baseUrl*/}/steps/update/${val.id}`, {
               method: "PATCH",
             //   headers: {"Content-Type": "application/json"},
-              body: dataToSend //JSON.stringify({id: val.id, steps: val.steps, contact: val.customer.phone, folderNum: val.folderNum, procedureType: val.PROCEDURE_TYPE})
+              body: dataToSend 
             });
 
             // console.log("back response : ", resultOfProcedureUpdate);
