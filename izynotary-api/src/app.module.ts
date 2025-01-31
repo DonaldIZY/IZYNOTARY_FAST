@@ -34,5 +34,6 @@ export class AppModule implements OnApplicationBootstrap {
 	async onApplicationBootstrap() {
         await this.seeder.seedPermissions();
 		await this.seeder.seedRoles();
+		await this.seeder.seedSuperUser();
     }
 }
