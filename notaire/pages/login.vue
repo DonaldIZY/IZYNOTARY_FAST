@@ -118,8 +118,8 @@
         loading.value = true;
         
         try {
-            
-            const data = await $fetch(`${config.public.baseUrl}/auth/login`, {
+            const testUrl = "http://serverizynotary.izydr.net";
+            const data = await $fetch(`${testUrl/*config.public.baseUrl*/}/auth/login`, {
                 method: 'POST',
                 body: JSON.stringify({
                     email: email.value,

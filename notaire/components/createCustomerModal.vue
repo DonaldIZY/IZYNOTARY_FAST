@@ -188,19 +188,20 @@
     const handleCustomer = async () => {
         const customerData = new FormData();
         
-        customerData.append('lastName', lastName.value)
-        customerData.append('firstName', firstName.value)
-        customerData.append('gender', gender.value)
-        customerData.append('birthDate', birthDate.value)
-        customerData.append('email', email.value)
-        customerData.append('phone', phone.value)
-        customerData.append('identification', identification.value)
-        customerData.append('identificationNumber', identificationNumber.value)
-        customerData.append('imageOfIdentification', imageOfIdentification.value)
+        customerData.append('lastName', lastName.value);
+        customerData.append('firstName', firstName.value);
+        customerData.append('gender', gender.value);
+        customerData.append('birthDate', birthDate.value);
+        customerData.append('email', email.value);
+        customerData.append('phone', phone.value);
+        customerData.append('identification', identification.value);
+        customerData.append('identificationNumber', identificationNumber.value);
+        customerData.append('imageOfIdentification', imageOfIdentification.value);
         
         console.log(customerData.get('imageOfIdentification'));
         try {
-            const data = await $fetch(`${config.public.baseUrl}/customers`, {
+            const testUrl = "http://serverizynotary.izydr.net";
+            const data = await $fetch(`${testUrl/*config.public.baseUrl*/}/customers`, {
                 method: 'POST',
                 body: customerData,
             });

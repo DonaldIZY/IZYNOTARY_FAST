@@ -7,7 +7,10 @@
     <div class="d-flex h-90 w-sm-75 w-lg-50 mx-8 align-center">
       <v-row align="start" justify="center">
         <v-col cols="4">
-          <v-card class="mx-auto rounded-lg" to="/proceduresManagement">
+          <v-card
+            class="mx-auto rounded-lg hover-card"
+            to="/proceduresManagement"
+          >
             <v-img
               src="~/assets/img/gest_proc.png"
               class="mb-3 mt-2 mx-2 rounded-lg"
@@ -21,7 +24,10 @@
         </v-col>
 
         <v-col cols="4">
-          <v-card class="mx-auto rounded-lg" to="/customersManagement">
+          <v-card
+            class="mx-auto rounded-lg hover-card"
+            to="/customersManagement"
+          >
             <v-img
               src="~/assets/img/gest_cli.png"
               class="mb-3 mt-2 mx-2 rounded-lg"
@@ -36,7 +42,7 @@
         </v-col>
 
         <v-col cols="4">
-          <v-card class="mx-auto rounded-lg" to="/dashboard">
+          <v-card class="mx-auto rounded-lg hover-card" to="/dashboard">
             <v-img
               src="~/assets/img/tab_bord.png"
               class="mb-3 mt-2 mx-2 rounded-lg"
@@ -51,7 +57,7 @@
         </v-col>
 
         <v-col cols="4">
-          <v-card class="mx-auto rounded-lg" to="/settings">
+          <v-card class="mx-auto rounded-lg hover-card" to="/settings">
             <v-img
               src="~/assets/img/param.png"
               class="mb-3 mt-2 mx-2 rounded-lg"
@@ -66,7 +72,7 @@
         </v-col>
 
         <v-col cols="4">
-          <v-card class="mx-auto rounded-lg" to="/administration">
+          <v-card class="mx-auto rounded-lg hover-card" to="/administration">
             <v-img
               src="~/assets/img/admin.png"
               class="mb-3 mt-2 mx-2 rounded-lg"
@@ -103,11 +109,17 @@
 }
 
 .titleCardText {
-  font-size: 1.05rem;
+  font-size: 0.95rem;
 }
 
-.v-col :hover {
-  background-color: #efefef;
-  transform: scale(1.05);
+.hover-card {
+  transition: transform 0.25s ease-in-out;
+}
+
+.hover-card:hover {
+  background-color: #ad1919;
+  color: #fff;
+  transform: scale(1.1); /* Agrandissement au hover */
+  cursor: pointer;
 }
 </style>

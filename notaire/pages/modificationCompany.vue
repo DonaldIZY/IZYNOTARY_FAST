@@ -226,7 +226,8 @@
 
     const loadCustomers = async () => {
         try {
-            const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
+            const testUrl = "http://serverizynotary.izydr.net";
+            const fetchCustomers = await $fetch(`${testUrl/*config.public.baseUrl*/}/customers`);
             if (fetchCustomers) {
                 customers.value = fetchCustomers.map((customer) => ({
                     ID: customer.id,

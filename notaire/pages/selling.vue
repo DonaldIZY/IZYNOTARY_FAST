@@ -336,9 +336,11 @@
 
     const config = useRuntimeConfig();
 
+    const testUrl = "http://serverizynotary.izydr.net";
+
     const loadCustomers = async () => {
         try {
-            const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
+            const fetchCustomers = await $fetch(`${testUrl/*config.public.baseUrl*/}/customers`);
             if (fetchCustomers) {
                 customers.value = fetchCustomers.map((customer) => ({
                     ID: customer.id,
@@ -399,10 +401,9 @@
     };
 
     const handleProcedure = async () => {
-    
         const procedureData = new FormData();
 
-        const folders = await $fetch(`${conf.public.baseUrl}/folders`);
+        const folders = await $fetch(`${testUrl/*conf.public.baseUrl*/}/folders`);
 
         const count = folders.length;
         if (isNaN(count)) {
@@ -434,7 +435,8 @@
         }
 
         try {
-            const date = await $fetch(`${config.public.baseUrl}/folders/selling`, {
+            
+            const date = await $fetch(`${testUrl/*config.public.baseUrl*/}/folders/selling`, {
                 method: 'POST',
                 body: procedureData
             });
