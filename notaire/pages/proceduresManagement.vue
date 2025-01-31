@@ -323,9 +323,9 @@
             var dataToSend = new FormData();
 
             dataToSend.append("action", val.action);
-            dataToSend.append("folderNum", val.action);
+            dataToSend.append("folderNum", val.folderNum);
             dataToSend.append("procedureType", val.procedureType);
-            
+            dataToSend.append("contact", val.contact);
 
             for(const fileKey of Object.keys(val.documents)) {
                 dataToSend.append(fileKey, val.documents[fileKey]);

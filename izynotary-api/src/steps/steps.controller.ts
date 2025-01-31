@@ -93,6 +93,7 @@ export class StepsController {
 
         // Assignation du champ uploadedFiles au DTO
         updateStepDto.uploadedFiles = uploadedFiles;
+        
 
         console.log("Final folder: ", updateStepDto);
 
