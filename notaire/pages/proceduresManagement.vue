@@ -206,7 +206,7 @@
         { align: "start", key: "NUM", title: "N°" },
         { align: "start", key: "CUSTOMER", title: "Client" },
         { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
-        { align: "start", key: "CREATE_BY", title: "Créée par" },
+         { align: "start", key: "CREATE_BY", title: "Créée par" },
         { align: "start", key: "CREATE_AT", title: "Date de création" },
         { align: "start", key: "PROGRESSION", title: "Progression" },
         { align: "center", key: "STATUS", title: "Statut" },
@@ -314,15 +314,32 @@
     }
 
     const updateProcedure = async (val) => { 
+        
         try {
             console.log("data to send : ", val);
+
+            var dataToSend = new FormData();
+
+            dataToSend.append("action", val.action);
+            dataToSend.append("folderNum", val.action);
+            dataToSend.append("procedureType", val.procedureType);
+            
+
+            for(const fileKey of Object.keys(val.documents)) {
+                dataToSend.append(fileKey, val.documents[fileKey]);
+            }
+
+            // for(const [key, value] of dataToSend.entries()) {
+            //     console.log(key, value);
+            // }
+
             const resultOfProcedureUpdate = await $fetch(`${config.public.baseUrl}/steps/update/${val.id}`, {
               method: "PATCH",
               headers: {"Content-Type": "application/json"},
-              body: JSON.stringify({id: val.id, steps: val.steps, contact: val.customer.phone, folderNum: val.folderNum, procedureType: val.PROCEDURE_TYPE})
+              body: dataToSend //JSON.stringify({id: val.id, steps: val.steps, contact: val.customer.phone, folderNum: val.folderNum, procedureType: val.PROCEDURE_TYPE})
             });
 
-            console.log("back response : ", resultOfProcedureUpdate);
+            // console.log("back response : ", resultOfProcedureUpdate);
 
         } catch (err) {
             console.error('Erreur lors de la mise à jour de la procédure : ', err);
