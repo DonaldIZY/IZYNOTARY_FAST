@@ -53,6 +53,7 @@
                   color="primary"
                   label="Type de procédure"
                   prepend-inner-icon="mdi-folder-open-outline"
+                  chips
                   :items="[
                     'Vente',
                     'Constitution de société',
@@ -61,7 +62,6 @@
                     'Succession de biens immobiliers',
                     'Crédit',
                   ]"
-                  chips
                   multiple
                   clearable
                   variant="outlined"
@@ -209,7 +209,7 @@ const searchCNI = ref(null);
 const searchNum = ref(null);
 const searchCustomer = ref(null);
 const searchStartDate = ref(null);
-const searchEndDate = ref(null);
+const searchProcedureType = ref(null);
 const searchStatus = ref(null);
 const form = ref(null);
 
@@ -226,17 +226,17 @@ const filteredProcedures = computed(() => {
       !searchStartDate.value ||
       new Date(item.CREATE_AT).toISOString().slice(0, 10) >=
         searchStartDate.value;
-    const matchesEndDate =
-      !searchEndDate.value ||
+    const matchesProcedureType =
+      !searchProcedureType.value ||
       new Date(item.CREATE_AT).toISOString().slice(0, 10) <=
-        searchEndDate.value;
+        searchProcedureType.value;
     const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
     return (
       matchesCNI &&
       matchesNum &&
       matchesCustomer &&
       matchesStartDate &&
-      matchesEndDate &&
+      matchesProcedureType &&
       matchesStatus
     );
   });
@@ -247,7 +247,7 @@ const clearFilters = () => {
   searchNum.value = null;
   searchCustomer.value = null;
   searchStartDate.value = null;
-  searchEndDate.value = null;
+  searchProcedureType.value = null;
   searchStatus.value = null;
 };
 
