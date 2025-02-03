@@ -1,6 +1,10 @@
 <template>
   <v-dialog v-model="props.open" max-width="600">
-    <v-card prepend-icon="mdi-account-tie" title="Créer un client">
+    <v-card>
+      <v-card-title
+        ><v-icon>mdi-account-tie</v-icon>
+        <span class="title">Créer un client</span></v-card-title
+      >
       <v-card-text>
         <v-row dense>
           <v-col cols="6">
@@ -202,3 +206,9 @@ const closeModal = () => {
   emit("update:open", false);
 };
 </script>
+<style>
+.title {
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+</style>
