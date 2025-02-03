@@ -13,6 +13,7 @@ export class AuthController {
     @Body('password') password: string,
     @Res() res: Response,
   ) {
+    
     const accessToken = await this.authService.login(email, password, res);
 
     // Définir le cookie sécurisé (httpOnly, sécurisé)
