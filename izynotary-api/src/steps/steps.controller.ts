@@ -58,7 +58,7 @@ export class StepsController {
             return result;
           }
 
-        //   req.body.procedureType = formatProcedureType(req.body.procedureType);
+          // req.body.procedureType = formatProcedureType(req.body.procedureType);
 
           const folderNum = req.body.folderNum; // Récupération du numéro de dossier
           const uploadPath = `./uploads/procedures/${formatProcedureType(req.body.procedureType)}/${folderNum}`;

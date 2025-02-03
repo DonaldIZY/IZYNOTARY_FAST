@@ -57,7 +57,10 @@
           <v-btn
               text="Annuler"
               variant="plain"
-              @click="$emit('closeModal')"
+              @click="() => {
+                $emit('closeModal');
+                newProcedureData = {};
+              }"
               class="text-none"
           ></v-btn>
 

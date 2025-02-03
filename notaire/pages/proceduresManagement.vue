@@ -190,7 +190,7 @@
 </template>
 
 <script setup>
-const testUrl = "http://serverizynotary.izydr.net";
+const testUrl = "http://localhost:8000" /*"http://serverizynotary.izydr.net"*/;
 
 const proceduresHeaders = ref([
   { align: "start", key: "NUM", title: "N°" },
@@ -345,11 +345,12 @@ const updateProcedure = async (val) => {
       {
         method: "PATCH",
         //   headers: {"Content-Type": "application/json"},
+        cors: "no-cors",
         body: dataToSend,
       }
     );
 
-    // console.log("back response : ", resultOfProcedureUpdate);
+    console.log("back response : ", resultOfProcedureUpdate);
   } catch (err) {
     console.error("Erreur lors de la mise à jour de la procédure : ", err);
   }

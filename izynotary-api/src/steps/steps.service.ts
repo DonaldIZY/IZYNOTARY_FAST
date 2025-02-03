@@ -36,10 +36,26 @@ export class StepsService {
 
     async updateTwo(id: number, updateStepDto: UpdateStepDto) {
         const step = await this.stepRepository.findOneBy({ id });
-        Object.assign(step, updateStepDto);
-        await this.entityManager.save(step);
+        // console.log("FOUND STEP : ", step);
 
-        
+        let searchedStepIndex = step.steps.findIndex(elem => elem.action == updateStepDto["action"]); //the index of the step we need
+        let searchedStep = step.steps.find(elem => elem.action == updateStepDto["action"]); //the step we need
+        console.log("STEP BEFORE UPDATE : ", searchedStep);
+
+        const listOfKeyToUpdate = Object.keys(updateStepDto.uploadedFiles);
+
+        for(const key of listOfKeyToUpdate) {
+            step.steps[searchedStepIndex].documents[key].path = updateStepDto.uploadedFiles[key]; //to change the path of the doc in the database, each key is a document name
+            step.steps[searchedStepIndex].documents[key].filled = true;
+        }
+
+        // step.steps[searchedStepIndex] = searchedStep;
+
+        const result = await this.entityManager.save(step);
+        let searchedStepAfterUpdate = result.steps.find(elem => elem.action == updateStepDto["action"]);
+        console.log("STEP AFTER UPDATE : ", searchedStepAfterUpdate);
+        console.log("STEP : ", result);
+
         // let customerContact = folder.customer.phone; 
         
         // YOU HAVE TO FIND 
