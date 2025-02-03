@@ -1,4 +1,0 @@
-const roles_vue_vue_type_style_index_0_scoped_1318759b_lang = ".customTable1[data-v-1318759b]{border-radius:.3rem!important}.customTable1 th[data-v-1318759b]{background-color:#e0e0e0;color:#000;font-weight:500!important}.customTable2[data-v-1318759b]{border-radius:.3rem!important}.customTable2 th[data-v-1318759b]{background-color:#ad1919;color:#fff;font-weight:500!important}.customTable2 thead tr:nth-child(2) th[data-v-1318759b]{background-color:#e0e0e0;color:#000;font-weight:500!important}.v-data-table tbody tr[data-v-1318759b]:nth-child(2n){background-color:#f5f5f5}.v-data-table tbody tr[data-v-1318759b]:nth-child(odd){background-color:#fff}.no-data-container[data-v-1318759b]{align-items:center;display:flex;flex-direction:column;font-size:16px;justify-content:center;margin:20px;text-align:center}";
-
-export { roles_vue_vue_type_style_index_0_scoped_1318759b_lang as r };
-//# sourceMappingURL=roles-styles-1.mjs-CnY1vhra.mjs.map
