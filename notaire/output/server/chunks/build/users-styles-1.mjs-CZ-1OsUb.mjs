@@ -1,0 +1,4 @@
+const users_vue_vue_type_style_index_0_scoped_e3e4e008_lang = ".customTable1[data-v-e3e4e008]{border-radius:.3rem!important}.customTable1 th[data-v-e3e4e008]{background-color:#e0e0e0;color:#000;font-weight:500!important}.customTable2[data-v-e3e4e008]{border-radius:.3rem!important}.customTable2 th[data-v-e3e4e008]{background-color:#ad1919;color:#fff;font-weight:500!important}.customTable2 thead tr:nth-child(2) th[data-v-e3e4e008]{background-color:#e0e0e0;color:#000;font-weight:500!important}.v-data-table tbody tr[data-v-e3e4e008]:nth-child(2n){background-color:#f5f5f5}.v-data-table tbody tr[data-v-e3e4e008]:nth-child(odd){background-color:#fff}.no-data-container[data-v-e3e4e008]{align-items:center;display:flex;flex-direction:column;font-size:16px;justify-content:center;margin:20px;text-align:center}";
+
+export { users_vue_vue_type_style_index_0_scoped_e3e4e008_lang as u };
+//# sourceMappingURL=users-styles-1.mjs-CZ-1OsUb.mjs.map
