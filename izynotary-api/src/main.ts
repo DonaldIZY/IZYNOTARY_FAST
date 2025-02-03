@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { join } from 'path';
 import * as fs from 'fs';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
 
@@ -33,6 +34,7 @@ async function bootstrap() {
     credentials: true, // Si vous avez besoin d'envoyer des cookies ou des headers d'authentification
   });
 
+  app.use(cookieParser()); // Middleware pour gérer les cookies
 
   await app.listen(process.env.APP_PORT ?? 3000);
 }

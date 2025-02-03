@@ -1,21 +1,25 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
+import { useCookie } from '#app';
 
-export const useAuthStore = defineStore('auth', {
-    state: () => ({
-        token: null as string | null,
-    }),
+export const useAuthStore = defineStore("auth", {
+  state: () => ({
+    // Use the cookie store to persist the token across sessions
+    token: useCookie('access_token').value || null,
+  }),
 
-    actions: {
-        setToken(newToken: string) {
-            this.token = newToken;
-        },
-
-        clearToken() {
-            this.token = null;
-        },
+  actions: {
+    setToken(newToken: string) {
+      useCookie('access_token').value = newToken;
+      this.token = newToken;
     },
 
-    getters: {
-        isAuthenticated: (state) => !!state.token,
+    clearToken() {
+      useCookie('access_token').value = null;
+      this.token = null;
     },
+  },
+
+  getters: {
+    isAuthenticated: (state) => !!state.token,
+  },
 });
