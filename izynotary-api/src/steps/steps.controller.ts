@@ -42,19 +42,18 @@ export class StepsController {
             let result: String;
 
             if(val.toLowerCase() == "constitution de société") {
-                result = "companyFormation";
+              result = "companyFormation";
             }else if(val.toLowerCase() == "modification de société") {
-                result = "companyModification";
-            }/*else if(val.toLowerCase() == "constitution de société") {
-
-            }else if(val.toLowerCase() == "constitution de société") {
-
-            }else if(val.toLowerCase() == "constitution de société") {
-
-            }else if(val.toLowerCase() == "constitution de société") {
+              result = "companyModification";
+            }else if(val.toLowerCase() == "vente") {
+              result = "selling";
+            }else if(val.toLowerCase() == "succession de biens mobiliers") {
+              result = "transferOfMovableProperty";
+            }else if(val.toLowerCase() == "succession de biens immobiliers") {
+              result = "transferOfRealEstate";
+            }/*else if(val.toLowerCase() == "crédit") {
 
             }*/
-
             return result;
           }
 
