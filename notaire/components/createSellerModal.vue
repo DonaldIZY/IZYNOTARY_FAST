@@ -1,6 +1,6 @@
 <template>
   <v-dialog v-model="props.open" max-width="600">
-    <v-card prepend-icon="mdi-account-tie" title="Créer un client">
+    <v-card prepend-icon="mdi-account-tie-voice" title="Créer un vendeur">
       <v-card-text>
         <v-row dense>
           <v-col cols="6">
@@ -39,9 +39,9 @@
               v-model="birthDate"
               color="primary"
               prepend-icon=""
+              density="compact"
               label="Date de naissance"
               variant="outlined"
-              density="compact"
               :max="maxDate"
               :year="new Date(maxDate).getFullYear()"
             >
@@ -49,12 +49,23 @@
           </v-col>
 
           <v-col cols="6">
+            <v-select
+              v-model="maritalStatus"
+              color="primary"
+              label="Situation matrimoniale"
+              :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
+              variant="outlined"
+              density="compact"
+            ></v-select>
+          </v-col>
+
+          <v-col cols="6">
             <v-text-field
               v-model="email"
               color="primary"
               label="Email"
-              variant="outlined"
               density="compact"
+              variant="outlined"
               :rules="[emailRule]"
             ></v-text-field>
           </v-col>
@@ -64,8 +75,8 @@
               v-model="phone"
               color="primary"
               label="Téléphone"
-              variant="outlined"
               density="compact"
+              variant="outlined"
             ></v-text-field>
           </v-col>
 
@@ -144,6 +155,7 @@ const gender = ref(null);
 const birthDate = ref(null);
 const email = ref("");
 const phone = ref("");
+const maritalStatus = ref("");
 const identification = ref(null);
 const identificationNumber = ref("");
 const imageOfIdentification = ref(null);
@@ -169,28 +181,26 @@ const maxDate = new Date(
   .split("T")[0]; // Format ISO pour Vuetify
 
 const handleCustomer = async () => {
-  const customerData = new FormData();
+  const sellerData = new FormData();
 
-  customerData.append("lastName", lastName.value);
-  customerData.append("firstName", firstName.value);
-  customerData.append("gender", gender.value);
-  customerData.append("birthDate", birthDate.value);
-  customerData.append("email", email.value);
-  customerData.append("phone", phone.value);
-  customerData.append("identification", identification.value);
-  customerData.append("identificationNumber", identificationNumber.value);
-  customerData.append("imageOfIdentification", imageOfIdentification.value);
+  sellerData.append("lastName", lastName.value);
+  sellerData.append("firstName", firstName.value);
+  sellerData.append("gender", gender.value);
+  sellerData.append("birthDate", birthDate.value);
+  sellerData.append("email", email.value);
+  sellerData.append("phone", phone.value);
+  sellerData.append("maritalStatus", maritalStatus.value);
+  sellerData.append("identification", identification.value);
+  sellerData.append("identificationNumber", identificationNumber.value);
+  sellerData.append("imageOfIdentification", imageOfIdentification.value);
 
-  console.log(customerData.get("imageOfIdentification"));
+  console.log(sellerData.get("imageOfIdentification"));
   try {
     const testUrl = "http://serverizynotary.izydr.net";
-    const data = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/customers`,
-      {
-        method: "POST",
-        body: customerData,
-      }
-    );
+    const data = await $fetch(`${testUrl /*config.public.baseUrl*/}/sellers`, {
+      method: "POST",
+      body: sellerData,
+    });
     alert("Client créé avec succès.");
     closeModal();
   } catch (error) {

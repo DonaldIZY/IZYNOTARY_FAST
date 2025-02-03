@@ -71,17 +71,17 @@
               </v-col>
 
               <v-col cols="12" lg="12" sm="6">
-                <v-text-field
-                  color="primary"
+                <v-date-input
                   v-model="searchStartDate"
-                  type="date"
-                  label="Date de création"
+                  color="primary"
+                  prepend-icon=""
                   prepend-inner-icon="mdi-calendar"
+                  label="Date de naissance"
                   variant="outlined"
                   density="compact"
                   hide-details
                 >
-                </v-text-field>
+                </v-date-input>
               </v-col>
 
               <v-col cols="12" lg="12" sm="6">

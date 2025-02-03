@@ -57,21 +57,6 @@
         </v-col>
 
         <v-col cols="4">
-          <v-card class="mx-auto rounded-lg hover-card" to="/settings">
-            <v-img
-              src="~/assets/img/param.png"
-              class="mb-3 mt-2 mx-2 rounded-lg"
-              cover
-              alt="Paramètres"
-            ></v-img>
-
-            <v-card-title class="titleCardText my-1 text-center">
-              Paramètres
-            </v-card-title>
-          </v-card>
-        </v-col>
-
-        <v-col cols="4">
           <v-card class="mx-auto rounded-lg hover-card" to="/administration">
             <v-img
               src="~/assets/img/admin.png"
@@ -82,6 +67,21 @@
 
             <v-card-title class="titleCardText my-1 text-center">
               Administration
+            </v-card-title>
+          </v-card>
+        </v-col>
+
+        <v-col cols="4">
+          <v-card disabled class="mx-auto rounded-lg hover-card" to="/settings">
+            <v-img
+              src="~/assets/img/param.png"
+              class="mb-3 mt-2 mx-2 rounded-lg"
+              cover
+              alt="Paramètres"
+            ></v-img>
+
+            <v-card-title class="titleCardText my-1 text-center">
+              Paramètres
             </v-card-title>
           </v-card>
         </v-col>
