@@ -54,20 +54,6 @@
         </v-col>
 
         <v-col cols="12" sm="6" md="4">
-          <v-card class="mx-auto rounded-lg hover-card" to="">
-            <v-img
-              src="~/assets/img/credit.png"
-              class="mb-2 mt-2 mx-2 rounded-lg"
-              cover
-              alt="Procédure de crédit"
-            ></v-img>
-            <v-card-title class="my-1 text-center titleCardText">
-              Crédit
-            </v-card-title>
-          </v-card>
-        </v-col>
-
-        <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
             to="/transferOfMovableProperty"
@@ -97,6 +83,20 @@
             ></v-img>
             <v-card-title class="my-1 text-center titleCardText">
               Succession de biens immobiliers
+            </v-card-title>
+          </v-card>
+        </v-col>
+
+        <v-col cols="12" sm="6" md="4">
+          <v-card class="mx-auto rounded-lg hover-card" to="" disabled>
+            <v-img
+              src="~/assets/img/credit.png"
+              class="mb-2 mt-2 mx-2 rounded-lg"
+              cover
+              alt="Procédure de crédit"
+            ></v-img>
+            <v-card-title class="my-1 text-center titleCardText">
+              Crédit
             </v-card-title>
           </v-card>
         </v-col>
