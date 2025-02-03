@@ -71,17 +71,17 @@
               </v-col>
 
               <v-col cols="12" lg="12" sm="6">
-                <v-date-input
-                  v-model="searchStartDate"
+                <v-text-field
                   color="primary"
-                  prepend-icon=""
+                  v-model="searchStartDate"
+                  type="date"
+                  label="Date de création"
                   prepend-inner-icon="mdi-calendar"
-                  label="Date de naissance"
                   variant="outlined"
                   density="compact"
                   hide-details
                 >
-                </v-date-input>
+                </v-text-field>
               </v-col>
 
               <v-col cols="12" lg="12" sm="6">
@@ -190,7 +190,7 @@
 </template>
 
 <script setup>
-const testUrl = "http://localhost:8000" /*"http://serverizynotary.izydr.net"*/;
+const testUrl = /*"http://localhost:8000"*/ "http://serverizynotary.izydr.net";
 
 const proceduresHeaders = ref([
   { align: "start", key: "NUM", title: "N°" },
