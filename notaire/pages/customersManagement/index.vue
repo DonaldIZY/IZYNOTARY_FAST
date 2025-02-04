@@ -84,7 +84,7 @@ const customersHeaders = ref([
   { align: "start", key: "COMPLETED_FILES", title: "Dossiers terminés" },
   { align: "start", key: "HANGING_FILES", title: "Dossiers suspendus" },
   { align: "start", key: "CLOSED_FILES", title: "Dossiers arrêtés" },
-  { align: "start", key: "FILES", title: "Dossiers" },
+  { align: "start", key: "FILES", title: "Total" },
 ]);
 
 const customers = ref([]);

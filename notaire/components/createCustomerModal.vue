@@ -6,6 +6,9 @@
         <span class="title">Créer un client</span></v-card-title
       >
       <v-card-text>
+        <p class="indication">
+          <span>*</span> Tous les champs sont obligatoires.
+        </p>
         <v-row dense>
           <v-col cols="6">
             <v-text-field
@@ -14,6 +17,8 @@
               label="Nom"
               variant="outlined"
               density="compact"
+              clearable
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -24,6 +29,8 @@
               label="Prénoms"
               variant="outlined"
               density="compact"
+              clearable
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -35,6 +42,8 @@
               :items="['Homme', 'Femme']"
               variant="outlined"
               density="compact"
+              clearable
+              :rules="[required]"
             ></v-select>
           </v-col>
 
@@ -48,6 +57,8 @@
               density="compact"
               :max="maxDate"
               :year="new Date(maxDate).getFullYear()"
+              clearable
+              :rules="[required]"
             >
             </v-date-input>
           </v-col>
@@ -59,7 +70,8 @@
               label="Email"
               variant="outlined"
               density="compact"
-              :rules="[emailRule]"
+              clearable
+              :rules="[required, emailRule]"
             ></v-text-field>
           </v-col>
 
@@ -70,6 +82,8 @@
               label="Téléphone"
               variant="outlined"
               density="compact"
+              clearable
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -81,6 +95,8 @@
               density="compact"
               :items="['CNI', 'Passeport']"
               variant="outlined"
+              clearable
+              :rules="[required]"
             ></v-select>
           </v-col>
           <v-col cols="6">
@@ -92,9 +108,21 @@
                   density="compact"
                   label="Numéro de la pièce d'identité"
                   variant="outlined"
+                  clearable
+                  :rules="[required]"
                 ></v-text-field>
               </v-col>
             </v-row>
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              v-model="maritalStatus"
+              color="primary"
+              label="Situation matrimoniale"
+              :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
+              variant="outlined"
+              density="compact"
+            ></v-select>
           </v-col>
           <v-col cols="12">
             <v-file-input
@@ -105,6 +133,9 @@
               prepend-icon=""
               prepend-inner-icon="mdi-id-card"
               variant="outlined"
+              clearable
+              hide-details
+              :rules="[required]"
             ></v-file-input>
           </v-col>
         </v-row>
@@ -117,30 +148,44 @@
 
         <v-btn
           text="Annuler"
-          variant="plain"
+          color="secondary"
+          variant="flat"
           @click="closeModal"
           class="text-none"
         ></v-btn>
 
         <v-btn
           color="primary"
-          text="Enregistrer"
-          variant="tonal"
-          @click="handleCustomer"
           class="text-none"
+          text="Enregistrer"
+          variant="flat"
+          @click="handleCustomer"
+          :disabled="!isFormValid"
         ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <result-modal-validation
+    :text="showTextResultModal"
+    :open="showResultModal"
+    :type="showTypeResultModal"
+    @update:open="showResultModal = $event"
+  />
 </template>
 
 <script setup>
+import { computed } from "vue";
+
 const props = defineProps({
   open: {
     type: Boolean,
     default: false,
   },
 });
+
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
 
 const lastName = ref("");
 const firstName = ref("");
@@ -151,6 +196,27 @@ const phone = ref("");
 const identification = ref(null);
 const identificationNumber = ref("");
 const imageOfIdentification = ref(null);
+const maritalStatus = ref(null);
+
+const isFormValid = computed(() => {
+  return (
+    lastName.value &&
+    firstName.value &&
+    gender.value &&
+    birthDate.value &&
+    email.value &&
+    phone.value &&
+    identification.value &&
+    maritalStatus.value &&
+    identificationNumber.value &&
+    imageOfIdentification.value
+  );
+});
+
+// Rules
+const required = (v) => {
+  return !!v || "Le champ est obligatoire.";
+};
 
 const emailRule = (v) => {
   return (
@@ -181,6 +247,7 @@ const handleCustomer = async () => {
   customerData.append("birthDate", birthDate.value);
   customerData.append("email", email.value);
   customerData.append("phone", phone.value);
+  customerData.append("maritalStatus", maritalStatus.value);
   customerData.append("identification", identification.value);
   customerData.append("identificationNumber", identificationNumber.value);
   customerData.append("imageOfIdentification", imageOfIdentification.value);
@@ -195,10 +262,28 @@ const handleCustomer = async () => {
         body: customerData,
       }
     );
-    alert("Client créé avec succès.");
     closeModal();
+    showTextResultModal.value = "Client créé au succès !";
+    showTypeResultModal.value = "success";
+    showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création du client :", error);
+    closeModal();
+    showTextResultModal.value = "Erreur lors de la création du client";
+    showTypeResultModal.value = "error";
+    showResultModal.value = true;
+  } finally {
+    //Réinitialisation des données du formulaire
+    lastName.value = "";
+    firstName.value = "";
+    gender.value = null;
+    birthDate.value = null;
+    email.value = "";
+    phone.value = "";
+    identification.value = null;
+    maritalStatus.value = null;
+    identificationNumber.value = "";
+    imageOfIdentification.value = null;
   }
 };
 
@@ -206,9 +291,22 @@ const closeModal = () => {
   emit("update:open", false);
 };
 </script>
+
 <style>
 .title {
   font-weight: bold;
   margin-left: 0.5rem;
+}
+
+.indication {
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: gray;
+}
+
+.indication > span {
+  color: #ad1919;
 }
 </style>

@@ -77,7 +77,7 @@
       >
       <v-card-actions>
         <v-btn
-          color="#808080"
+          color="secondary"
           variant="elevated"
           class="text-none"
           @click="showModal = false"
@@ -86,6 +86,13 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <result-modal-validation
+    :text="showTextResultModal"
+    :open="showResultModal"
+    :type="showTypeResultModal"
+    @update:open="showResultModal = $event"
+  />
 </template>
 
 <script setup>
