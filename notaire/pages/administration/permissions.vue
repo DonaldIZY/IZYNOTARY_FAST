@@ -3,31 +3,33 @@
     <back-button title="Liste des permissions" goBackTo="/home" />
   </div>
   <div class="ma-4">
-    <v-data-table
-      :headers="permissionsHeaders"
-      :items="permissions"
-      :search="permissionsSearch"
-      no-data-text="Aucune permission trouvée."
-      items-per-page-text="Permissions par page :"
-      class="customTable1"
-      density="compact"
-      fixed-header
-      hover
-    >
-      <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
-      <template #no-data>
-        <div class="no-data-container">
-          <v-img
-            src="~/assets/img/tableIcon_nodata.png"
-            height="80"
-            width="80"
-            class="mb-3"
-            alt="Aucune donnée"
-          ></v-img>
-          <p>Aucune donnée</p>
-        </div>
-      </template>
-    </v-data-table>
+    <v-sheet rounded elevation="4">
+      <v-data-table
+        :headers="permissionsHeaders"
+        :items="permissions"
+        :search="permissionsSearch"
+        no-data-text="Aucune permission trouvée."
+        class="customTable1"
+        density="compact"
+        fixed-header
+        hide-default-footer
+        hover
+      >
+        <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
+        <template #no-data>
+          <div class="no-data-container">
+            <v-img
+              src="~/assets/img/tableIcon_nodata.png"
+              height="80"
+              width="80"
+              class="mb-3"
+              alt="Aucune donnée"
+            ></v-img>
+            <p>Aucune donnée</p>
+          </div>
+        </template>
+      </v-data-table>
+    </v-sheet>
   </div>
 </template>
 

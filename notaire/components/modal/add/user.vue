@@ -24,6 +24,7 @@
               label="Prénoms"
               variant="outlined"
               density="compact"
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -45,6 +46,7 @@
               label="Téléphone"
               variant="outlined"
               density="compact"
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -58,6 +60,7 @@
               item-value="ID"
               variant="outlined"
               density="compact"
+              :rules="[required]"
               hide-details
             ></v-select>
           </v-col>
@@ -71,7 +74,8 @@
 
         <v-btn
           text="Annuler"
-          variant="plain"
+          variant="flat"
+          color="secondary"
           @click="closeModal"
           class="text-none"
         ></v-btn>
@@ -79,16 +83,27 @@
         <v-btn
           color="primary"
           text="Enregistrer"
-          variant="tonal"
+          variant="flat"
           @click="handleUser"
+          :disabled="!isFormValid"
           class="text-none"
         ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <result-modal-validation
+    :text="showTextResultModal"
+    :open="showResultModal"
+    :type="showTypeResultModal"
+    @update:open="showResultModal = $event"
+  />
 </template>
 
 <script setup>
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
+
 const props = defineProps({
   open: {
     type: Boolean,
@@ -99,6 +114,7 @@ const props = defineProps({
 const lastName = ref("");
 const firstName = ref("");
 const email = ref("");
+const phone = ref("");
 const roles = ref([]);
 const roleId = ref(null);
 
@@ -109,8 +125,19 @@ const resetForm = () => {
   lastName.value = "";
   firstName.value = "";
   email.value = "";
+  phone.value = "";
   roleId.value = null;
 };
+
+const isFormValid = computed(() => {
+  return (
+    lastName.value &&
+    firstName.value &&
+    email.value &&
+    phone.value &&
+    roleId.value
+  );
+});
 
 const closeModal = () => {
   resetForm();
@@ -121,6 +148,7 @@ const handleUser = async () => {
   const userData = {
     lastName: lastName.value,
     firstName: firstName.value,
+    phone: phone.value,
     email: email.value,
     roleId: roleId.value,
   };
@@ -130,15 +158,24 @@ const handleUser = async () => {
       method: "POST",
       body: JSON.stringify(userData),
     });
-    alert("Utilisateur créé avec succès.");
     closeModal();
+    showTextResultModal.value = "Utilisateur créé au succès !";
+    showTypeResultModal.value = "success";
+    showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création de l'utilisateur :", error);
+    closeModal();
+    showTextResultModal.value = "Erreur lors de la création de l'utilisateur.";
+    showTypeResultModal.value = "error";
+    showResultModal.value = true;
+  } finally {
+    //Réinitialisation des données du formulaire
+    resetForm();
   }
 };
 
 const required = (v) => {
-  return !!v || "Le champ est requis.";
+  return !!v || "Le champ est obligatoire.";
 };
 
 const emailRule = (v) => {

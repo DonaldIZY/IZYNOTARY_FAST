@@ -12,55 +12,57 @@
   </div>
 
   <div class="ma-4">
-    <v-data-table
-      :headers="usersHeaders"
-      :items="users"
-      :search="usersSearch"
-      items-per-page-text="Utilisateurs par page :"
-      page-text
-      class="customTable1"
-      density="compact"
-      fixed-header
-      hover
-    >
-      <template v-slot:item.ROLE="{ item }">
-        {{ item.ROLE.name }}
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon
-          class="me-2"
-          size="small"
-          color="primary"
-          @click="toggleEditModal(item)"
-        >
-          mdi-pencil
-        </v-icon>
-        <v-icon
-          class="me-2"
-          size="small"
-          color="primary"
-          @click="toggleConfModal(item)"
-        >
-          mdi-delete
-        </v-icon>
-        <v-icon size="small" color="primary" @click="changePassword(item)">
-          mdi-lock-reset
-        </v-icon>
-      </template>
-      <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
-      <template #no-data>
-        <div class="no-data-container">
-          <v-img
-            src="~/assets/img/tableIcon_nodata.png"
-            height="80"
-            width="80"
-            class="mb-3"
-            alt="Aucune donnée"
-          ></v-img>
-          <p>Aucune donnée</p>
-        </div>
-      </template>
-    </v-data-table>
+    <v-sheet rounded elevation="4">
+      <v-data-table
+        :headers="usersHeaders"
+        :items="users"
+        :search="usersSearch"
+        items-per-page-text="Utilisateurs par page :"
+        page-text
+        class="customTable1"
+        density="compact"
+        fixed-header
+        hover
+      >
+        <template v-slot:item.ROLE="{ item }">
+          {{ item.ROLE.name }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon
+            class="me-2"
+            size="small"
+            color="primary"
+            @click="toggleEditModal(item)"
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon
+            class="me-2"
+            size="small"
+            color="primary"
+            @click="toggleConfModal(item)"
+          >
+            mdi-delete
+          </v-icon>
+          <v-icon size="small" color="primary" @click="changePassword(item)">
+            mdi-lock-reset
+          </v-icon>
+        </template>
+        <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
+        <template #no-data>
+          <div class="no-data-container">
+            <v-img
+              src="~/assets/img/tableIcon_nodata.png"
+              height="80"
+              width="80"
+              class="mb-3"
+              alt="Aucune donnée"
+            ></v-img>
+            <p>Aucune donnée</p>
+          </div>
+        </template>
+      </v-data-table>
+    </v-sheet>
     <modal-edit-user
       :open="openEdit"
       :userData="selectedUser"
