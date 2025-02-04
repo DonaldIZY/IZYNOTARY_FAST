@@ -3,7 +3,7 @@ X
   <div class="ma-4">
     <back-button title="Gestion des clients" goBackTo="/home" />
   </div>
-  <div class="ma-4">
+  <div class="ma-4 customerField">
     <div class="d-flex justify-end align-center ga-5">
       <div class="searchField">
         <v-text-field
@@ -32,44 +32,46 @@ X
     </div>
 
     <div class="mt-4">
-      <v-data-table
-        :headers="customersHeaders"
-        :items="customers"
-        :search="customersSearch"
-        items-per-page-text="Clients par page :"
-        item-value="ID"
-        class="customTable1"
-        density="compact"
-        fixed-header
-        hover
-      >
-        <template #item="{ item }">
-          <tr @click="goToCustomerDetails(item)">
-            <td>{{ item.LAST_NAME }}</td>
-            <td>{{ item.FIRST_NAME }}</td>
-            <td>{{ item.EMAIL }}</td>
-            <td>{{ item.PHONE }}</td>
-            <td>{{ item.CURRENT_FILES }}</td>
-            <td>{{ item.COMPLETED_FILES }}</td>
-            <td>{{ item.HANGING_FILES }}</td>
-            <td>{{ item.CLOSED_FILES }}</td>
-            <td>{{ item.FILES }}</td>
-          </tr>
-        </template>
-        <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
-        <template #no-data>
-          <div class="no-data-container">
-            <v-img
-              src="~/assets/img/tableIcon_nodata.png"
-              height="80"
-              width="80"
-              class="mb-3"
-              alt="Aucune donnée"
-            ></v-img>
-            <p>Aucun client trouvé.</p>
-          </div>
-        </template>
-      </v-data-table>
+      <v-sheet rounded elevation="4">
+        <v-data-table
+          :headers="customersHeaders"
+          :items="customers"
+          :search="customersSearch"
+          items-per-page-text="Clients par page :"
+          item-value="ID"
+          class="customTable1"
+          density="compact"
+          fixed-header
+          hover
+        >
+          <template #item="{ item }">
+            <tr @click="goToCustomerDetails(item)">
+              <td>{{ item.LAST_NAME }}</td>
+              <td>{{ item.FIRST_NAME }}</td>
+              <td>{{ item.EMAIL }}</td>
+              <td>{{ item.PHONE }}</td>
+              <td>{{ item.CURRENT_FILES }}</td>
+              <td>{{ item.COMPLETED_FILES }}</td>
+              <td>{{ item.HANGING_FILES }}</td>
+              <td>{{ item.CLOSED_FILES }}</td>
+              <td>{{ item.FILES }}</td>
+            </tr>
+          </template>
+          <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
+          <template #no-data>
+            <div class="no-data-container">
+              <v-img
+                src="~/assets/img/tableIcon_nodata.png"
+                height="80"
+                width="80"
+                class="mb-3"
+                alt="Aucune donnée"
+              ></v-img>
+              <p>Aucun client trouvé.</p>
+            </div>
+          </template>
+        </v-data-table>
+      </v-sheet>
     </div>
   </div>
 </template>
@@ -153,5 +155,9 @@ watchEffect(() => {
   margin: 20px;
   text-align: center;
   font-size: 16px;
+}
+
+.customerField {
+  padding: 0 1.5rem;
 }
 </style>
