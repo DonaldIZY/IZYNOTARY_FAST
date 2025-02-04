@@ -34,15 +34,15 @@
   });
 
   function statusToColor(val) {
-    if(val == "done") {
+    if(val.toLowerCase() == "terminée") {
       return "green";
-    }else if(val == "not started") {
+    }else if(val.toLowerCase() == "non débuté") {
       return "#EAE8E6";
-    }else if(val == "current") {
+    }else if(val.toLowerCase() == "en cours") {
       return "orange";
-    }else if(val == "canceled") {
+    }else if(val.toLowerCase() == "arrêtée") {
       return "red";
-    }else if(val == "suspended") {
+    }else if(val.toLowerCase() == "suspendue") {
       return "purple";
     }
   }
@@ -51,7 +51,7 @@
 
 <template>
   <div class="stepBox">
-    <step-number :stepNumber="number" :stepBackgroundColor="statusToColor(status)" :stepTextColor="status != 'not started' ? 'white' : 'black'" />
+    <step-number :stepNumber="number" :stepBackgroundColor="statusToColor(status)" :stepTextColor="status != 'non débuté' ? 'white' : 'black'" />
 
     <div class="stepText" :style="{borderColor: statusToColor(status)}" >
       <step-icon :stepBackgroundColor="statusToColor(status)" :image-path="icon" :parentDoor="status" />
@@ -61,9 +61,9 @@
       <div class="subStepBox">
         <sub-step 
           v-for="val in listOfSubStep" 
-          :text="val.text" 
-          :inputName="val.inputName" 
-          :status="val.status" 
+          :text="val[1].name" 
+          :inputName="val[0]" 
+          :status="val[1].filled" 
           :parentDoor="status"
         />
       </div>

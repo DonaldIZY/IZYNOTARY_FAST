@@ -1,18 +1,11 @@
 <script setup>
-  const listOfStep = [{text: "Certificat de localisation", status: "done", inputName: "certifLocal"}, {text: "Attestation de situation fiscale", status: "done", inputName: "certifLocal"}, {text: "Etat foncier", status: "done", inputName: "certifLocal"}, {text: "Titre de propriété", status: "done", inputName: "certifLocal"}];
-  const listOfCanceledStep = [{text: "Certificat de localisation", status: "none", inputName: "certifLocal"}, {text: "Attestation de situation fiscale", status: "done", inputName: "certifLocal"}, {text: "Etat foncier", status: "done", inputName: "certifLocal"}, {text: "Titre de propriété", status: "done", inputName: "certifLocal"}];
-  const documentToSupply = [
-    {text: "CNI du vendeur", status: "", inputName: ""},
-    {text: "Extrait d’acte de naissance ou extrait d’acte de mariage si le vendeur est marié", status: "", inputName: ""},
-    {text: "CNI du conjoint", status: "", inputName: ""},
-    {text: "Titre de Propriété ", status: "", inputName: ""},
-    {text: "État Foncier", status: "", inputName: ""},
-    {text: "Certificat de Localisation", status: "", inputName: ""}
-  ];
-  const documentForClient = [
-    {text: "Acte de vente", status: "", inputName: ""},
-    {text: "CMPF", status: "", inputName: ""}
-  ];
+  const props = defineProps({
+    stepList: {
+      type: Array
+    }
+  });
+
+  const stepList = toRef(props.stepList);
 </script>
 
 
@@ -36,52 +29,52 @@
     
     <step-box 
       :number="1" 
-      title="Fourniture de pièces" 
-      status="current" 
+      :title="stepList[0].action" 
+      :status="stepList[0].status.toLowerCase()"
       icon="document-file.png" 
       date="17/01/2025" 
-      :listOfSubStep="documentToSupply" 
+      :listOfSubStep="Object.entries(stepList[0].documents)" 
       :first="true"
     />
     <step-box 
       :number="2" 
-      title="Rédaction de l'acte de vente" 
-      status="not started" 
+      :title="stepList[1].action" 
+      :status="stepList[1].status.toLowerCase()"
       icon="signature1.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Rédaction de l\'acte de vente', status: '', inputName: 'redaction'}]" 
+      :listOfSubStep="Object.entries(stepList[1].documents)"  
     />
     <step-box 
       :number="3" 
-      title="Règlement des frais" 
-      status="not started" 
+      :title="stepList[2].action" 
+      :status="stepList[2].status.toLowerCase()"
       icon="debit-card2.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Règlement des frais', status: '', inputName: 'reglement'}]" 
+      :listOfSubStep="Object.entries(stepList[2].documents)"  
     />
     <step-box 
       :number="4" 
-      title="Signature de l'acte de vente (par l'acquéreur et le vendeur)" 
-      status="not started" 
+      :title="stepList[3].action" 
+      :status="stepList[3].status.toLowerCase()"
       icon="autograph.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Signature de l\'acte de vente', status: '', inputName: 'redaction'}]" 
+      :listOfSubStep="Object.entries(stepList[3].documents)" 
     />
     <step-box 
       :number="5" 
-      title="Dépôt de l'acte signé" 
-      status="not started" 
+      :title="stepList[4].action" 
+      :status="stepList[4].status.toLowerCase()"
       icon="document.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Dépôt de l\'acte signé', status: '', inputName: 'depot'}]" 
+      :listOfSubStep="Object.entries(stepList[4].documents)" 
     />
     <step-box 
       :number="6" 
-      title="Livrables" 
-      status="not started" 
+      :title="stepList[5].action" 
+      :status="stepList[5].status.toLowerCase()"
       icon="letter.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'acte', status: '', inputName: 'acte'}]" 
+      :listOfSubStep="Object.entries(stepList[5].documents)"  
     />
   </div>
 </template>

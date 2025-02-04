@@ -9,7 +9,7 @@
       type: String,
       required: true
     },
-    parentDoor: {
+    parentDoor: { //["non débuté", "en cours", "suspendue", "arrêtée", "terminée"]
       type: String,
       required: true
     }
@@ -39,7 +39,7 @@
 </style>
 
 <template>
-  <div v-if="parentDoor == 'not started'" class="stepDate" :style="{borderColor: borderColor, opacity: 0.5}">
+  <div v-if="parentDoor == 'non débuté'" class="stepDate" :style="{borderColor: borderColor, opacity: 0.5}">
     <img src="../assets/img/calendarfilled.png" />
     <span>16/01/2025</span>
   </div>

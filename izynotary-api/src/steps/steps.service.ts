@@ -4,6 +4,7 @@ import { UpdateStepDto } from './dto/update-step.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Step } from './entities/step.entity';
 import { EntityManager, Repository } from 'typeorm';
+import { translateFieldNameToFrench } from 'src/utils/usefulFunctions.util';
 
 @Injectable()
 export class StepsService {
@@ -73,13 +74,18 @@ export class StepsService {
         var message = 
 `Acte notarié de ${updateStepDto.procedureType}
 Numéro : ${updateStepDto.folderNum}.
-${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.join(", ") + "sont " : "votre documnent " + updateStepDto.documents[0] + " est " } maintenant disponible.`;
+${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(", ") + "sont " : "votre documnent " + updateStepDto.documents[0] + " est " } maintenant disponible(s).`;
 
         var encodedMessage = encodeURIComponent(message);
         const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 
         let a = await fetch(smsUrl);
         console.log("sms response : ", a);
+
+        return {
+          status: false,
+          message: "Procedure updated successfully"
+        };
     }
 
     async remove(id: number) {

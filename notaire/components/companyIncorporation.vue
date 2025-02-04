@@ -1,18 +1,12 @@
 <script setup>
-  const listOfStep = [{text: "Certificat de localisation", status: "done", inputName: "certifLocal"}, {text: "Attestation de situation fiscale", status: "done", inputName: "certifLocal"}, {text: "Etat foncier", status: "done", inputName: "certifLocal"}, {text: "Titre de propriété", status: "done", inputName: "certifLocal"}];
+  const props = defineProps({
+    stepList: {
+      type: Array
+    }
+  });
+
+  const stepList = toRef(props.stepList);
   
-  const documentToSupply = [
-    {text: "CNI des associés", status: "", inputName: "cni"},
-    {text: "Casier judiciaire", status: "", inputName: "casierjudiciaire"},
-    {text: "Bail", status: "", inputName: "bail"},
-    {text: "Croquis de la situation géographique du lieu", status: "", inputName: "croquis"},
-    {text: "Fiche à renseigner de la société à constituer", status: "", inputName: "fiche"},
-    {text: "Capital à libérer", status: "", inputName: "capital"}
-  ];
-  const documentForClient = [
-    {text: "Acte de vente", status: "", inputName: "actedevente"},
-    {text: "CMPF", status: "", inputName: "cmpf"}
-  ];
 </script>
 
 
@@ -36,52 +30,52 @@
     
     <step-box 
       :number="1" 
-      title="Fourniture de pièces" 
-      status="current" 
+      :title="stepList[0].action" 
+      :status="stepList[0].status.toLowerCase()" 
       icon="document-file.png" 
-      date="17/01/2025" 
-      :listOfSubStep="documentToSupply" 
+      date="" 
+      :listOfSubStep="Object.entries(stepList[0].documents)" 
       :first="true"
     />
     <step-box 
       :number="2" 
-      title="Redaction des status" 
-      status="not started" 
+      :title="stepList[1].action" 
+      :status="stepList[1].status.toLowerCase()" 
       icon="policy.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Rédaction des status', status: '', inputName: 'redaction'}]" 
+      :listOfSubStep="Object.entries(stepList[1].documents)" 
     />
     <step-box 
       :number="3" 
-      title="Règlement des frais" 
-      status="not started" 
+      :title="stepList[2].action" 
+      :status="stepList[2].status.toLowerCase()" 
       icon="debit-card2.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Règlement des frais', status: '', inputName: 'reglement'}]" 
+      :listOfSubStep="Object.entries(stepList[2].documents)" 
     />
     <step-box 
       :number="4" 
-      title="Signature des actes" 
-      status="not started" 
+      :title="stepList[3].action" 
+      :status="stepList[3].status.toLowerCase()" 
       icon="autograph.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Signature des actes par le client', status: '', inputName: 'signature'}]" 
+      :listOfSubStep="Object.entries(stepList[3].documents)" 
     />
     <step-box 
       :number="5" 
-      title="Dépôt de l'acte signé" 
-      status="not started" 
+      :title="stepList[4].action" 
+      :status="stepList[4].status.toLowerCase()" 
       icon="document.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Dépôt au CEPICI des actes signés', status: '', inputName: 'depot'}]" 
+      :listOfSubStep="Object.entries(stepList[4].documents)" 
     />
     <step-box 
       :number="6" 
-      title="Livrables" 
-      status="not started" 
+      :title="stepList[5].action" 
+      :status="stepList[5].status.toLowerCase()" 
       icon="letter.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'actes', status: '', inputName: 'acte'}]" 
+      :listOfSubStep="Object.entries(stepList[5].documents)" 
     />
   </div>
 </template>

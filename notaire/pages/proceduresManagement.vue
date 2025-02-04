@@ -133,7 +133,7 @@
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
                 variant="text"
-                @click=""
+                @click="selectProcedure(item.id)"
                 color="primary text-none"
                 :to="redirectRegardingProcedure(item)"
               >
@@ -191,6 +191,11 @@
 
 <script setup>
 const testUrl = /*"http://localhost:8000"*/ "http://serverizynotary.izydr.net";
+const selectedProcedureStore = useSelectedDataStore();
+
+function selectProcedure (val) {
+  selectedProcedureStore.defineProcedureId(val);
+}
 
 const proceduresHeaders = ref([
   { align: "start", key: "NUM", title: "N°" },
