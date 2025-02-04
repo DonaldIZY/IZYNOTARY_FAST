@@ -1,7 +1,14 @@
 <template>
   <v-dialog v-model="props.open" max-width="600">
-    <v-card prepend-icon="mdi-account-tie-voice" title="Créer un vendeur">
+    <v-card>
+      <v-card-title
+        ><v-icon>mdi-account-tie-voice</v-icon>
+        <span class="title">Créer un vendeur</span></v-card-title
+      >
       <v-card-text>
+        <p class="indication">
+          <span>*</span> Tous les champs sont obligatoires sauf l'email.
+        </p>
         <v-row dense>
           <v-col cols="6">
             <v-text-field
@@ -10,6 +17,7 @@
               label="Nom"
               variant="outlined"
               density="compact"
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -20,6 +28,7 @@
               label="Prénoms"
               variant="outlined"
               density="compact"
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -31,6 +40,7 @@
               :items="['Homme', 'Femme']"
               variant="outlined"
               density="compact"
+              :rules="[required]"
             ></v-select>
           </v-col>
 
@@ -44,6 +54,7 @@
               variant="outlined"
               :max="maxDate"
               :year="new Date(maxDate).getFullYear()"
+              :rules="[required]"
             >
             </v-date-input>
           </v-col>
@@ -56,6 +67,7 @@
               :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
               variant="outlined"
               density="compact"
+              :rules="[required]"
             ></v-select>
           </v-col>
 
@@ -77,6 +89,7 @@
               label="Téléphone"
               density="compact"
               variant="outlined"
+              :rules="[required]"
             ></v-text-field>
           </v-col>
 
@@ -88,6 +101,7 @@
               density="compact"
               :items="['CNI', 'Passeport']"
               variant="outlined"
+              :rules="[required]"
             ></v-select>
           </v-col>
           <v-col cols="6">
@@ -99,6 +113,7 @@
                   density="compact"
                   label="Numéro de la pièce d'identité"
                   variant="outlined"
+                  :rules="[required]"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -112,6 +127,8 @@
               prepend-icon=""
               prepend-inner-icon="mdi-id-card"
               variant="outlined"
+              hide-details
+              :rules="[required]"
             ></v-file-input>
           </v-col>
         </v-row>
@@ -124,7 +141,8 @@
 
         <v-btn
           text="Annuler"
-          variant="plain"
+          variant="flat"
+          color="secondary"
           @click="closeModal"
           class="text-none"
         ></v-btn>
@@ -132,22 +150,35 @@
         <v-btn
           color="primary"
           text="Enregistrer"
-          variant="tonal"
+          variant="flat"
           @click="handleCustomer"
           class="text-none"
+          :disabled="!isFormValid"
         ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <result-modal-validation
+    :text="showTextResultModal"
+    :open="showResultModal"
+    :type="showTypeResultModal"
+    @update:open="showResultModal = $event"
+  />
 </template>
 
 <script setup>
+import { computed } from "vue";
+
 const props = defineProps({
   open: {
     type: Boolean,
     default: false,
   },
 });
+
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
 
 const lastName = ref("");
 const firstName = ref("");
@@ -159,6 +190,24 @@ const maritalStatus = ref("");
 const identification = ref(null);
 const identificationNumber = ref("");
 const imageOfIdentification = ref(null);
+
+const isFormValid = computed(() => {
+  return (
+    lastName.value &&
+    firstName.value &&
+    gender.value &&
+    birthDate.value &&
+    phone.value &&
+    identification.value &&
+    maritalStatus.value &&
+    identificationNumber.value &&
+    imageOfIdentification.value
+  );
+});
+
+const required = (v) => {
+  return !!v || "Le champ est obligatoire.";
+};
 
 const emailRule = (v) => {
   return (
@@ -201,10 +250,29 @@ const handleCustomer = async () => {
       method: "POST",
       body: sellerData,
     });
-    alert("Client créé avec succès.");
+    console.log("Vendeur créé avec succès.");
     closeModal();
+    showTextResultModal.value = "Vendeur créé au succès !";
+    showTypeResultModal.value = "success";
+    showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création du client :", error);
+    closeModal();
+    showTextResultModal.value = "Erreur lors de la création du vendeur";
+    showTypeResultModal.value = "error";
+    showResultModal.value = true;
+  } finally {
+    //Réinitialisation des données du formulaire
+    lastName.value = "";
+    firstName.value = "";
+    gender.value = null;
+    birthDate.value = null;
+    email.value = "";
+    phone.value = "";
+    identification.value = null;
+    maritalStatus.value = null;
+    identificationNumber.value = "";
+    imageOfIdentification.value = null;
   }
 };
 
@@ -212,3 +280,22 @@ const closeModal = () => {
   emit("update:open", false);
 };
 </script>
+
+<style>
+.title {
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+
+.indication {
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: gray;
+}
+
+.indication > span {
+  color: #ad1919;
+}
+</style>

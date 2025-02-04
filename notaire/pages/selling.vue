@@ -124,7 +124,7 @@
                 </v-form>
                 <v-divider class="my-5">ou</v-divider>
                 <v-btn
-                  color="blue"
+                  color="#252c61"
                   class="text-none align-self-center"
                   prepend-icon="mdi-account-tie-voice"
                   @click="toggleSellerModal"
