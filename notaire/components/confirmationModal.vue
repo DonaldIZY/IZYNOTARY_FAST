@@ -1,6 +1,10 @@
 <template>
   <v-dialog v-model="props.open" width="500">
-    <v-card prepend-icon="mdi-information-outline" title="Confirmation">
+    <v-card>
+      <v-card-title
+        ><v-icon>mdi-alert-circle-outline</v-icon>
+        <span class="title">Confirmation</span></v-card-title
+      >
       <v-card-text class="ma-4 text-center">
         <p>{{ text }}</p>
       </v-card-text>
@@ -11,8 +15,9 @@
         <v-spacer></v-spacer>
 
         <v-btn
+          color="secondary"
           text="Annuler"
-          variant="plain"
+          variant="flat"
           @click="closeModal"
           class="text-none"
         ></v-btn>
@@ -20,7 +25,7 @@
         <v-btn
           color="primary"
           text="Valider"
-          variant="tonal"
+          variant="flat"
           @click="submitModal"
           class="text-none"
         ></v-btn>
@@ -56,3 +61,9 @@ const submitModal = () => {
   emit("update:open", false);
 };
 </script>
+<style>
+.title {
+  font-weight: bold;
+  margin-left: 0.5rem;
+}
+</style>

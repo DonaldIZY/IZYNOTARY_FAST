@@ -116,6 +116,7 @@
               prepend-icon=""
               prepend-inner-icon="mdi-id-card"
               variant="outlined"
+              hide-details
             ></v-file-input>
           </v-col>
         </v-row>
@@ -128,7 +129,8 @@
 
         <v-btn
           text="Annuler"
-          variant="plain"
+          variant="flat"
+          color="secondary"
           @click="closeModal"
           class="text-none"
         ></v-btn>
@@ -136,13 +138,19 @@
         <v-btn
           color="primary"
           text="Enregistrer"
-          variant="tonal"
+          variant="flat"
           @click="handleCustomer"
           class="text-none"
         ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <result-modal-validation
+    :text="showTextResultModal"
+    :open="showResultModal"
+    :type="showTypeResultModal"
+    @update:open="showResultModal = $event"
+  />
 </template>
 
 <script setup>
@@ -152,6 +160,10 @@ const props = defineProps({
     default: false,
   },
 });
+
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
 
 const lastName = ref("");
 const firstName = ref("");
@@ -205,10 +217,29 @@ const handleCustomer = async () => {
       method: "POST",
       body: sellerData,
     });
-    alert("Client créé avec succès.");
+    console.log("Vendeur créé avec succès.");
     closeModal();
+    showTextResultModal.value = "Vendeur créé au succès !";
+    showTypeResultModal.value = "success";
+    showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création du client :", error);
+    closeModal();
+    showTextResultModal.value = "Erreur lors de la création du vendeur";
+    showTypeResultModal.value = "error";
+    showResultModal.value = true;
+  } finally {
+    //Réinitialisation des données du formulaire
+    lastName.value = "";
+    firstName.value = "";
+    gender.value = null;
+    birthDate.value = null;
+    email.value = "";
+    phone.value = "";
+    identification.value = null;
+    maritalStatus.value = null;
+    identificationNumber.value = "";
+    imageOfIdentification.value = null;
   }
 };
 
