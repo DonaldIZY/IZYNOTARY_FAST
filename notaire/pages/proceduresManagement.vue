@@ -278,7 +278,7 @@ const clearFilters = () => {
 const loadProcedures = async () => {
   try {
     const fetchedProcedures = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/folders`
+      `${config.public.baseUrl}/folders`
     );
 
     console.log("fetchedProcedures : ", fetchedProcedures);
@@ -300,7 +300,9 @@ const loadProcedures = async () => {
         folderNum: procedure.folderNum,
       }));
     }
-  };
+  }catch(err) {
+    console.error("erreur lors de la reception des procédures : ", err);
+  }};
 
   loadProcedures();
 
