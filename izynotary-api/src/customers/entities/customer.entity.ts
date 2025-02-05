@@ -34,6 +34,9 @@ export class Customer {
     @Column()
     imageOfIdentification: string;
 
+    @Column()
+    maritalStatus: string;
+
     @CreateDateColumn()
     createAt: Date;
     
