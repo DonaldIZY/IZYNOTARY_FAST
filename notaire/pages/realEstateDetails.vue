@@ -3,15 +3,15 @@
   const stepList = ref([]);
   const procedureNum = ref("Procédure de succession de biens immobiliers");
 
-  let procedureID = selectedProcedureStore.getProcedureId;
+let procedureID = selectedProcedureStore.getProcedureId;
 
-  const loadProcedures = async () => {
-    try {
-      const fetchedProcedures = await $fetch(
-        `http://serverizynotary.izydr.net/folders`
-      );
+const loadProcedures = async () => {
+  try {
+    const fetchedProcedures = await $fetch(
+      `http://serverizynotary.izydr.net/folders`
+    );
 
-      console.log("fetchedProcedures : ", fetchedProcedures);
+    console.log("fetchedProcedures : ", fetchedProcedures);
 
       let procedureData = fetchedProcedures.find(proc => proc.id == procedureID);
       procedureNum.value = procedureNum.value + " : N°" + procedureData.folderNum;
@@ -22,15 +22,10 @@
     }
   };
 
-  loadProcedures();
+loadProcedures();
 </script>
 
-
-<style scoped>
- 
-
-</style>
-
+<style scoped></style>
 
 <template>
   <div class="ma-4" >

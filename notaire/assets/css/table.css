@@ -7,6 +7,7 @@ border: 1px solid gray;
   border-radius: 0.3rem !important;
   height: 28rem;
   min-height: 15rem;
+  min-width: 40rem;
 }
 
 .customTable1 th {
