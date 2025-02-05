@@ -150,13 +150,8 @@
         <v-btn
           color="primary"
           text="Enregistrer"
-<<<<<<< HEAD
-          variant="tonal"
-          @click="handleSeller"
-=======
           variant="flat"
-          @click="handleCustomer"
->>>>>>> 46099f38fb2526a327dc96cf0ca7681c04543944
+          @click="handleSeller"
           class="text-none"
           :disabled="!isFormValid"
         ></v-btn>
@@ -254,19 +249,12 @@ const handleSeller = async () => {
       method: "POST",
       body: sellerData,
     });
-<<<<<<< HEAD
-    alert("Vendeur créé avec succès.");
-=======
     console.log("Vendeur créé avec succès.");
->>>>>>> 46099f38fb2526a327dc96cf0ca7681c04543944
     closeModal();
     showTextResultModal.value = "Vendeur créé avec succès !";
     showTypeResultModal.value = "success";
     showResultModal.value = true;
   } catch (error) {
-<<<<<<< HEAD
-    console.error("Erreur lors de la création du vendeur :", error);
-=======
     console.error("Erreur lors de la création du client :", error);
     closeModal();
     showTextResultModal.value = "Erreur lors de la création du vendeur";
@@ -274,17 +262,16 @@ const handleSeller = async () => {
     showResultModal.value = true;
   } finally {
     //Réinitialisation des données du formulaire
-    lastName.value = "";
-    firstName.value = "";
-    gender.value = null;
-    birthDate.value = null;
-    email.value = "";
-    phone.value = "";
-    identification.value = null;
-    maritalStatus.value = null;
-    identificationNumber.value = "";
-    imageOfIdentification.value = null;
->>>>>>> 46099f38fb2526a327dc96cf0ca7681c04543944
+    // lastName.value = "";
+    // firstName.value = "";
+    // gender.value = null;
+    // birthDate.value = null;
+    // email.value = "";
+    // phone.value = "";
+    // identification.value = null;
+    // maritalStatus.value = null;
+    // identificationNumber.value = "";
+    // imageOfIdentification.value = null;
   }
 };
 
@@ -294,12 +281,6 @@ const closeModal = () => {
 </script>
 
 <style>
-<<<<<<< HEAD
-  .title {
-    font-weight: bold;
-    margin-left: 0.5rem;
-  }
-=======
 .title {
   font-weight: bold;
   margin-left: 0.5rem;
@@ -316,5 +297,4 @@ const closeModal = () => {
 .indication > span {
   color: #ad1919;
 }
->>>>>>> 46099f38fb2526a327dc96cf0ca7681c04543944
 </style>
