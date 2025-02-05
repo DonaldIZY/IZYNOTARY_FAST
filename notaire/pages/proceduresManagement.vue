@@ -122,6 +122,7 @@
           <v-data-table
             :headers="proceduresHeaders"
             :items="filteredProcedures"
+            :sort-by="[{ key: 'CREATE_AT', order: 'desc' }]"
             items-per-page-text="Procédures par page :"
             page-text
             hover
@@ -130,21 +131,39 @@
             density="compact"
             fixed-header
           >
+            <template v-slot:item.CREATE_AT="{ item }">
+              {{
+                new Date(item.CREATE_AT).toLocaleDateString("fr-FR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+              }}
+            </template>
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
-                variant="text"
-                @click="selectProcedure(item.id)"
-                color="primary text-none"
-                :to="redirectRegardingProcedure(item)"
-              >
-                Voir
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary text-none"
+                class="actionBtn"
+                title="Modifier la procédure"
+                color="gray"
+                size="x-small"
+                density="comfortable"
+                icon="mdi-pencil"
                 @click="openModal(item)"
               >
-                Modifier
+              </v-btn>
+              <v-btn
+                class="actionBtn"
+                title="Voir les détails"
+                color="blue"
+                size="x-small"
+                density="comfortable"
+                icon="mdi-text-box-outline"
+                @click="selectProcedure(item.id)"
+                :to="redirectRegardingProcedure(item)"
+              >
               </v-btn>
             </template>
             <template v-slot:item.STATUS="{ item }">
@@ -192,98 +211,94 @@
 <script setup>
   const selectedProcedureStore = useSelectedDataStore();
 
-  function selectProcedure (val) {
-    selectedProcedureStore.defineProcedureId(val);
-  }
+function selectProcedure(val) {
+  selectedProcedureStore.defineProcedureId(val);
+}
 
-  const proceduresHeaders = ref([
-    { align: "start", key: "NUM", title: "N°" },
-    { align: "start", key: "CUSTOMER", title: "Client" },
-    { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
-    { align: "start", key: "CREATE_BY", title: "Créée par" },
-    { align: "start", key: "CREATE_AT", title: "Date de création" },
-    { align: "start", key: "PROGRESSION", title: "Progression" },
-    { align: "center", key: "STATUS", title: "Statut" },
-    { align: "center", key: "ACTIONS", title: "Actions" },
-  ]);
+const proceduresHeaders = ref([
+  { align: "start", key: "NUM", title: "N°" },
+  { align: "start", key: "CUSTOMER", title: "Client" },
+  { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
+  { align: "start", key: "CREATE_BY", title: "Créée par" },
+  { align: "start", key: "CREATE_AT", title: "Date de création" },
+  { align: "start", key: "PROGRESSION", title: "Progression" },
+  { align: "center", key: "STATUS", title: "Statut" },
+  { align: "center", key: "ACTIONS", title: "Actions" },
+]);
 
-  const procedures = ref([]);
+const procedures = ref([]);
 
-  const searchCNI = ref(null);
-  const searchNum = ref(null);
-  const searchCustomer = ref(null);
-  const searchStartDate = ref(null);
-  const searchProcedureType = ref(null);
-  const searchStatus = ref(null);
-  const form = ref(null);
+const searchCNI = ref(null);
+const searchNum = ref(null);
+const searchCustomer = ref(null);
+const searchStartDate = ref(null);
+const searchProcedureType = ref(null);
+const searchStatus = ref(null);
+const form = ref(null);
 
-  const config = useRuntimeConfig();
-  
-  const filteredProcedures = computed(() => {
-    return procedures.value.filter((item) => {
-      const matchesCNI =
-        !searchCNI.value || item.NUM.toString().includes(searchCNI.value);
-      const matchesNum =
-        !searchNum.value || item.NUM.toString().includes(searchNum.value);
-      const matchesCustomer =
-        !searchCustomer.value ||
-        item.CUSTOMER.toLowerCase().includes(searchCustomer.value.toLowerCase());
-      const matchesStartDate =
-        !searchStartDate.value ||
-        new Date(item.CREATE_AT).toISOString().slice(0, 10) >=
-          searchStartDate.value;
-      const matchesProcedureType =
-        !searchProcedureType.value ||
-        new Date(item.CREATE_AT).toISOString().slice(0, 10) <=
-          searchProcedureType.value;
-      const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
-      return (
-        matchesCNI &&
-        matchesNum &&
-        matchesCustomer &&
-        matchesStartDate &&
-        matchesProcedureType &&
-        matchesStatus
+const filteredProcedures = computed(() => {
+  return procedures.value.filter((item) => {
+    const matchesCNI =
+      !searchCNI.value || item.NUM.toString().includes(searchCNI.value);
+    const matchesNum =
+      !searchNum.value || item.NUM.toString().includes(searchNum.value);
+    const matchesCustomer =
+      !searchCustomer.value ||
+      item.CUSTOMER.toLowerCase().includes(searchCustomer.value.toLowerCase());
+    const matchesStartDate =
+      !searchStartDate.value ||
+      new Date(item.CREATE_AT).toISOString().slice(0, 10) >=
+        searchStartDate.value;
+    const matchesProcedureType =
+      !searchProcedureType.value ||
+      item.PROCEDURE_TYPE.toLowerCase().includes(
+        searchProcedureType.value.toLowerCase()
       );
-    });
+    const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
+    return (
+      matchesCNI &&
+      matchesNum &&
+      matchesCustomer &&
+      matchesStartDate &&
+      matchesProcedureType &&
+      matchesStatus
+    );
   });
+});
 
-  const clearFilters = () => {
-    searchCNI.value = null;
-    searchNum.value = null;
-    searchCustomer.value = null;
-    searchStartDate.value = null;
-    searchProcedureType.value = null;
-    searchStatus.value = null;
-  };
+const clearFilters = () => {
+  searchCNI.value = null;
+  searchNum.value = null;
+  searchCustomer.value = null;
+  searchStartDate.value = null;
+  searchProcedureType.value = [];
+  searchStatus.value = [];
+};
 
-  const loadProcedures = async () => {
-    try {
-      const fetchedProcedures = await $fetch(
-        `${config.public.baseUrl}/folders`
-      );
+const loadProcedures = async () => {
+  try {
+    const fetchedProcedures = await $fetch(
+      `${testUrl /*config.public.baseUrl*/}/folders`
+    );
 
-      console.log("fetchedProcedures : ", fetchedProcedures);
+    console.log("fetchedProcedures : ", fetchedProcedures);
 
-      if (fetchedProcedures) {
-        procedures.value = fetchedProcedures.map((procedure, index) => ({
-          NUM: index + 1,
-          CUSTOMER:
-            procedure.customer.lastName + " " + procedure.customer.firstName,
-          PROCEDURE_TYPE: procedure.procedureType,
-          CREATE_BY: "",
-          CREATE_AT: new Date(procedure.createAt).toLocaleDateString(),
-          PROGRESSION: procedure.progression * 100 + "%",
-          STATUS: procedure.status,
-          steps: procedure.step?.steps,
-          customer: procedure.customer,
-          id: procedure.id,
-          stepId: procedure.step?.id,
-          folderNum: procedure.folderNum,
-        }));
-      }
-    } catch (err) {
-      console.error("Erreur lors du chargement des procédures : ", err);
+    if (fetchedProcedures) {
+      procedures.value = fetchedProcedures.map((procedure, index) => ({
+        NUM: index + 1,
+        CUSTOMER:
+          procedure.customer.lastName + " " + procedure.customer.firstName,
+        PROCEDURE_TYPE: procedure.procedureType,
+        CREATE_BY: "",
+        CREATE_AT: procedure.createAt,
+        PROGRESSION: Math.round(procedure.progression * 100) + "%",
+        STATUS: procedure.status,
+        steps: procedure.step?.steps,
+        customer: procedure.customer,
+        id: procedure.id,
+        stepId: procedure.step?.id,
+        folderNum: procedure.folderNum,
+      }));
     }
   };
 
@@ -377,5 +392,8 @@
   margin: 20px;
   text-align: center;
   font-size: 16px;
+}
+.actionBtn {
+  margin: 0 0.3rem;
 }
 </style>
