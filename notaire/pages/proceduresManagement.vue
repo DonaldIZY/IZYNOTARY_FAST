@@ -274,7 +274,7 @@ const loadProcedures = async () => {
         CREATE_AT: new Date(procedure.createAt).toLocaleDateString(),
         PROGRESSION: procedure.progression * 100 + "%",
         STATUS: procedure.status,
-        steps: procedure.step.steps,
+        steps: procedure.step?.steps,
         customer: procedure.customer,
         id: procedure.id,
         folderNum: procedure.folderNum,

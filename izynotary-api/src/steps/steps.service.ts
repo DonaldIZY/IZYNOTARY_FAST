@@ -74,7 +74,7 @@ export class StepsService {
         var message = 
 `Acte notarié de ${updateStepDto.procedureType}
 Numéro : ${updateStepDto.folderNum}.
-${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(", ") + "sont " : "votre documnent " + updateStepDto.documents[0] + " est " } maintenant disponible(s).`;
+${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(", ") + "sont " : "votre documnent " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + " est " } maintenant disponible(s).`;
 
         var encodedMessage = encodeURIComponent(message);
         const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
@@ -83,7 +83,7 @@ ${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.document
         console.log("sms response : ", a);
 
         return {
-          status: false,
+          status: true,
           message: "Procedure updated successfully"
         };
     }
