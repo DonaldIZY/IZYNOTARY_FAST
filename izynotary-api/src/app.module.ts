@@ -10,7 +10,6 @@ import { CustomersModule } from './customers/customers.module';
 import { FoldersModule } from './folders/folders.module';
 import { StepsModule } from './steps/steps.module';
 import { AuthModule } from './auth/auth.module';
-import { SellersModule } from './sellers/sellers.module';
 
 @Module({
 	imports: [
@@ -24,7 +23,6 @@ import { SellersModule } from './sellers/sellers.module';
 		FoldersModule,
 		StepsModule,
 		AuthModule,
-		SellersModule,
 	],
 	controllers: [],
 	providers: [DatabaseSeeder],

@@ -1,0 +1,19 @@
+// APPLICATION VAR
+APP_PORT=8000
+ 
+// DATA BASE VAR
+DB_HOST=localhost
+DB_PORT=3306
+DB_USERNAME=root
+DB_PASSWORD=12345
+DB_DATABASE=izynotary
+DB_SYNCHRONIZE=true
+ 
+// JWT VAR
+JWT_SECRET='#v05%$^ts@q&%4#rs*aH'
+JWT_EXPIRATION=36000
+
+//superuser data connexion 
+SUPERUSERPASSWORD= '@#|i*j^$A-Eç4m'
+SUPERUSEREMAIL = 'izytechnology225@gmail.com'
+

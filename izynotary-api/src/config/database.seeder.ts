@@ -49,7 +49,6 @@ export class DatabaseSeeder {
     console.log('Permissions successfully seeded!');
   }
 
-
   async seedRoles() {
     const roleRepository = this.dataSource.getRepository(Role);
     const permissionRepository = this.dataSource.getRepository(Permission);
@@ -86,7 +85,6 @@ export class DatabaseSeeder {
     console.log('Roles successfully seeded!');
   }
 
-
   async seedSuperUser() {
     const userRepository = this.dataSource.getRepository(User);
     const roleRepository = this.dataSource.getRepository(Role);
@@ -109,7 +107,7 @@ export class DatabaseSeeder {
       return;
     }
 
-    const password = '@#|i*j^$A-Eç4m'; // Mot de passe par défaut (à changer)
+    const password = process.env.SUPERUSERPASSWORD; // Mot de passe par défaut (à changer)
     console.log('mot de passe admin', password);
 
     // Hacher le mot de passe
@@ -121,7 +119,7 @@ export class DatabaseSeeder {
     const user = new User({
       firstName: 'Super',
       lastName: 'Admin',
-      email: 'izytechnology225@gmail.com',
+      email: process.env.SUPERUSEREMAIL,
       role, // Associer le rôle Administrateur
     });
 
@@ -133,6 +131,5 @@ export class DatabaseSeeder {
     await this.entityManager.save(user);
 
     console.log('✅ Super administrateur enregistré avec succès !');
-
   }
 }
