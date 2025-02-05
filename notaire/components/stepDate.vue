@@ -41,10 +41,10 @@
 <template>
   <div v-if="parentDoor == 'non débuté'" class="stepDate" :style="{borderColor: borderColor, opacity: 0.5}">
     <img src="../assets/img/calendarfilled.png" />
-    <span>""</span>
+    <span>-</span>
   </div>
   <div v-else class="stepDate" :style="{borderColor: borderColor}">
     <img src="../assets/img/calendarfilled.png" />
-    <span >""</span>
+    <span >-</span>
   </div>
 </template>
