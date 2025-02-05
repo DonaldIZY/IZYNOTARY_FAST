@@ -263,7 +263,7 @@ const handleCustomer = async () => {
       }
     );
     closeModal();
-    showTextResultModal.value = "Client créé au succès !";
+    showTextResultModal.value = "Client créé avec succès !";
     showTypeResultModal.value = "success";
     showResultModal.value = true;
   } catch (error) {

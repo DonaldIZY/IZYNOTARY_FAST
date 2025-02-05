@@ -159,7 +159,7 @@ const handleUser = async () => {
       body: JSON.stringify(userData),
     });
     closeModal();
-    showTextResultModal.value = "Utilisateur créé au succès !";
+    showTextResultModal.value = "Utilisateur créé avec succès !";
     showTypeResultModal.value = "success";
     showResultModal.value = true;
   } catch (error) {

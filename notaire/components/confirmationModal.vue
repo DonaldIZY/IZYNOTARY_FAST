@@ -8,23 +8,19 @@
       <v-card-text class="ma-4 text-center">
         <p>{{ text }}</p>
       </v-card-text>
-
       <v-divider></v-divider>
-
       <v-card-actions>
         <v-spacer></v-spacer>
-
         <v-btn
           color="secondary"
-          text="Annuler"
+          text="Non"
           variant="flat"
           @click="closeModal"
           class="text-none"
         ></v-btn>
-
         <v-btn
           color="primary"
-          text="Valider"
+          text="Oui"
           variant="flat"
           @click="submitModal"
           class="text-none"
@@ -61,6 +57,7 @@ const submitModal = () => {
   emit("update:open", false);
 };
 </script>
+
 <style>
 .title {
   font-weight: bold;
