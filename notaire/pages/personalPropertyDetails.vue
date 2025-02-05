@@ -1,6 +1,7 @@
 <script setup>
   const selectedProcedureStore = useSelectedDataStore();
   const stepList = ref([]);
+  const procedureNum = ref("Procédure de succession de biens mobiliers");
 
   let procedureID = selectedProcedureStore.getProcedureId;
 
@@ -12,13 +13,14 @@
 
       console.log("fetchedProcedures : ", fetchedProcedures);
 
-      stepList.value = fetchedProcedures.find(proc => proc.id == procedureID).step.steps;
+      let procedureData = fetchedProcedures.find(proc => proc.id == procedureID);
+      procedureNum.value = procedureNum.value + " : N°" + procedureData.folderNum;
+      stepList.value = procedureData.step.steps;
       console.log("step list : ", stepList.value);
     } catch (err) {
       console.error("Erreur lors du chargement des procédures : ", err);
     }
   };
-
 loadProcedures();
   
 </script>
@@ -32,7 +34,7 @@ loadProcedures();
 
 <template>
   <div class="ma-4" >
-      <back-button title="Procédure de succession de biens mobiliers" goBackTo="/proceduresManagement"/>
+      <back-button v-if="stepList.length > 0" :title="procedureNum" goBackTo="/proceduresManagement"/>
   </div>
   <personal-property v-if="stepList.length > 0" :stepList="stepList"/>
 </template>

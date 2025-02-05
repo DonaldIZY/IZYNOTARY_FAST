@@ -54,6 +54,7 @@ const procedureData = toRef(props, "data");
               v-on:update:model-value="
                 (file) => {
                   // newProcedureData[]
+                  
                   if (newProcedureData.action == step.action) {
                     newProcedureData.documents[doc] = file;
                   } else {
@@ -62,9 +63,11 @@ const procedureData = toRef(props, "data");
                       documents: { [doc]: file },
                     };
                   }
-                  // console.log('input file : ', file, 'input name : ', doc, 'step : ', step);
+                  // console.log('FILE :', file);
+                  
                 }
-              "
+              " 
+              :disabled="step.documents[doc].path != '' ? true : false"
             />
           </v-tabs-window-item>
         </v-tabs-window>
