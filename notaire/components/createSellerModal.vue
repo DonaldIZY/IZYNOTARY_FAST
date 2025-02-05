@@ -252,7 +252,7 @@ const handleCustomer = async () => {
     });
     console.log("Vendeur créé avec succès.");
     closeModal();
-    showTextResultModal.value = "Vendeur créé au succès !";
+    showTextResultModal.value = "Vendeur créé avec succès !";
     showTypeResultModal.value = "success";
     showResultModal.value = true;
   } catch (error) {
