@@ -6,6 +6,7 @@ import { Folder } from './entities/folder.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { Step } from 'src/steps/entities/step.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
+import { Seller } from 'src/sellers/entities/seller.entity';
 
 @Injectable()
 export class FoldersService {
@@ -13,12 +14,15 @@ export class FoldersService {
     constructor(
         @InjectRepository(Folder) private readonly folderRepository: Repository<Folder>,
         @InjectRepository(Customer) private readonly customerRepository: Repository<Customer>,
+        @InjectRepository(Seller) private readonly sellerRepository: Repository<Seller>,
         private readonly entityManager: EntityManager
     ) {}
 
     async create(createFolderDto: CreateFolderDto) {
 
         const customer = await this.customerRepository.findOneBy({ id: createFolderDto.customerId });
+
+        const seller = createFolderDto.procedureType == 'Vente' ? await this.sellerRepository.findOneBy({ id: createFolderDto.sellerId }) : null;
 
         let step;
 
@@ -27,51 +31,143 @@ export class FoldersService {
                 steps: [
                     {
                         "stepNum": '1',
-                        "status": 'Terminée',
+                        "status":
+                            createFolderDto.requiredFiles.customerCNI && 
+                            createFolderDto.requiredFiles.partnerCNI && 
+                            createFolderDto.requiredFiles.certificateOfBirthOrMarriage && 
+                            createFolderDto.requiredFiles.CIEOrSODECIInvoice &&  
+                            createFolderDto.requiredFiles.taxStatusCertificate &&
+                            createFolderDto.requiredFiles.titleDeed &&
+                            createFolderDto.requiredFiles.landRegistry &&
+                            createFolderDto.requiredFiles.certificateOfLocation ? 'Terminée' : 'En cours',
                         "action": 'Fourniture des pièces',
-                        "documents": createFolderDto.requiredFiles,
-                        "comment": '',
-                        "editBy": ''
+                        "documents": {
+                            "customerCNI": {
+                                "name": "CNI du client",
+                                "path": createFolderDto.requiredFiles.customerCNI ? createFolderDto.requiredFiles.customerCNI : '',
+                                "filled": createFolderDto.requiredFiles.customerCNI ? true : false,
+                                "editBy": ''
+                            },
+                            "partnerCNI": {
+                                "name": "CNI du conjoint",
+                                "path": createFolderDto.requiredFiles.partnerCNI ? createFolderDto.requiredFiles.partnerCNI : '',
+                                "filled": createFolderDto.requiredFiles.partnerCNI ? true : false,
+                                "editBy": ''
+                            },
+                            "certificateOfBirthOrMarriage": {
+                                "name": "Extrait d'acte de naissance ou de marriage",
+                                "path": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? createFolderDto.requiredFiles.certificateOfBirthOrMarriage : '',
+                                "filled": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? true : false,
+                                "editBy": ''
+                            },
+                            "CIEOrSODECIInvoice": {
+                                "name": "Facture de CIE ou SODECI",
+                                "path": createFolderDto.requiredFiles.CIEOrSODECIInvoice ? createFolderDto.requiredFiles.CIEOrSODECIInvoice : '',
+                                "filled": createFolderDto.requiredFiles.CIEOrSODECIInvoice ? true : false,
+                                "editBy": ''
+                            },
+                            "taxStatusCertificate": {
+                                "name": "Attestation de situation fiscale",
+                                "path": createFolderDto.requiredFiles.taxStatusCertificate ? createFolderDto.requiredFiles.taxStatusCertificate : '',
+                                "filled": createFolderDto.requiredFiles.taxStatusCertificate ? true : false,
+                                "editBy": ''
+                            },
+                            "titleDeed": {
+                                "name": "Titre de propriété",
+                                "path": createFolderDto.requiredFiles.titleDeed ? createFolderDto.requiredFiles.titleDeed : '',
+                                "filled": createFolderDto.requiredFiles.titleDeed ? true : false,
+                                "editBy": ''
+                            },
+                            "landRegistry": {
+                                "name": "État foncier",
+                                "path": createFolderDto.requiredFiles.landRegistry ? createFolderDto.requiredFiles.landRegistry : '',
+                                "filled": createFolderDto.requiredFiles.landRegistry ? true : false,
+                                "editBy": ''
+                            },
+                            "certificateOfLocation": {
+                                "name": "Certificat de localisation",
+                                "path": createFolderDto.requiredFiles.certificateOfLocation ? createFolderDto.requiredFiles.certificateOfLocation : '',
+                                "filled": createFolderDto.requiredFiles.certificateOfLocation ? true : false,
+                                "editBy": ''
+                            }
+                        },
+                        "comment": ''
                     },
                     {
                         "stepNum": '2',
                         "status": 'Non débuté',
                         "action": 'Rédaction l\'acte de vente',
-                        "documents": [],
-                        "comment": '',
-                        "editBy": ''
+                        "documents": {
+                            "deedOfSale": {
+                                "name": "Acte de vente",
+                                "path": '',
+                                "filled": false,
+                                "editBy": ''
+                            }
+                        },
+                        "comment": ''
                     },
                     {
                         "stepNum": '3',
                         "status": 'Non débuté',
                         "action": 'Règlement total ou partiel des frais',
-                        "documents": [],
-                        "comment": '',
-                        "editBy": ''
+                        "documents": {
+                            "paymentOfFees": {
+                                "name": "Règlement des frais",
+                                "path": '',
+                                "filled": false,
+                                "editBy": ''
+                            }
+                        },
+                        "comment": ''
                     },
                     {
                         "stepNum": '4',
                         "status": 'Non débuté',
                         "action": 'Signature de l\'acte de vente',
-                        "documents": [],
-                        "comment": '',
-                        "editBy": ''
+                        "documents": {
+                            "deedOfSaleSigned": {
+                                "name": "Acte de vente signé par l'acquéreur et le vendeur",
+                                "path": '',
+                                "filled": false,
+                                "editBy": ''
+                            }
+                        },
+                        "comment": ''
                     },
                     {
                         "stepNum": '5',
                         "status": 'Non débuté',
-                        "action": 'Dépôt de l\'acte signé',
-                        "documents": [],
-                        "comment": '',
-                        "editBy": ''
+                        "action": "Dépôt de l'acte signé",
+                        "documents": {
+                            "deedOfSaleDeposited": {
+                                "name": "Dépôt de l'acte signé à la Direction Générale des Impôts",
+                                "path": '',
+                                "filled": false,
+                                "editBy": ''
+                            }
+                        },
+                        "comment": ''
                     },
                     {
                         "stepNum": '6',
                         "status": 'Non débuté',
                         "action": 'Livrables',
-                        "documents": [],
+                        "documents": {
+                            "deedOfSale": {
+                                "name": "Acte de vente",
+                                "path": '',
+                                "filled": false,
+                                "editBy": ''
+                            },
+                            "CMPF": {
+                                "name": "CMPF",
+                                "path": '',
+                                "filled": false,
+                                "editBy": ''
+                            }
+                        },
                         "comment": '',
-                        "editBy": ''
                     }
                 ]
             });
@@ -81,7 +177,13 @@ export class FoldersService {
                 steps: [
                     {
                         "stepNum": '1',
-                        "status": 'Terminée',
+                        "status": 
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.criminalRecord &&
+                            createFolderDto.requiredFiles.lease &&
+                            createFolderDto.requiredFiles.sketchOfGeoLocation &&
+                            createFolderDto.requiredFiles.formForCompanyFormation &&
+                            createFolderDto.requiredFiles.capitalToBeReleased? 'Terminée' : "En cours",
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
@@ -196,37 +298,41 @@ export class FoldersService {
                     }
                 ]
             });
-        } else if (createFolderDto.procedureType == 'Modificaion de société') {
+        } else if (createFolderDto.procedureType == 'Modification de société') {
             
             step = new Step({
                 steps: [
                     {
                         "stepNum": '1',
-                        "status": 'Terminée',
+                        "status": 
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.RCCM &&
+                            createFolderDto.requiredFiles.Statut &&
+                            createFolderDto.requiredFiles.DNSV? 'Terminée' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
                                 "name": "CNI du client",
-                                "path": createFolderDto.requiredFiles[0] ? createFolderDto.requiredFiles[0] : '',
-                                "filled": createFolderDto.requiredFiles[0] ? true : false,
+                                "path": createFolderDto.requiredFiles.customerCNI ? createFolderDto.requiredFiles.customerCNI : '',
+                                "filled": createFolderDto.requiredFiles.customerCNI ? true : false,
                                 "editBy": ''
                             },
                             "RCCM": {
                                 "name": "RCCM",
-                                "path": createFolderDto.requiredFiles[1] ? createFolderDto.requiredFiles[1] : '',
-                                "filled": createFolderDto.requiredFiles[1] ? true : false,
+                                "path": createFolderDto.requiredFiles.RCCM ? createFolderDto.requiredFiles.RCCM : '',
+                                "filled": createFolderDto.requiredFiles.RCCM ? true : false,
                                 "editBy": ''
                             },
                             "status": {
                                 "name": "Statut",
-                                "path": createFolderDto.requiredFiles[2] ? createFolderDto.requiredFiles[2] : '',
-                                "filled": createFolderDto.requiredFiles[2] ? true : false,
+                                "path": createFolderDto.requiredFiles.Statut ? createFolderDto.requiredFiles.Statut : '',
+                                "filled": createFolderDto.requiredFiles.Statut ? true : false,
                                 "editBy": ''
                             },
                             "DNSV": {
                                 "name": "DNSV",
-                                "path": createFolderDto.requiredFiles[3] ? createFolderDto.requiredFiles[3] : '',
-                                "filled": createFolderDto.requiredFiles[3] ? true : false,
+                                "path": createFolderDto.requiredFiles.DNSV ? createFolderDto.requiredFiles.DNSV : '',
+                                "filled": createFolderDto.requiredFiles.DNSV ? true : false,
                                 "editBy": ''
                             }
                         },
@@ -309,19 +415,21 @@ export class FoldersService {
                 steps: [
                     {
                         "stepNum": '1',
-                        "status": 'Terminée',
+                        "status": 
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.birthCertificate ? 'Terminée' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
                                 "name": "CNI du client",
-                                "path": createFolderDto.requiredFiles[0] ? createFolderDto.requiredFiles[0] : '',
-                                "filled": createFolderDto.requiredFiles[0] ? true : false,
+                                "path": createFolderDto.requiredFiles.customerCNI ? createFolderDto.requiredFiles.customerCNI : '',
+                                "filled": createFolderDto.requiredFiles.customerCNI ? true : false,
                                 "editBy": ''
                             },
                             "birthCertificate": {
                                 "name": "Extrait d'acte de naissance",
-                                "path": createFolderDto.requiredFiles[1] ? createFolderDto.requiredFiles[1] : '',
-                                "filled": createFolderDto.requiredFiles[1] ? true : false,
+                                "path": createFolderDto.requiredFiles.birthCertificate ? createFolderDto.requiredFiles.birthCertificate : '',
+                                "filled": createFolderDto.requiredFiles.birthCertificate ? true : false,
                                 "editBy": ''
                             }
                         },
@@ -404,25 +512,28 @@ export class FoldersService {
                 steps: [
                     {
                         "stepNum": '1',
-                        "status": 'Terminée',
+                        "status": 
+                            createFolderDto.requiredFiles.cniOfRightsHolders &&
+                            createFolderDto.requiredFiles.cniOfTheDonor &&
+                            createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders? 'Terminée' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "cniOfRightsHolders": {
                                 "name": "CNI du client",
-                                "path": createFolderDto.requiredFiles[0] ? createFolderDto.requiredFiles[0] : '',
-                                "filled": createFolderDto.requiredFiles[0] ? true : false,
+                                "path": createFolderDto.requiredFiles.cniOfRightsHolders ? createFolderDto.requiredFiles.cniOfRightsHolders : '',
+                                "filled": createFolderDto.requiredFiles.cniOfRightsHolders ? true : false,
                                 "editBy": ''
                             },
                             "cniOfTheDonor": {
                                 "name": "CNI du donateur",
-                                "path": createFolderDto.requiredFiles[1] ? createFolderDto.requiredFiles[1] : '',
-                                "filled": createFolderDto.requiredFiles[1] ? true : false,
+                                "path": createFolderDto.requiredFiles.cniOfTheDonor ? createFolderDto.requiredFiles.cniOfTheDonor : '',
+                                "filled": createFolderDto.requiredFiles.cniOfTheDonor ? true : false,
                                 "editBy": ''
                             },
                             "birthCertificateOfTheRightsHolders": {
                                 "name": "Extrait d'acte de naissance",
-                                "path": createFolderDto.requiredFiles[2] ? createFolderDto.requiredFiles[2] : '',
-                                "filled": createFolderDto.requiredFiles[2] ? true : false,
+                                "path": createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders ? createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders : '',
+                                "filled": createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders ? true : false,
                                 "editBy": ''
                             }
                         },
@@ -522,6 +633,7 @@ export class FoldersService {
 
         folder.step = step;
         folder.customer = customer;
+        folder.seller = seller;
 
         await this.entityManager.save(folder);
     }

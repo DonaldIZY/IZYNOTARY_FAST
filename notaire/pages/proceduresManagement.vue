@@ -190,171 +190,170 @@
 </template>
 
 <script setup>
-const testUrl = "http://localhost:8000"; /*"http://serverizynotary.izydr.net"*/
 
-const proceduresHeaders = ref([
-  { align: "start", key: "NUM", title: "N°" },
-  { align: "start", key: "CUSTOMER", title: "Client" },
-  { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
-  { align: "start", key: "CREATE_BY", title: "Créée par" },
-  { align: "start", key: "CREATE_AT", title: "Date de création" },
-  { align: "start", key: "PROGRESSION", title: "Progression" },
-  { align: "center", key: "STATUS", title: "Statut" },
-  { align: "center", key: "ACTIONS", title: "Actions" },
-]);
+  const proceduresHeaders = ref([
+    { align: "start", key: "NUM", title: "N°" },
+    { align: "start", key: "CUSTOMER", title: "Client" },
+    { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
+    { align: "start", key: "CREATE_BY", title: "Créée par" },
+    { align: "start", key: "CREATE_AT", title: "Date de création" },
+    { align: "start", key: "PROGRESSION", title: "Progression" },
+    { align: "center", key: "STATUS", title: "Statut" },
+    { align: "center", key: "ACTIONS", title: "Actions" },
+  ]);
 
-const procedures = ref([]);
+  const procedures = ref([]);
 
-const searchCNI = ref(null);
-const searchNum = ref(null);
-const searchCustomer = ref(null);
-const searchStartDate = ref(null);
-const searchProcedureType = ref(null);
-const searchStatus = ref(null);
-const form = ref(null);
+  const searchCNI = ref(null);
+  const searchNum = ref(null);
+  const searchCustomer = ref(null);
+  const searchStartDate = ref(null);
+  const searchProcedureType = ref(null);
+  const searchStatus = ref(null);
+  const form = ref(null);
 
-const filteredProcedures = computed(() => {
-  return procedures.value.filter((item) => {
-    const matchesCNI =
-      !searchCNI.value || item.NUM.toString().includes(searchCNI.value);
-    const matchesNum =
-      !searchNum.value || item.NUM.toString().includes(searchNum.value);
-    const matchesCustomer =
-      !searchCustomer.value ||
-      item.CUSTOMER.toLowerCase().includes(searchCustomer.value.toLowerCase());
-    const matchesStartDate =
-      !searchStartDate.value ||
-      new Date(item.CREATE_AT).toISOString().slice(0, 10) >=
-        searchStartDate.value;
-    const matchesProcedureType =
-      !searchProcedureType.value ||
-      new Date(item.CREATE_AT).toISOString().slice(0, 10) <=
-        searchProcedureType.value;
-    const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
-    return (
-      matchesCNI &&
-      matchesNum &&
-      matchesCustomer &&
-      matchesStartDate &&
-      matchesProcedureType &&
-      matchesStatus
-    );
+  const filteredProcedures = computed(() => {
+    return procedures.value.filter((item) => {
+      const matchesCNI =
+        !searchCNI.value || item.NUM.toString().includes(searchCNI.value);
+      const matchesNum =
+        !searchNum.value || item.NUM.toString().includes(searchNum.value);
+      const matchesCustomer =
+        !searchCustomer.value ||
+        item.CUSTOMER.toLowerCase().includes(searchCustomer.value.toLowerCase());
+      const matchesStartDate =
+        !searchStartDate.value ||
+        new Date(item.CREATE_AT).toISOString().slice(0, 10) >=
+          searchStartDate.value;
+      const matchesProcedureType =
+        !searchProcedureType.value ||
+        new Date(item.CREATE_AT).toISOString().slice(0, 10) <=
+          searchProcedureType.value;
+      const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
+      return (
+        matchesCNI &&
+        matchesNum &&
+        matchesCustomer &&
+        matchesStartDate &&
+        matchesProcedureType &&
+        matchesStatus
+      );
+    });
   });
-});
 
-const clearFilters = () => {
-  searchCNI.value = null;
-  searchNum.value = null;
-  searchCustomer.value = null;
-  searchStartDate.value = null;
-  searchProcedureType.value = null;
-  searchStatus.value = null;
-};
+  const clearFilters = () => {
+    searchCNI.value = null;
+    searchNum.value = null;
+    searchCustomer.value = null;
+    searchStartDate.value = null;
+    searchProcedureType.value = null;
+    searchStatus.value = null;
+  };
 
-const loadProcedures = async () => {
-  try {
-    const fetchedProcedures = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/folders`
-    );
+  const loadProcedures = async () => {
+    try {
+      const fetchedProcedures = await $fetch(
+        `${config.public.baseUrl}/folders`
+      );
 
-    console.log("fetchedProcedures : ", fetchedProcedures);
+      console.log("fetchedProcedures : ", fetchedProcedures);
 
-    if (fetchedProcedures) {
-      procedures.value = fetchedProcedures.map((procedure, index) => ({
-        NUM: index + 1,
-        CUSTOMER:
-          procedure.customer.lastName + " " + procedure.customer.firstName,
-        PROCEDURE_TYPE: procedure.procedureType,
-        CREATE_BY: "",
-        CREATE_AT: new Date(procedure.createAt).toLocaleDateString(),
-        PROGRESSION: procedure.progression * 100 + "%",
-        STATUS: procedure.status,
-        steps: procedure.step.steps,
-        customer: procedure.customer,
-        id: procedure.id,
-        folderNum: procedure.folderNum,
-      }));
-    }
-  } catch (err) {
-    console.error("Erreur lors du chargement des procédures : ", err);
-  }
-};
-
-loadProcedures();
-
-const dialog = ref(false);
-const selectedProcedure = ref({});
-
-const openModal = (val) => {
-  dialog.value = true;
-  /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
-         selectedProcedure.value = fakeCompanyIncorporation;  
-     }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
-         selectedProcedure.value = fakeSales;
-     }else{
-         selectedProcedure.value = {};
-         dialog.value = false;
-     }*/
-  selectedProcedure.value = val;
-  console.log("selectedValue : ", selectedProcedure.value);
-};
-
-const closeModal = () => {
-  dialog.value = false;
-  // selectedProcedure.value = {};
-};
-
-const redirectRegardingProcedure = (procedure) => {
-  console.log("procedure details : ", procedure);
-  let type = procedure.PROCEDURE_TYPE;
-
-  if (type.toLowerCase() == "constitution de société") {
-    return "/companyIncorporationDetails";
-  } else if (type.toLowerCase() == "modification de société") {
-    return "/companyModificationDetails";
-  } else if (type.toLowerCase() == "succession de biens immobiliers") {
-    return "/realEstateDetails";
-  } else if (type.toLowerCase() == "succession de biens mobiliers") {
-    return "/personalPropertyDetails";
-  } else if (type.toLowerCase() == "vente") {
-    return "/salesDetails";
-  }
-};
-
-const updateProcedure = async (val) => {
-  try {
-    console.log("data to send before change to formadata : ", val);
-
-    var dataToSend = new FormData();
-
-    dataToSend.append("action", val.action);
-    dataToSend.append("folderNum", val.folderNum);
-    dataToSend.append("procedureType", val.procedureType);
-    dataToSend.append("contact", val.contact);
-
-    for (const fileKey of Object.keys(val.documents)) {
-      dataToSend.append(fileKey, val.documents[fileKey]);
-    }
-
-    // for(const [key, value] of dataToSend.entries()) {
-    //     console.log(key, value);
-    // }
-
-    const resultOfProcedureUpdate = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/steps/update/${val.id}`,
-      {
-        method: "PATCH",
-        //   headers: {"Content-Type": "application/json"},
-        cors: "no-cors",
-        body: dataToSend,
+      if (fetchedProcedures) {
+        procedures.value = fetchedProcedures.map((procedure, index) => ({
+          NUM: index + 1,
+          CUSTOMER:
+            procedure.customer.lastName + " " + procedure.customer.firstName,
+          PROCEDURE_TYPE: procedure.procedureType,
+          CREATE_BY: "",
+          CREATE_AT: new Date(procedure.createAt).toLocaleDateString(),
+          PROGRESSION: procedure.progression * 100 + "%",
+          STATUS: procedure.status,
+          steps: procedure.step.steps,
+          customer: procedure.customer,
+          id: procedure.id,
+          folderNum: procedure.folderNum,
+        }));
       }
-    );
+    } catch (err) {
+      console.error("Erreur lors du chargement des procédures : ", err);
+    }
+  };
 
-    console.log("back response : ", resultOfProcedureUpdate);
-  } catch (err) {
-    console.error("Erreur lors de la mise à jour de la procédure : ", err);
-  }
-};
+  loadProcedures();
+
+  const dialog = ref(false);
+  const selectedProcedure = ref({});
+
+  const openModal = (val) => {
+    dialog.value = true;
+    /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
+          selectedProcedure.value = fakeCompanyIncorporation;  
+      }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
+          selectedProcedure.value = fakeSales;
+      }else{
+          selectedProcedure.value = {};
+          dialog.value = false;
+      }*/
+    selectedProcedure.value = val;
+    console.log("selectedValue : ", selectedProcedure.value);
+  };
+
+  const closeModal = () => {
+    dialog.value = false;
+    // selectedProcedure.value = {};
+  };
+
+  const redirectRegardingProcedure = (procedure) => {
+    console.log("procedure details : ", procedure);
+    let type = procedure.PROCEDURE_TYPE;
+
+    if (type.toLowerCase() == "constitution de société") {
+      return "/companyIncorporationDetails";
+    } else if (type.toLowerCase() == "modification de société") {
+      return "/companyModificationDetails";
+    } else if (type.toLowerCase() == "succession de biens immobiliers") {
+      return "/realEstateDetails";
+    } else if (type.toLowerCase() == "succession de biens mobiliers") {
+      return "/personalPropertyDetails";
+    } else if (type.toLowerCase() == "vente") {
+      return "/salesDetails";
+    }
+  };
+
+  const updateProcedure = async (val) => {
+    try {
+      console.log("data to send before change to formadata : ", val);
+
+      var dataToSend = new FormData();
+
+      dataToSend.append("action", val.action);
+      dataToSend.append("folderNum", val.folderNum);
+      dataToSend.append("procedureType", val.procedureType);
+      dataToSend.append("contact", val.contact);
+
+      for (const fileKey of Object.keys(val.documents)) {
+        dataToSend.append(fileKey, val.documents[fileKey]);
+      }
+
+      // for(const [key, value] of dataToSend.entries()) {
+      //     console.log(key, value);
+      // }
+
+      const resultOfProcedureUpdate = await $fetch(
+        `${config.public.baseUrl}/steps/update/${val.id}`,
+        {
+          method: "PATCH",
+          //   headers: {"Content-Type": "application/json"},
+          cors: "no-cors",
+          body: dataToSend,
+        }
+      );
+
+      console.log("back response : ", resultOfProcedureUpdate);
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour de la procédure : ", err);
+    }
+  };
 </script>
 
 <style scoped>

@@ -131,9 +131,8 @@ const onSubmit = async () => {
   showModal.value = false; // Fermer le modal avant la requête
 
   try {
-    const testUrl = "http://serverizynotary.izydr.net";
     const data = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/auth/login`,
+      `${config.public.baseUrl}/auth/login`,
       {
         method: "POST",
         body: JSON.stringify({

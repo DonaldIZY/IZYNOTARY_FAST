@@ -1,4 +1,5 @@
 import { Customer } from "src/customers/entities/customer.entity";
+import { Seller } from "src/sellers/entities/seller.entity";
 import { Step } from "src/steps/entities/step.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -35,6 +36,9 @@ export class Folder {
     @OneToOne(() => Step, { cascade: true })
     @JoinColumn()
     step: Step;
+
+    @ManyToOne(() => Seller, seller => seller.folders, { nullable: true })
+    seller: Seller;
 
     constructor(folder: Partial<Folder>) {
         Object.assign(this, folder);

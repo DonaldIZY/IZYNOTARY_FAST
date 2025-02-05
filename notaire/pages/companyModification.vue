@@ -198,9 +198,8 @@ const config = useRuntimeConfig();
 
 const loadCustomers = async () => {
   try {
-    const testUrl = "http://serverizynotary.izydr.net";
     const fetchCustomers = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/customers`
+      `${config.public.baseUrl}/customers`
     );
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
@@ -290,7 +289,7 @@ const handleProcedure = async () => {
   }
 
   try {
-    const date = await $fetch(
+    const data = await $fetch(
       `${config.public.baseUrl}/folders/companyModification`,
       {
         method: "POST",

@@ -137,7 +137,7 @@
           color="primary"
           text="Enregistrer"
           variant="tonal"
-          @click="handleCustomer"
+          @click="handleSeller"
           class="text-none"
         ></v-btn>
       </v-card-actions>
@@ -159,7 +159,7 @@ const gender = ref(null);
 const birthDate = ref(null);
 const email = ref("");
 const phone = ref("");
-const maritalStatus = ref("");
+const maritalStatus = ref(null);
 const identification = ref(null);
 const identificationNumber = ref("");
 const imageOfIdentification = ref(null);
@@ -181,10 +181,10 @@ const maxDate = new Date(
   today.getMonth(),
   today.getDate()
 )
-  .toISOString()
+   .toISOString()
   .split("T")[0]; // Format ISO pour Vuetify
 
-const handleCustomer = async () => {
+const handleSeller = async () => {
   const sellerData = new FormData();
 
   sellerData.append("lastName", lastName.value);
@@ -198,17 +198,16 @@ const handleCustomer = async () => {
   sellerData.append("identificationNumber", identificationNumber.value);
   sellerData.append("imageOfIdentification", imageOfIdentification.value);
 
-  console.log(sellerData.get("imageOfIdentification"));
   try {
-    const testUrl = "http://serverizynotary.izydr.net";
-    const data = await $fetch(`${testUrl /*config.public.baseUrl*/}/sellers`, {
+    
+    const data = await $fetch(`${config.public.baseUrl}/sellers`, {
       method: "POST",
       body: sellerData,
     });
-    alert("Client créé avec succès.");
+    alert("Vendeur créé avec succès.");
     closeModal();
   } catch (error) {
-    console.error("Erreur lors de la création du client :", error);
+    console.error("Erreur lors de la création du vendeur :", error);
   }
 };
 
@@ -217,8 +216,8 @@ const closeModal = () => {
 };
 </script>
 <style>
-.title {
-  font-weight: bold;
-  margin-left: 0.5rem;
-}
+  .title {
+    font-weight: bold;
+    margin-left: 0.5rem;
+  }
 </style>

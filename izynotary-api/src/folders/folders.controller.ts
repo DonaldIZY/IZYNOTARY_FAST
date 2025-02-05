@@ -6,7 +6,6 @@ import { AnyFilesInterceptor, FileFieldsInterceptor } from '@nestjs/platform-exp
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as fs from 'fs';
-import { GenerateID } from 'src/utils/generateID.util';
 
 @Controller('folders')
 export class FoldersController {

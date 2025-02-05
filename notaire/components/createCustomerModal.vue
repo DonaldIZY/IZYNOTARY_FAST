@@ -187,9 +187,8 @@ const handleCustomer = async () => {
 
   console.log(customerData.get("imageOfIdentification"));
   try {
-    const testUrl = "http://serverizynotary.izydr.net";
     const data = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/customers`,
+      `${config.public.baseUrl}/customers`,
       {
         method: "POST",
         body: customerData,

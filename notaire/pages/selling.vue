@@ -264,7 +264,7 @@
       color="primary"
       class="text-none"
       prepend-icon="mdi-content-save-outline"
-      @click="toggleConfModal"
+      @click="handleProcedure"
     >
       Enregistrer la procédure
     </v-btn>
@@ -284,15 +284,11 @@ const openSellerModal = ref(false);
 const openConf = ref(false);
 
 const customers = ref([]);
-
 const customerId = ref(null);
-
 const selectedCustomer = ref(null);
 
 const sellers = ref([]);
-
 const sellerId = ref(null);
-
 const selectedSeller = ref(null);
 
 const firstName = ref("");
@@ -303,9 +299,9 @@ const identificationNumber = ref("");
 
 const sellerLastName = ref("");
 const sellerFirstName = ref("");
+const sellerCNINumber = ref("");
 const sellerGender = ref("");
 const sellerMaritalStatus = ref("");
-const sellerCNINumber = ref("");
 
 const sellerCNI = ref(null);
 const partnerCNI = ref(null);
@@ -315,6 +311,8 @@ const taxStatusCertificate = ref(null);
 const titleDeed = ref(null);
 const landRegistry = ref(null);
 const certificateOfLocation = ref(null);
+
+const router = useRouter();
 
 const toggleConfModal = () => {
   openConf.value = !openConf.value;
@@ -330,12 +328,10 @@ const toggleSellerModal = () => {
 
 const config = useRuntimeConfig();
 
-const testUrl = "http://serverizynotary.izydr.net";
-
 const loadCustomers = async () => {
   try {
     const fetchCustomers = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/customers`
+      `${config.public.baseUrl}/customers`
     );
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
@@ -353,11 +349,39 @@ const loadCustomers = async () => {
   }
 };
 
+const loadSellers = async () => {
+  try {
+    const fetchSellers = await $fetch(
+      `${config.public.baseUrl}/sellers`
+    );
+    if (fetchSellers) {
+      sellers.value = fetchSellers.map((seller) => ({
+        ID: seller.id,
+        LASTNAME: seller.lastName,
+        FIRSTNAME: seller.firstName,
+        NAME: seller.lastName + " " + seller.firstName,
+        IDENTIFICATION_NUMBER: seller.identificationNumber,
+        MARITAL_STATUS: seller.maritalStatus,
+        GENDER: seller.gender,
+      }));
+    }
+  } catch (err) {
+    console.error("Erreur lors du chargement des vendeurs :", err);
+  }
+};
+
 loadCustomers();
+loadSellers();
 
 watchEffect(() => {
   if (!open.value) {
     loadCustomers();
+  }
+});
+
+watchEffect(() => {
+  if (!openSellerModal.value) {
+    loadSellers();
   }
 });
 
@@ -374,6 +398,20 @@ watch(customerId, (newSelectedCustomer) => {
     ).toLocaleDateString();
     gender.value = selectedCustomer.value.GENDER;
     identificationNumber.value = selectedCustomer.value.IDENTIFICATION_NUMBER;
+  }
+});
+
+watch(sellerId, (newSelectedSeller) => {
+  selectedSeller.value = sellers.value.find(
+    (seller) => seller.ID === newSelectedSeller.ID
+  );
+
+  if (selectedSeller.value) {
+    sellerLastName.value = selectedSeller.value.LASTNAME;
+    sellerFirstName.value = selectedSeller.value.FIRSTNAME;
+    sellerCNINumber.value = selectedSeller.value.IDENTIFICATION_NUMBER;
+    sellerGender.value = selectedSeller.value.GENDER;
+    sellerMaritalStatus.value = selectedSeller.value.MARITAL_STATUS;
   }
 });
 
@@ -398,12 +436,14 @@ const resetFields = () => {
   titleDeed.value = null;
   landRegistry.value = null;
   certificateOfLocation.value = null;
+
+  router.push("/proceduresManagement")
 };
 
 const handleProcedure = async () => {
   const procedureData = new FormData();
 
-  const folders = await $fetch(`${testUrl /*conf.public.baseUrl*/}/folders`);
+  const folders = await $fetch(`${config.public.baseUrl}/folders`);
 
   const count = folders.length;
   if (isNaN(count)) {
@@ -416,6 +456,7 @@ const handleProcedure = async () => {
   procedureData.append("progression", 1 / 6);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
+  procedureData.append("sellerId", selectedSeller.value.ID);
 
   const requiredFiles = {
     sellerCNI: sellerCNI.value,
@@ -435,8 +476,8 @@ const handleProcedure = async () => {
   }
 
   try {
-    const date = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/folders/selling`,
+    const data = await $fetch(
+      `${config.public.baseUrl}/folders/selling`,
       {
         method: "POST",
         body: procedureData,

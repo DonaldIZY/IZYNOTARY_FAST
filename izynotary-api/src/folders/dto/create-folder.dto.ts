@@ -5,4 +5,5 @@ export class CreateFolderDto {
     progression: number;
     status: string;
     customerId: number;
+    sellerId: number;
 }
