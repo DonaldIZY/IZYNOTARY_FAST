@@ -22,10 +22,16 @@
     </v-btn>
 
     <!-- Dialog pour prévisualisation -->
-    <v-dialog v-model="open" width="50%" class="ma-4">
+    <v-dialog v-model="open" :width="dialogWidth" class="ma-4">
       <v-card>
-        <v-card-title>{{ label }}</v-card-title>
-        <v-card-text>
+        <v-card-title
+          ><v-icon size="small">mdi-file-document-outline</v-icon>
+          <span class="title"
+            >Apercu du document -
+            <span class="nameDocument">{{ label }}</span></span
+          >
+        </v-card-title>
+        <v-card-text class="dialog-content">
           <!-- Prévisualisation pour différents types de fichiers -->
           <template v-if="fileType === 'image'">
             <img
@@ -67,12 +73,24 @@
             <p>Aucun aperçu disponible pour ce type de fichier.</p>
           </template>
         </v-card-text>
+        <v-card-actions
+          ><v-btn
+            class="text-none"
+            color="secondary"
+            variant="flat"
+            @click="toggleModal"
+            >Fermer</v-btn
+          ></v-card-actions
+        >
       </v-card>
     </v-dialog>
   </div>
 </template>
 
 <script setup>
+import * as mammoth from "mammoth";
+import { useDisplay } from "vuetify";
+
 const props = defineProps({
   label: {
     type: String,
@@ -112,7 +130,7 @@ const onFileChange = async () => {
         reader.readAsDataURL(selectFile);
       } else if (fileExtension === "pdf") {
         fileType.value = "pdf";
-        previewContent.value = URL.createObjectURL(file);
+        previewContent.value = URL.createObjectURL(selectFile);
       } else if (fileExtension === "txt") {
         fileType.value = "text";
         const reader = new FileReader();
@@ -143,7 +161,33 @@ const onFileChange = async () => {
       previewContent.value = "Erreur lors du traitement du fichier.";
     }
 
-    emit("update:file", file.value);
+    // emit("update:file", file.value);
   }
 };
+
+const display = useDisplay();
+
+const dialogWidth = computed(() => {
+  if (display.xs.value) return "90vw"; // Écran très petit
+  if (display.sm.value) return "70vw"; // Petit écran
+  if (display.md.value) return "80vw"; // Écran moyen
+  return "40vw"; // Grand écran
+});
 </script>
+
+<style>
+.title {
+  font-size: 1rem;
+}
+
+.nameDocument {
+  color: #ad1919;
+  font-style: italic;
+}
+
+.dialog-content {
+  margin: 0.8rem;
+  flex: 1;
+  overflow-y: auto; /* Ajoute un défilement si nécessaire */
+}
+</style>

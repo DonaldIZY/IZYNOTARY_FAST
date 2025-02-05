@@ -71,7 +71,8 @@
 
         <v-btn
           text="Annuler"
-          variant="plain"
+          variant="flat"
+          color="secondary"
           @click="closeModal"
           class="text-none"
         ></v-btn>
@@ -79,7 +80,7 @@
         <v-btn
           color="primary"
           text="Enregistrer"
-          variant="tonal"
+          variant="flat"
           @click="handleUser"
           class="text-none"
         ></v-btn>

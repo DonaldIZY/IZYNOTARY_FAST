@@ -28,25 +28,34 @@
           {{ item.ROLE.name }}
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-icon
-            class="me-2"
-            size="small"
-            color="primary"
+          <v-btn
+            class="actionBtn"
+            title="Modifier"
+            color="gray"
+            size="x-small"
+            density="comfortable"
+            icon="mdi-pencil"
             @click="toggleEditModal(item)"
-          >
-            mdi-pencil
-          </v-icon>
-          <v-icon
-            class="me-2"
-            size="small"
-            color="primary"
+          ></v-btn>
+          <v-btn
+            class="actionBtn"
+            title="Supprimer"
+            color="#ad1919"
+            size="x-small"
+            density="comfortable"
+            icon="mdi-delete"
             @click="toggleConfModal(item)"
-          >
-            mdi-delete
-          </v-icon>
-          <v-icon size="small" color="primary" @click="changePassword(item)">
-            mdi-lock-reset
-          </v-icon>
+          ></v-btn>
+          <v-btn
+            class="actionBtn"
+            title="Réinitialiser le mot de passe"
+            color="green"
+            size="x-small"
+            density="comfortable"
+            icon="mdi-lock-reset"
+            @click="toggleConfModal(item)"
+            disabled
+          ></v-btn>
         </template>
         <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
         <template #no-data>
@@ -70,7 +79,7 @@
       @userUpdated="loadUsers"
     />
     <confirmation-modal
-      text="Vous allez supprimer un utilisateur. Continuer?"
+      text="Vous êtes sur le point de supprimer cet utilisateur. Souhaiteriez-vous continuer?"
       :open="openConf"
       @update:open="openConf = $event"
       :submit="() => deleteUser(selectedUser.ID)"
@@ -165,5 +174,9 @@ const deleteUser = async (id) => {
   margin: 20px;
   text-align: center;
   font-size: 16px;
+}
+
+.actionBtn {
+  margin: 0 0.3rem;
 }
 </style>

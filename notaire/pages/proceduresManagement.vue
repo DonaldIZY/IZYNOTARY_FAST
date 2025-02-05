@@ -122,6 +122,7 @@
           <v-data-table
             :headers="proceduresHeaders"
             :items="filteredProcedures"
+            :sort-by="[{ key: 'CREATE_AT', order: 'desc' }]"
             items-per-page-text="Procédures par page :"
             page-text
             hover
@@ -130,21 +131,39 @@
             density="compact"
             fixed-header
           >
+            <template v-slot:item.CREATE_AT="{ item }">
+              {{
+                new Date(item.CREATE_AT).toLocaleDateString("fr-FR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+              }}
+            </template>
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
-                variant="text"
-                @click="selectProcedure(item.id)"
-                color="primary text-none"
-                :to="redirectRegardingProcedure(item)"
-              >
-                Voir
-              </v-btn>
-              <v-btn
-                variant="text"
-                color="primary text-none"
+                class="actionBtn"
+                title="Modifier la procédure"
+                color="gray"
+                size="x-small"
+                density="comfortable"
+                icon="mdi-pencil"
                 @click="openModal(item)"
               >
-                Modifier
+              </v-btn>
+              <v-btn
+                class="actionBtn"
+                title="Voir les détails"
+                color="blue"
+                size="x-small"
+                density="comfortable"
+                icon="mdi-text-box-outline"
+                @click="selectProcedure(item.id)"
+                :to="redirectRegardingProcedure(item)"
+              >
               </v-btn>
             </template>
             <template v-slot:item.STATUS="{ item }">
@@ -193,7 +212,7 @@
 const testUrl = /*"http://localhost:8000"*/ "http://serverizynotary.izydr.net";
 const selectedProcedureStore = useSelectedDataStore();
 
-function selectProcedure (val) {
+function selectProcedure(val) {
   selectedProcedureStore.defineProcedureId(val);
 }
 
@@ -233,8 +252,9 @@ const filteredProcedures = computed(() => {
         searchStartDate.value;
     const matchesProcedureType =
       !searchProcedureType.value ||
-      new Date(item.CREATE_AT).toISOString().slice(0, 10) <=
-        searchProcedureType.value;
+      item.PROCEDURE_TYPE.toLowerCase().includes(
+        searchProcedureType.value.toLowerCase()
+      );
     const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
     return (
       matchesCNI &&
@@ -252,8 +272,8 @@ const clearFilters = () => {
   searchNum.value = null;
   searchCustomer.value = null;
   searchStartDate.value = null;
-  searchProcedureType.value = null;
-  searchStatus.value = null;
+  searchProcedureType.value = [];
+  searchStatus.value = [];
 };
 
 const loadProcedures = async () => {
@@ -271,8 +291,8 @@ const loadProcedures = async () => {
           procedure.customer.lastName + " " + procedure.customer.firstName,
         PROCEDURE_TYPE: procedure.procedureType,
         CREATE_BY: "",
-        CREATE_AT: new Date(procedure.createAt).toLocaleDateString(),
-        PROGRESSION: procedure.progression * 100 + "%",
+        CREATE_AT: procedure.createAt,
+        PROGRESSION: Math.round(procedure.progression * 100) + "%",
         STATUS: procedure.status,
         steps: procedure.step?.steps,
         customer: procedure.customer,
@@ -373,5 +393,8 @@ const updateProcedure = async (val) => {
   margin: 20px;
   text-align: center;
   font-size: 16px;
+}
+.actionBtn {
+  margin: 0 0.3rem;
 }
 </style>
