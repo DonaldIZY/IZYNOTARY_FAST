@@ -1,37 +1,37 @@
 <script setup>
-  const selectedProcedureStore = useSelectedDataStore();
-  const stepList = ref([]);
+const selectedProcedureStore = useSelectedDataStore();
+const stepList = ref([]);
 
-  let procedureID = selectedProcedureStore.getProcedureId;
+let procedureID = selectedProcedureStore.getProcedureId;
 
-  const loadProcedures = async () => {
-    try {
-      const fetchedProcedures = await $fetch(
-        `http://serverizynotary.izydr.net/folders`
-      );
+const loadProcedures = async () => {
+  try {
+    const fetchedProcedures = await $fetch(
+      `http://serverizynotary.izydr.net/folders`
+    );
 
-      console.log("fetchedProcedures : ", fetchedProcedures);
+    console.log("fetchedProcedures : ", fetchedProcedures);
 
-      stepList.value = fetchedProcedures.find(proc => proc.id == procedureID).step.steps;
-      console.log("step list : ", stepList.value);
-    } catch (err) {
-      console.error("Erreur lors du chargement des procédures : ", err);
-    }
-  };
+    stepList.value = fetchedProcedures.find(
+      (proc) => proc.id == procedureID
+    ).step.steps;
+    console.log("step list : ", stepList.value);
+  } catch (err) {
+    console.error("Erreur lors du chargement des procédures : ", err);
+  }
+};
 
-  loadProcedures();
+loadProcedures();
 </script>
 
-
-<style scoped>
- 
-
-</style>
-
+<style scoped></style>
 
 <template>
-  <div class="ma-4" >
-      <back-button title="Procédure de succession de biens immobiliers" goBackTo="/proceduresManagement"/>
+  <div class="ma-4">
+    <back-button
+      title="Procédure de succession de biens immobiliers"
+      goBackTo="/proceduresManagement"
+    />
   </div>
   <real-estate v-if="stepList.length > 0" :stepList="stepList" />
 </template>

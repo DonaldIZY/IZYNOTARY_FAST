@@ -67,6 +67,7 @@
                   variant="outlined"
                   density="compact"
                   hide-details
+                  disabled
                 ></v-select>
               </v-col>
 
@@ -80,6 +81,7 @@
                   variant="outlined"
                   density="compact"
                   hide-details
+                  disabled
                 >
                 </v-text-field>
               </v-col>
@@ -97,6 +99,7 @@
                   variant="outlined"
                   density="compact"
                   hide-details
+                  disabled
                 ></v-select>
               </v-col>
 
@@ -209,7 +212,7 @@
 </template>
 
 <script setup>
-  const selectedProcedureStore = useSelectedDataStore();
+const selectedProcedureStore = useSelectedDataStore();
 
 function selectProcedure(val) {
   selectedProcedureStore.defineProcedureId(val);
@@ -217,9 +220,10 @@ function selectProcedure(val) {
 
 const proceduresHeaders = ref([
   { align: "start", key: "NUM", title: "N°" },
+  { align: "start", key: "FOLDERNUM", title: "N° Dossier" },
   { align: "start", key: "CUSTOMER", title: "Client" },
   { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
-  { align: "start", key: "CREATE_BY", title: "Créée par" },
+  // { align: "start", key: "CREATE_BY", title: "Créée par" },
   { align: "start", key: "CREATE_AT", title: "Date de création" },
   { align: "start", key: "PROGRESSION", title: "Progression" },
   { align: "center", key: "STATUS", title: "Statut" },
@@ -237,7 +241,7 @@ const searchStatus = ref(null);
 const form = ref(null);
 
 const config = useRuntimeConfig();
-  
+
 const filteredProcedures = computed(() => {
   return procedures.value.filter((item) => {
     const matchesCNI =
@@ -279,15 +283,14 @@ const clearFilters = () => {
 
 const loadProcedures = async () => {
   try {
-    const fetchedProcedures = await $fetch(
-      `${config.public.baseUrl}/folders`
-    );
+    const fetchedProcedures = await $fetch(`${config.public.baseUrl}/folders`);
 
     console.log("fetchedProcedures : ", fetchedProcedures);
 
     if (fetchedProcedures) {
       procedures.value = fetchedProcedures.map((procedure, index) => ({
         NUM: index + 1,
+        FOLDERNUM: procedure.folderNum,
         CUSTOMER:
           procedure.customer.lastName + " " + procedure.customer.firstName,
         PROCEDURE_TYPE: procedure.procedureType,
@@ -302,18 +305,19 @@ const loadProcedures = async () => {
         folderNum: procedure.folderNum,
       }));
     }
-  }catch(err) {
+  } catch (err) {
     console.error("erreur lors de la reception des procédures : ", err);
-  }};
+  }
+};
 
-  loadProcedures();
+loadProcedures();
 
-  const dialog = ref(false);
-  const selectedProcedure = ref({});
+const dialog = ref(false);
+const selectedProcedure = ref({});
 
-  const openModal = (val) => {
-    dialog.value = true;
-    /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
+const openModal = (val) => {
+  dialog.value = true;
+  /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
           selectedProcedure.value = fakeCompanyIncorporation;  
       }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
           selectedProcedure.value = fakeSales;
@@ -321,68 +325,69 @@ const loadProcedures = async () => {
           selectedProcedure.value = {};
           dialog.value = false;
       }*/
-    selectedProcedure.value = val;
-    console.log("selectedValue : ", selectedProcedure.value);
-  };
+  selectedProcedure.value = val;
+  console.log("selectedValue : ", selectedProcedure.value);
+};
 
-  const closeModal = () => {
-    dialog.value = false;
-    // selectedProcedure.value = {};
-  };
+const closeModal = () => {
+  dialog.value = false;
+  // selectedProcedure.value = {};
+};
 
-  const redirectRegardingProcedure = (procedure) => {
-    // console.log("procedure details : ", procedure);
-    let type = procedure.PROCEDURE_TYPE;
+const redirectRegardingProcedure = (procedure) => {
+  // console.log("procedure details : ", procedure);
+  let type = procedure.PROCEDURE_TYPE;
 
-    if (type.toLowerCase() == "constitution de société") {
-      return "/companyIncorporationDetails";
-    } else if (type.toLowerCase() == "modification de société") {
-      return "/companyModificationDetails";
-    } else if (type.toLowerCase() == "succession de biens immobiliers") {
-      return "/realEstateDetails";
-    } else if (type.toLowerCase() == "succession de biens mobiliers") {
-      return "/personalPropertyDetails";
-    } else if (type.toLowerCase() == "vente") {
-      return "/salesDetails";
+  if (type.toLowerCase() == "constitution de société") {
+    return "/companyIncorporationDetails";
+  } else if (type.toLowerCase() == "modification de société") {
+    return "/companyModificationDetails";
+  } else if (type.toLowerCase() == "succession de biens immobiliers") {
+    return "/realEstateDetails";
+  } else if (type.toLowerCase() == "succession de biens mobiliers") {
+    return "/personalPropertyDetails";
+  } else if (type.toLowerCase() == "vente") {
+    return "/salesDetails";
+  }
+};
+
+const updateProcedure = async (val) => {
+  try {
+    console.log("data to send before change to formadata : ", val);
+
+    var dataToSend = new FormData();
+
+    dataToSend.append("action", val.action);
+    dataToSend.append("folderNum", val.folderNum);
+    dataToSend.append("procedureType", val.procedureType);
+    dataToSend.append("contact", val.contact);
+
+    for (const fileKey of Object.keys(val.documents)) {
+      dataToSend.append(fileKey, val.documents[fileKey]);
     }
-  };
 
-  const updateProcedure = async (val) => {
-    try {
-      console.log("data to send before change to formadata : ", val);
+    // for(const [key, value] of dataToSend.entries()) {
+    //     console.log(key, value);
+    // }
 
-      var dataToSend = new FormData();
-
-      dataToSend.append("action", val.action);
-      dataToSend.append("folderNum", val.folderNum);
-      dataToSend.append("procedureType", val.procedureType);
-      dataToSend.append("contact", val.contact);
-
-      for (const fileKey of Object.keys(val.documents)) {
-        dataToSend.append(fileKey, val.documents[fileKey]);
+    const resultOfProcedureUpdate = await $fetch(
+      `${config.public.baseUrl}/steps/update/${val.id}`,
+      {
+        method: "PATCH",
+        body: dataToSend,
       }
-
-      // for(const [key, value] of dataToSend.entries()) {
-      //     console.log(key, value);
-      // }
-
-      const resultOfProcedureUpdate = await $fetch(`${config.public.baseUrl}/steps/update/${val.id}`,
-        {
-          method: "PATCH",
-          body: dataToSend,
-        }
-      )
-      if(resultOfProcedureUpdate.status) {
-        alert("La procédure a été modifiée.");
-        loadProcedures();
-        closeModal();
-      }
-
-      console.log("back response : ", resultOfProcedureUpdate);
-    } catch (err) {
-      console.error("Erreur lors de la mise à jour de la procédure : ", err);
+    );
+    if (resultOfProcedureUpdate.status) {
+      alert("La procédure a été modifiée.");
+      loadProcedures();
+      closeModal();
     }
-  };
+
+    console.log("back response : ", resultOfProcedureUpdate);
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour de la procédure : ", err);
+  }
+};
 </script>
 
 <style scoped>
