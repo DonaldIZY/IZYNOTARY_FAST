@@ -16,7 +16,9 @@
 
   const procedureData = toRef(props, "data");
 
-  const newProcedureData = reactive({});
+  console.log("procedureData : ", procedureData);
+
+  const newProcedureData = reactive({}); 
   
 </script>
 
@@ -68,7 +70,7 @@
               color="primary"
               text="Enregistrer"
               variant="tonal"
-              @click="$emit('submit', {...newProcedureData, contact: procedureData.customer.phone, folderNum: procedureData.folderNum, procedureType: procedureData.PROCEDURE_TYPE, id: procedureData.id })"
+              @click="$emit('submit', {...newProcedureData, contact: procedureData.customer.phone, folderNum: procedureData.folderNum, procedureType: procedureData.PROCEDURE_TYPE, id: procedureData.stepId })"
               class="text-none"
           ></v-btn>
       </v-card-actions>

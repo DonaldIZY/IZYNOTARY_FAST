@@ -277,6 +277,7 @@ const loadProcedures = async () => {
         steps: procedure.step?.steps,
         customer: procedure.customer,
         id: procedure.id,
+        stepId: procedure.step?.id,
         folderNum: procedure.folderNum,
       }));
     }
@@ -310,7 +311,7 @@ const closeModal = () => {
 };
 
 const redirectRegardingProcedure = (procedure) => {
-  console.log("procedure details : ", procedure);
+  // console.log("procedure details : ", procedure);
   let type = procedure.PROCEDURE_TYPE;
 
   if (type.toLowerCase() == "constitution de société") {
@@ -354,6 +355,12 @@ const updateProcedure = async (val) => {
         body: dataToSend,
       }
     );
+
+    if(resultOfProcedureUpdate.status) {
+      alert("La procédure a été modifiée.");
+      loadProcedures();
+      closeModal();
+    }
 
     console.log("back response : ", resultOfProcedureUpdate);
   } catch (err) {

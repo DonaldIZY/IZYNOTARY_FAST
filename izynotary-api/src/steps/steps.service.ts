@@ -37,7 +37,8 @@ export class StepsService {
 
     async updateTwo(id: number, updateStepDto: UpdateStepDto) {
         const step = await this.stepRepository.findOneBy({ id });
-        // console.log("FOUND STEP : ", step);
+        console.log("Id of step : ", id);
+        console.log("FOUND STEP : ", step);
 
         let searchedStepIndex = step.steps.findIndex(elem => elem.action == updateStepDto["action"]); //the index of the step we need
         let searchedStep = step.steps.find(elem => elem.action == updateStepDto["action"]); //the step we need
