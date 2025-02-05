@@ -217,6 +217,8 @@
   const searchStatus = ref(null);
   const form = ref(null);
 
+  const config = useRuntimeConfig();
+  
   const filteredProcedures = computed(() => {
     return procedures.value.filter((item) => {
       const matchesCNI =
