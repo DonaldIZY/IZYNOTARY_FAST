@@ -38,6 +38,18 @@
               <v-col cols="12" lg="12" sm="4">
                 <v-text-field
                   color="primary"
+                  v-model="searchFolderNum"
+                  label="Recherche par N° Dossier"
+                  prepend-inner-icon="mdi-folder-open"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                ></v-text-field>
+              </v-col>
+
+              <v-col cols="12" lg="12" sm="4">
+                <v-text-field
+                  color="primary"
                   v-model="searchCustomer"
                   label="Recherche par client"
                   prepend-inner-icon="mdi-account"
@@ -249,6 +261,7 @@ const procedures = ref([]);
 
 const searchCNI = ref(null);
 const searchNum = ref(null);
+const searchFolderNum = ref(null);
 const searchCustomer = ref(null);
 const searchStartDate = ref(null);
 const searchProcedureType = ref(null);
@@ -263,6 +276,9 @@ const filteredProcedures = computed(() => {
       !searchCNI.value || item.NUM.toString().includes(searchCNI.value);
     const matchesNum =
       !searchNum.value || item.NUM.toString().includes(searchNum.value);
+    const matchesFolderNum =
+      !searchFolderNum.value ||
+      item.FOLDERNUM.toString().includes(searchFolderNum.value);
     const matchesCustomer =
       !searchCustomer.value ||
       item.CUSTOMER.toLowerCase().includes(searchCustomer.value.toLowerCase());
@@ -279,6 +295,7 @@ const filteredProcedures = computed(() => {
     return (
       matchesCNI &&
       matchesNum &&
+      matchesFolderNum &&
       matchesCustomer &&
       matchesStartDate &&
       matchesProcedureType &&
