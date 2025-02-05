@@ -23,7 +23,7 @@ export class CustomersController {
     }))
     async create(@UploadedFile() file: Express.Multer.File, @Body() createCustomerDto: CreateCustomerDto) {
         
-        const imageUrl = `/uploads/${file.filename}`;
+        const imageUrl = `/uploads/customers/${file.filename}`;
         createCustomerDto.imageOfIdentification = imageUrl;
 
         return this.customersService.create(createCustomerDto);

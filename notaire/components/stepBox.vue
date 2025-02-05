@@ -33,6 +33,8 @@
     }
   });
 
+  console.log("PROPS : ", props);
+
   function statusToColor(val) {
     if(val.toLowerCase() == "terminée") {
       return "green";
@@ -63,7 +65,7 @@
           v-for="val in listOfSubStep" 
           :text="val[1].name" 
           :inputName="val[0]" 
-          :status="val[1].filled" 
+          :status="val[1].filled.toString()" 
           :parentDoor="status"
         />
       </div>

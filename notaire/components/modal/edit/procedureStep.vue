@@ -16,7 +16,11 @@ const emit = defineEmits(["closeModal", "submit"]);
 
 const procedureData = toRef(props, "data");
 
-const newProcedureData = reactive({});
+
+  console.log("procedureData : ", procedureData);
+
+  const newProcedureData = reactive({}); 
+  
 </script>
 
 <template>
@@ -83,21 +87,14 @@ const newProcedureData = reactive({});
           class="text-none"
         ></v-btn>
 
-        <v-btn
-          color="primary"
-          text="Enregistrer"
-          variant="flat"
-          @click="
-            $emit('submit', {
-              ...newProcedureData,
-              contact: procedureData.customer.phone,
-              folderNum: procedureData.folderNum,
-              procedureType: procedureData.PROCEDURE_TYPE,
-              id: procedureData.id,
-            })
-          "
-          class="text-none"
-        ></v-btn>
+
+          <v-btn
+              color="primary"
+              text="Enregistrer"
+              variant="tonal"
+              @click="$emit('submit', {...newProcedureData, contact: procedureData.customer.phone, folderNum: procedureData.folderNum, procedureType: procedureData.PROCEDURE_TYPE, id: procedureData.stepId })"
+              class="text-none"
+          ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

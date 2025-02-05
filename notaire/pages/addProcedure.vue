@@ -39,7 +39,7 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
-            to="/modificationCompany"
+            to="/companyModification"
           >
             <v-img
               src="~/assets/img/modifSoc.png"

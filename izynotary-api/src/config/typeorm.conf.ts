@@ -16,7 +16,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
                 database: configService.get('DB_DATABASE'),
                 autoLoadEntities: true, // Charge les entités
                 synchronize: configService.get('DB_SYNCHRONIZE'), // Synchronise automatiquement les entités (désactivez en production)
-                entities: [__dirname + '/entities/*.ts'],
+                entities: [__dirname + '/**/*.entity.{ts,js}'],
                 migrations: [__dirname + '/migrations/*.ts'],
             }),
         }),

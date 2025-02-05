@@ -209,8 +209,7 @@
 </template>
 
 <script setup>
-const testUrl = /*"http://localhost:8000"*/ "http://serverizynotary.izydr.net";
-const selectedProcedureStore = useSelectedDataStore();
+  const selectedProcedureStore = useSelectedDataStore();
 
 function selectProcedure(val) {
   selectedProcedureStore.defineProcedureId(val);
@@ -297,89 +296,89 @@ const loadProcedures = async () => {
         steps: procedure.step?.steps,
         customer: procedure.customer,
         id: procedure.id,
+        stepId: procedure.step?.id,
         folderNum: procedure.folderNum,
       }));
     }
-  } catch (err) {
-    console.error("Erreur lors du chargement des procédures : ", err);
-  }
-};
+  };
 
-loadProcedures();
+  loadProcedures();
 
-const dialog = ref(false);
-const selectedProcedure = ref({});
+  const dialog = ref(false);
+  const selectedProcedure = ref({});
 
-const openModal = (val) => {
-  dialog.value = true;
-  /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
-         selectedProcedure.value = fakeCompanyIncorporation;  
-     }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
-         selectedProcedure.value = fakeSales;
-     }else{
-         selectedProcedure.value = {};
-         dialog.value = false;
-     }*/
-  selectedProcedure.value = val;
-  console.log("selectedValue : ", selectedProcedure.value);
-};
+  const openModal = (val) => {
+    dialog.value = true;
+    /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
+          selectedProcedure.value = fakeCompanyIncorporation;  
+      }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
+          selectedProcedure.value = fakeSales;
+      }else{
+          selectedProcedure.value = {};
+          dialog.value = false;
+      }*/
+    selectedProcedure.value = val;
+    console.log("selectedValue : ", selectedProcedure.value);
+  };
 
-const closeModal = () => {
-  dialog.value = false;
-  // selectedProcedure.value = {};
-};
+  const closeModal = () => {
+    dialog.value = false;
+    // selectedProcedure.value = {};
+  };
 
-const redirectRegardingProcedure = (procedure) => {
-  console.log("procedure details : ", procedure);
-  let type = procedure.PROCEDURE_TYPE;
+  const redirectRegardingProcedure = (procedure) => {
+    // console.log("procedure details : ", procedure);
+    let type = procedure.PROCEDURE_TYPE;
 
-  if (type.toLowerCase() == "constitution de société") {
-    return "/companyIncorporationDetails";
-  } else if (type.toLowerCase() == "modification de société") {
-    return "/companyModificationDetails";
-  } else if (type.toLowerCase() == "succession de biens immobiliers") {
-    return "/realEstateDetails";
-  } else if (type.toLowerCase() == "succession de biens mobiliers") {
-    return "/personalPropertyDetails";
-  } else if (type.toLowerCase() == "vente") {
-    return "/salesDetails";
-  }
-};
-
-const updateProcedure = async (val) => {
-  try {
-    console.log("data to send before change to formadata : ", val);
-
-    var dataToSend = new FormData();
-
-    dataToSend.append("action", val.action);
-    dataToSend.append("folderNum", val.folderNum);
-    dataToSend.append("procedureType", val.procedureType);
-    dataToSend.append("contact", val.contact);
-
-    for (const fileKey of Object.keys(val.documents)) {
-      dataToSend.append(fileKey, val.documents[fileKey]);
+    if (type.toLowerCase() == "constitution de société") {
+      return "/companyIncorporationDetails";
+    } else if (type.toLowerCase() == "modification de société") {
+      return "/companyModificationDetails";
+    } else if (type.toLowerCase() == "succession de biens immobiliers") {
+      return "/realEstateDetails";
+    } else if (type.toLowerCase() == "succession de biens mobiliers") {
+      return "/personalPropertyDetails";
+    } else if (type.toLowerCase() == "vente") {
+      return "/salesDetails";
     }
+  };
 
-    // for(const [key, value] of dataToSend.entries()) {
-    //     console.log(key, value);
-    // }
+  const updateProcedure = async (val) => {
+    try {
+      console.log("data to send before change to formadata : ", val);
 
-    const resultOfProcedureUpdate = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/steps/update/${val.id}`,
-      {
-        method: "PATCH",
-        //   headers: {"Content-Type": "application/json"},
-        cors: "no-cors",
-        body: dataToSend,
+      var dataToSend = new FormData();
+
+      dataToSend.append("action", val.action);
+      dataToSend.append("folderNum", val.folderNum);
+      dataToSend.append("procedureType", val.procedureType);
+      dataToSend.append("contact", val.contact);
+
+      for (const fileKey of Object.keys(val.documents)) {
+        dataToSend.append(fileKey, val.documents[fileKey]);
       }
-    );
 
-    console.log("back response : ", resultOfProcedureUpdate);
-  } catch (err) {
-    console.error("Erreur lors de la mise à jour de la procédure : ", err);
-  }
-};
+      // for(const [key, value] of dataToSend.entries()) {
+      //     console.log(key, value);
+      // }
+
+      const resultOfProcedureUpdate = await $fetch(`${config.public.baseUrl}/steps/update/${val.id}`,
+        {
+          method: "PATCH",
+          body: dataToSend,
+        }
+      )
+      if(resultOfProcedureUpdate.status) {
+        alert("La procédure a été modifiée.");
+        loadProcedures();
+        closeModal();
+      }
+
+      console.log("back response : ", resultOfProcedureUpdate);
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour de la procédure : ", err);
+    }
+  };
 </script>
 
 <style scoped>
