@@ -64,40 +64,25 @@
     </div>
   </div>
 
-  <!-- Modal -->
-  <v-dialog v-model="showModal" persistent max-width="400">
-    <v-card>
-      <v-card-title class="headline">{{ modalTitle }}</v-card-title>
-
-      <v-card-text class="textModal"
-        ><v-icon class="mb-3" color="#ad1919" :size="80"
-          >mdi-close-circle-outline</v-icon
-        >
-        <p>{{ modalText }}</p></v-card-text
-      >
-      <v-card-actions>
-        <v-btn
-          color="#808080"
-          variant="elevated"
-          class="text-none"
-          @click="showModal = false"
-          >Fermer</v-btn
-        >
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+  <result-modal-validation
+    :text="showTextResultModal"
+    :open="showResultModal"
+    :type="showTypeResultModal"
+    @update:open="showResultModal = $event"
+  />
 </template>
 
 <script setup>
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
+
 // References
 const form = ref(false);
 const email = ref("");
 const password = ref("");
 const loading = ref(false);
 const show = ref(false);
-const showModal = ref(false); // Contrôle l'affichage du modal
-const modalTitle = ref(""); // Titre du modal
-const modalText = ref(""); // Contenu du modal
 
 // Rules
 const required = (v) => {
@@ -125,10 +110,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 
 const onSubmit = async () => {
-  // if (!form.value) return
-
   loading.value = true;
-  showModal.value = false; // Fermer le modal avant la requête
 
   try {
     const data = await $fetch(
@@ -152,11 +134,15 @@ const onSubmit = async () => {
     }
   } catch (error) {
     console.error("Erreur de connexion :", error);
-    modalTitle.value = "Erreur de connexion";
-    modalText.value = "Veuillez vérifier vos informations.";
+    // modalTitle.value = "Erreur de connexion";
+    // modalText.value = "Veuillez vérifier vos informations.";
+    showTextResultModal.value =
+      "Les informations renseignées sont incorrectes. Veuillez réessayer s'il vous plaît.";
+    showTypeResultModal.value = "error";
   } finally {
     loading.value = false;
-    showModal.value = true; // Afficher le modal avec le résultat
+    // showModal.value = true; // Afficher le modal avec le résultat
+    showResultModal.value = true;
   }
 };
 

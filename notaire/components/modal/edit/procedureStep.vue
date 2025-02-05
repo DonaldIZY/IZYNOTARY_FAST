@@ -16,7 +16,9 @@
 
   const procedureData = toRef(props, "data");
 
-  const newProcedureData = reactive({});
+  console.log("procedureData : ", procedureData);
+
+  const newProcedureData = reactive({}); 
   
 </script>
 
@@ -35,7 +37,7 @@
       <v-card-text>
         <v-tabs-window v-model="tab" >
           <v-tabs-window-item v-for="step in procedureData.steps.filter(elem => ['terminée', 'en cours'].includes(elem.status.toLowerCase()))" :value="step.action" >
-            <v-file-input v-for="doc in Object.keys(step.documents)" name="test" :label="doc" variant="outlined" prepend-inner-icon="mdi-file" v-on:update:model-value="(file) => {
+            <v-file-input v-for="doc in Object.keys(step.documents)" :name="doc" :label="step.documents[doc].name" variant="outlined" prepend-inner-icon="mdi-file" v-on:update:model-value="(file) => {
               // newProcedureData[]
               if(newProcedureData.action == step.action) {
                 newProcedureData.documents[doc] = file;
@@ -68,7 +70,7 @@
               color="primary"
               text="Enregistrer"
               variant="tonal"
-              @click="$emit('submit', {...newProcedureData, contact: procedureData.customer.phone, folderNum: procedureData.folderNum, procedureType: procedureData.PROCEDURE_TYPE, id: procedureData.id })"
+              @click="$emit('submit', {...newProcedureData, contact: procedureData.customer.phone, folderNum: procedureData.folderNum, procedureType: procedureData.PROCEDURE_TYPE, id: procedureData.stepId })"
               class="text-none"
           ></v-btn>
       </v-card-actions>

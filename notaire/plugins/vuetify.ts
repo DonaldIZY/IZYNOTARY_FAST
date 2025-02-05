@@ -17,7 +17,7 @@ const defaultTheme = {
     // 'on-surface-variant': '#EEEEEE',
     primary: '#AD1919',
     // 'primary-darken-1': '#1F5592',
-    secondary: '#e4923b',
+    secondary: '#5c5c5c',
     // 'secondary-darken-1': '#018786',
     // error: '#B00020',
     // info: '#2196F3',

@@ -4,6 +4,7 @@ import { UpdateStepDto } from './dto/update-step.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Step } from './entities/step.entity';
 import { EntityManager, Repository } from 'typeorm';
+import { translateFieldNameToFrench } from 'src/utils/usefulFunctions.util';
 
 @Injectable()
 export class StepsService {
@@ -35,7 +36,8 @@ export class StepsService {
 
     async updateTwo(id: number, updateStepDto: UpdateStepDto) {
         const step = await this.stepRepository.findOneBy({ id });
-        // console.log("FOUND STEP : ", step);
+        console.log("Id of step : ", id);
+        console.log("FOUND STEP : ", step);
 
         let searchedStepIndex = step.steps.findIndex(elem => elem.action == updateStepDto["action"]); //the index of the step we need
         let searchedStep = step.steps.find(elem => elem.action == updateStepDto["action"]); //the step we need
@@ -70,15 +72,26 @@ export class StepsService {
             : "225" + updateStepDto.contact
         }`;
         var message = 
+<<<<<<< HEAD
         `Acte notarié de ${updateStepDto.procedureType}
         Numéro : ${updateStepDto.folderNum}.
         ${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.join(", ") + "sont " : "votre documnent " + updateStepDto.documents[0] + " est " } maintenant disponible.`;
+=======
+`Acte notarié de ${updateStepDto.procedureType}
+Numéro : ${updateStepDto.folderNum}.
+${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(", ") + "sont " : "votre documnent " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + " est " } maintenant disponible(s).`;
+>>>>>>> 46099f38fb2526a327dc96cf0ca7681c04543944
 
         var encodedMessage = encodeURIComponent(message);
         const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 
         let a = await fetch(smsUrl);
         console.log("sms response : ", a);
+
+        return {
+          status: true,
+          message: "Procedure updated successfully"
+        };
     }
 
     async remove(id: number) {

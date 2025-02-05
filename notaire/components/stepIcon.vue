@@ -10,7 +10,7 @@
       type: String,
       required: true
     },
-    parentDoor: {
+    parentDoor: { //["non débuté", "en cours", "suspendue", "arrêtée", "terminée"]
       type: String,
       required: true
     }
@@ -25,8 +25,8 @@
 
 <template>
   <div class="stepIcon" :style="{background: stepBackgroundColor, borderColor: 'white'}" >
-    <img v-if="parentDoor == 'not started'" :src="imagePath" style="opacity:0.5" />
-    <img v-else="parentDoor == 'not started'" :src="imagePath" />
+    <img v-if="parentDoor == 'non débuté'" :src="imagePath" style="opacity:0.5" />
+    <img v-else="parentDoor == 'non débuté'" :src="imagePath" />
   </div>
 </template>
 

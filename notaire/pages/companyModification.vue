@@ -152,19 +152,31 @@
       color="primary"
       class="text-none"
       prepend-icon="mdi-content-save-outline"
-      @click="handleProcedure"
+      :disabled="!isFormValid"
+      @click="toggleConfModal"
     >
       Enregistrer la procédure
     </v-btn>
     <confirmation-modal
-      text="Voulez vous enregistrer la procédure de modification de société ?"
+      text="Voulez-vous enregistrer cette procédure de modification de société ?"
       :open="openConf"
+      :submit="handleProcedure"
       @update:open="openConf = $event"
     ></confirmation-modal>
+    <result-modal-redirection
+      :text="showTextResultModal"
+      :open="showResultModal"
+      :type="showTypeResultModal"
+      destination="/proceduresManagement"
+      @update:open="showResultModal = $event"
+    />
   </div>
 </template>
 
 <script setup>
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
 const open = ref(false);
 
 const openConf = ref(false);
@@ -255,6 +267,10 @@ const resetFields = () => {
   DNSV.value = null;
 };
 
+const isFormValid = computed(() => {
+  return selectedCustomer.value;
+});
+
 const handleProcedure = async () => {
   const procedureData = new FormData();
 
@@ -263,6 +279,10 @@ const handleProcedure = async () => {
   const count = folders.length;
   if (isNaN(count)) {
     console.error("Erreur : count est NaN");
+    showTextResultModal.value =
+      "Impossible de se connecter à la base de données. Veuillez réessayer s'il vous plaît!";
+    showTypeResultModal.value = "error";
+    showResultModal.value = true;
     return;
   }
 
@@ -296,10 +316,17 @@ const handleProcedure = async () => {
         body: procedureData,
       }
     );
-    alert("Procédure créée avec succès.");
-    //resetFields();
+    showTextResultModal.value = "Procédure créée avec succès.";
+    showTypeResultModal.value = "success";
+    open.value = false;
+    showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création de la procédure :", error);
+    showTextResultModal.value =
+      "Erreur lors de la création de cette procédure. Veuillez réessayer s'il vous plaît!";
+    showTypeResultModal.value = "error";
+    open.value = false;
+    showResultModal.value = true;
   }
 };
 </script>

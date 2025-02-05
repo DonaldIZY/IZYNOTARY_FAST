@@ -82,7 +82,8 @@ export class StepsController {
     @UploadedFiles() files: Express.Multer.File[],
     @Body() updateStepDto: UpdateStepDto,
   ) {
-    console.log('FILES : ',files)
+    console.log("ID : ", id);
+    console.log('FILES : ',files);
 
         // Construction de l'objet uploadedFiles avec les chemins des fichiers
         const uploadedFiles = {};

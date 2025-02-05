@@ -17,13 +17,13 @@
   };
 
   function getImagePathFromStatus(val) {
-    if(val == "done") {
+    if(val.toLowerCase() == "terminée") {
       return "check.png";
-    }else if(val == "current") {
+    }else if(val.toLowerCase() == "en cours") {
       return "recycle.png";
-    }else if(val == "canceled") {
+    }else if(val.toLowerCase() == "arrêtée") {
       return "close.png";
-    }else if(val == "suspended") {
+    }else if(val.toLowerCase() == "non débuté") {
       return "dash.png";
     }
   }

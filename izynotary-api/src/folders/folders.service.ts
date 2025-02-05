@@ -497,7 +497,7 @@ export class FoldersService {
                         "action": 'Livrables',
                         "documents": {
                             "statusOfRepayments ": {
-                                "name": "État des reversements ",
+                                "name": "État des reversements",
                                 "path": '',
                                 "filled": false,
                                 "editBy": ''

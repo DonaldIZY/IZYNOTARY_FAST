@@ -1,12 +1,11 @@
 <script setup>  
-  const documentToSupply = [
-    {text: "CNI du dirigeant", status: "", inputName: "cni"},
-    {text: "Extrait d'acte de naissance", status: "", inputName: "rccm"}
-  ];
-  const documentForClient = [
-    {text: "Acte de vente", status: "", inputName: "actedevente"},
-    {text: "CMPF", status: "", inputName: "cmpf"}
-  ];
+  const props = defineProps({
+    stepList: {
+      type: Array
+    }
+  });
+
+  const stepList = toRef(props.stepList);
 </script>
 
 
@@ -30,60 +29,60 @@
     
     <step-box 
       :number="1" 
-      title="Fourniture de pièces" 
-      status="current" 
+      :title="stepList[0].action" 
+      :status="stepList[0].status.toLowerCase()" 
       icon="document-file.png" 
       date="17/01/2025" 
-      :listOfSubStep="documentToSupply" 
+      :listOfSubStep="Object.entries(stepList[0].documents)" 
       :first="true"
     />
     <step-box 
       :number="2" 
-      title="Règlement des frais" 
-      status="not started" 
+      :title="stepList[1].action" 
+      :status="stepList[1].status.toLowerCase()" 
       icon="debit-card2.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Règlement des frais', status: '', inputName: 'reglement'}]" 
+      :listOfSubStep="Object.entries(stepList[1].documents)" 
     />
     <step-box 
       :number="3" 
-      title="Evaluation des différents biens immobiliers" 
-      status="not started" 
+      :title="stepList[2].action" 
+      :status="stepList[2].status.toLowerCase()" 
       icon="estimation.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Evaluation des différents biens immobiliers', status: '', inputName: 'evaluation'}]" 
+      :listOfSubStep="Object.entries(stepList[2].documents)" 
     />
     <step-box 
       :number="4" 
-      title="Déclaration de la succession auprès de la DGI" 
-      status="not started" 
+      :title="stepList[3].action" 
+      :status="stepList[3].status.toLowerCase()" 
       icon="declaration.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Déclaration de la succession auprès de la DGI', status: '', inputName: 'declaration'}]" 
+      :listOfSubStep="Object.entries(stepList[3].documents)" 
     />
     <step-box 
       :number="5" 
-      title="Etablissement de l'attestation immobilière" 
-      status="not started" 
+      :title="stepList[4].action" 
+      :status="stepList[4].status.toLowerCase()" 
       icon="certification.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Établissement de l\'attestation immobilière', status: '', inputName: 'etablissement'}]" 
+      :listOfSubStep="Object.entries(stepList[4].documents)" 
     />
     <step-box 
       :number="6" 
-      title="Dépôt de l'attestation immobilière" 
-      status="not started" 
+      :title="stepList[5].action" 
+      :status="stepList[5].status.toLowerCase()" 
       icon="document.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'Dépôt de l\'attestation immobilière auprès de la DGI', status: '', inputName: 'depot'}]" 
+      :listOfSubStep="Object.entries(stepList[5].documents)" 
     />
     <step-box 
       :number="7" 
-      title="Livrables" 
-      status="not started" 
+      :title="stepList[6].action" 
+      :status="stepList[6].status.toLowerCase()" 
       icon="letter.png" 
       date="17/01/2025" 
-      :listOfSubStep="[{text: 'État des reversements', status: '', inputName: 'livrables'}]" 
+      :listOfSubStep="Object.entries(stepList[6].documents)" 
     />
   </div>
 </template>
