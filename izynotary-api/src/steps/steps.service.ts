@@ -32,7 +32,6 @@ export class StepsService {
         const step = await this.stepRepository.findOneBy({ id });
         Object.assign(step, updateStepDto);
         await this.entityManager.save(step);
-
     }
 
     async updateTwo(id: number, updateStepDto: UpdateStepDto) {
@@ -73,9 +72,15 @@ export class StepsService {
             : "225" + updateStepDto.contact
         }`;
         var message = 
+<<<<<<< HEAD
+        `Acte notarié de ${updateStepDto.procedureType}
+        Numéro : ${updateStepDto.folderNum}.
+        ${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.join(", ") + "sont " : "votre documnent " + updateStepDto.documents[0] + " est " } maintenant disponible.`;
+=======
 `Acte notarié de ${updateStepDto.procedureType}
 Numéro : ${updateStepDto.folderNum}.
 ${updateStepDto.documents.length > 1 ? "vos documents " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(", ") + "sont " : "votre documnent " + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + " est " } maintenant disponible(s).`;
+>>>>>>> 46099f38fb2526a327dc96cf0ca7681c04543944
 
         var encodedMessage = encodeURIComponent(message);
         const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;

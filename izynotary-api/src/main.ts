@@ -10,6 +10,8 @@ async function bootstrap() {
 
   const customerDir = join(uploadDir, 'customers');
 
+  const sellerDir = join(uploadDir, 'sellers')
+
   const procedureDir = join(uploadDir, 'procedures');
   const sellinngDir = join(procedureDir, 'selling');
   const companyFormationDir = join(procedureDir, 'companyFormation');
@@ -18,6 +20,7 @@ async function bootstrap() {
   const transferOfRealEstateDir = join(procedureDir, 'transferOfRealEstate');
   
   fs.mkdirSync(customerDir, { recursive: true });
+  fs.mkdirSync(sellerDir, { recursive: true });
   fs.mkdirSync(sellinngDir, { recursive: true });
   fs.mkdirSync(companyFormationDir, { recursive: true });
   fs.mkdirSync(companyModificationDir, { recursive: true });

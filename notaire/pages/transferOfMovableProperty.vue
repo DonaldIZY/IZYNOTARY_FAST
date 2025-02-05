@@ -195,12 +195,10 @@ const toggleModal = () => {
 
 const config = useRuntimeConfig();
 
-const testUrl = "http://serverizynotary.izydr.net";
-
 const loadCustomers = async () => {
   try {
     const fetchCustomers = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/customers`
+      `${config.public.baseUrl}/customers`
     );
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
@@ -261,7 +259,7 @@ const isFormValid = computed(() => {
 const handleProcedure = async () => {
   const procedureData = new FormData();
 
-  const folders = await $fetch(`${testUrl /*config.public.baseUrl*/}/folders`);
+  const folders = await $fetch(`${config.public.baseUrl}/folders`);
 
   const count = folders.length;
   if (isNaN(count)) {
@@ -295,7 +293,7 @@ const handleProcedure = async () => {
 
   try {
     const date = await $fetch(
-      `${testUrl /*config.public.baseUrl*/}/folders/transferOfMovableProperty`,
+      `${config.public.baseUrl}/folders/transferOfMovableProperty`,
       {
         method: "POST",
         body: procedureData,
