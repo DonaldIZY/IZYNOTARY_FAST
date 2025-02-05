@@ -8,4 +8,5 @@ export class CreateCustomerDto {
     identification: string;
     identificationNumber: string;
     imageOfIdentification: string;
+    maritalStatus: string;
 }
