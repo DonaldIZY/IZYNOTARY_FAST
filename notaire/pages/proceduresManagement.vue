@@ -134,6 +134,21 @@
             density="compact"
             fixed-header
           >
+            <template v-slot:item.PROCEDURE_TYPE="{ item }">
+              <v-row no-gutters>
+                <v-col class="d-flex">
+                  <!-- Icône en fonction du type de procédure -->
+                  <v-icon
+                    :color="getProcedureTypeColor(item.PROCEDURE_TYPE)"
+                    class="mr-2"
+                  >
+                    mdi-folder-open
+                  </v-icon>
+                  <!-- Texte de la procédure -->
+                  {{ item.PROCEDURE_TYPE }}
+                </v-col>
+              </v-row>
+            </template>
             <template v-slot:item.CREATE_AT="{ item }">
               {{
                 new Date(item.CREATE_AT).toLocaleDateString("fr-FR", {
@@ -386,6 +401,25 @@ const updateProcedure = async (val) => {
     console.log("back response : ", resultOfProcedureUpdate);
   } catch (err) {
     console.error("Erreur lors de la mise à jour de la procédure : ", err);
+  }
+};
+
+const getProcedureTypeColor = (type) => {
+  switch (type.toLowerCase()) {
+    case "vente":
+      return "#fa9f02";
+    case "constitution de société":
+      return "#009be3";
+    case "modification de société":
+      return "#011a8a";
+    case "succession de biens mobiliers":
+      return "#cf0205";
+    case "succession de biens immobiliers":
+      return "#02ad07";
+    case "crédit":
+      return "#fafa02";
+    default:
+      return "gray";
   }
 };
 </script>
