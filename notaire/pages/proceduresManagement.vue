@@ -395,6 +395,7 @@ const updateProcedure = async (val) => {
     dataToSend.append("folderNum", val.folderNum);
     dataToSend.append("procedureType", val.procedureType);
     dataToSend.append("contact", val.contact);
+    dataToSend.append("comment", val.comment);
 
     for (const fileKey of Object.keys(val.documents)) {
       dataToSend.append(fileKey, val.documents[fileKey]);

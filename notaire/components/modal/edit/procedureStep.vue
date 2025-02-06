@@ -71,13 +71,21 @@ const newProcedureData = reactive({});
               " 
               :disabled="step.documents[doc].path != '' ? true : false"
             />
-            <!-- <v-text-field color="primary"
-              
+            <v-text-field color="primary"
               variant="outlined"
               density="compact" 
-              :model-value="step.folderNum" 
-              :placeholder="step.folderNum"
-              /> -->
+              label="Commentaire"
+              v-model="step.comment" 
+              v-on:update:model-value="(val) => {
+                console.log('comment : ', val);
+                if (newProcedureData.action == step.action) {
+                  newProcedureData.comment = val;
+                } else {
+                  newProcedureData = {action: step.action, comment: val};
+                }
+                // console.log('new procedure data:', newProcedureData);
+              }"
+              />
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card-text>

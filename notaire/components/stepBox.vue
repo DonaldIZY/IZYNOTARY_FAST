@@ -153,7 +153,7 @@ function statusToColor(val) {
   background: black;
   position: absolute;
   left: 0;
-  top: 81%;
+  top: 85%;
   z-index: -2;
 }
 
@@ -162,8 +162,8 @@ function statusToColor(val) {
   height: 1px;
   background: black;
   position: absolute;
-  left: 44%;
-  top: 81%;
+  left: 43%;
+  top: 85%;
   z-index: -2;
   transform: rotate(45deg);
 }

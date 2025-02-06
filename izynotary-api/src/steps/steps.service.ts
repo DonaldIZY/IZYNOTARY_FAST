@@ -48,6 +48,10 @@ export class StepsService {
 
     const listOfKeyToUpdate = Object.keys(updateStepDto.uploadedFiles);
 
+    if(Object.keys(updateStepDto).includes("comment")) {
+      step.steps[searchedStepIndex].comment = updateStepDto["comment"];
+    }
+
     for (const key of listOfKeyToUpdate) {
       step.steps[searchedStepIndex].documents[key].path =
         updateStepDto.uploadedFiles[key]; //to change the path of the doc in the database, each key is a document name
