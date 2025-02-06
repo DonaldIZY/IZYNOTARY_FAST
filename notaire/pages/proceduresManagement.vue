@@ -203,6 +203,8 @@
                     ? '#63AD19'
                     : item.STATUS == 'En cours'
                     ? '#FFC300'
+                    : item.STATUS == 'Suspendue'
+                    ? '#B734EB'
                     : '#AD1919'
                 "
                 :text="item.STATUS"
