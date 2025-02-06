@@ -23,15 +23,16 @@ const newProcedureData = reactive({});
 
 <template>
   <v-dialog v-model="props.show" max-width="900" :persistent="true">
-    <v-card title="Modifier l'étape de la procédure">
+    <v-card >
+      <v-card-title>{{ `Modifier l'étape de la procédure ${procedureData.folderNum}` }}</v-card-title>
       <v-tabs v-model="tab" color="#ad1919">
         <v-tab
           v-for="step in procedureData.steps.filter((elem) =>
             ['terminée', 'en cours'].includes(elem.status.toLowerCase())
           )"
-          :value="step.action"
+          :value="step.action "
         >
-          {{ step.action }}
+          {{ `Etape ${procedureData.steps.findIndex(elem => elem.action == step.action) + 1}`}}
         </v-tab>
       </v-tabs>
 
@@ -43,6 +44,9 @@ const newProcedureData = reactive({});
             )"
             :value="step.action"
           >
+            
+            <v-chip :style="{marginBottom: '1rem'}" :text="step.action" ></v-chip>
+            
             <v-file-input
               v-for="doc in Object.keys(step.documents)"
               :name="doc"
@@ -67,6 +71,13 @@ const newProcedureData = reactive({});
               " 
               :disabled="step.documents[doc].path != '' ? true : false"
             />
+            <!-- <v-text-field color="primary"
+              
+              variant="outlined"
+              density="compact" 
+              :model-value="step.folderNum" 
+              :placeholder="step.folderNum"
+              /> -->
           </v-tabs-window-item>
         </v-tabs-window>
       </v-card-text>
