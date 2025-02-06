@@ -1,5 +1,10 @@
 <template>
-  <back-button title="Procédure de constitution de société." goBackTo="/home" />
+  <div class="ga-4">
+    <back-button
+      title="Procédure de constitution de société."
+      goBackTo="/home"
+    />
+  </div>
   <v-data-table
     :headers="headers"
     :items="companyFormations"
@@ -8,6 +13,19 @@
     hover
     class="customTable2"
   >
+    <template v-slot:item.ACTIONS="{ item }">
+      <v-btn
+        class="actionBtn"
+        title="Voir les détails"
+        color="blue"
+        size="x-small"
+        density="comfortable"
+        icon="mdi-text-box-outline"
+        @click="selectProcedure(item.id)"
+        :to="redirectRegardingProcedure(item)"
+      >
+      </v-btn>
+    </template>
   </v-data-table>
 </template>
 
@@ -54,4 +72,9 @@ const headers = ref([
 
 <style>
 @import url("~/assets/css/table.css");
+
+.ga-4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
 </style>

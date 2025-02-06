@@ -1,16 +1,32 @@
 <template>
-  <back-button
-    title="Procédure de succession de biens immobiliers"
-    goBackTo="/home"
-  />
+  <div class="ga-4">
+    <back-button
+      title="Procédure de succession de biens mobiliers"
+      goBackTo="/home"
+    />
+  </div>
+
   <v-data-table
     :headers="headers"
-    :items="transferOfRealEstates"
-    :search="transferOfRealEstatesSearch"
-    no-data-text="Aucune procédure de succession de biens immobiliers."
+    :items="transferOfMovableProperties"
+    :search="transferOfMovablePropertiesSearch"
+    no-data-text="Aucune procédure de succession de biens mobiliers."
     hover
     class="customTable2"
   >
+    <template v-slot:item.ACTIONS="{ item }">
+      <v-btn
+        class="actionBtn"
+        title="Voir les détails"
+        color="blue"
+        size="x-small"
+        density="comfortable"
+        icon="mdi-text-box-outline"
+        @click="selectProcedure(item.id)"
+        :to="redirectRegardingProcedure(item)"
+      >
+      </v-btn>
+    </template>
   </v-data-table>
 </template>
 
@@ -29,13 +45,13 @@ const headers = ref([
       },
       {
         align: "start",
-        key: "SETTLEMENT_OF_FEES",
-        title: "Règlement des frais",
+        key: "REQUEST_TO_BANK",
+        title: "Demande auprès de la banque",
       },
       {
         align: "start",
-        key: "VALUATION_OF_INDIVIDUAL_PROPERTIES",
-        title: "Évaluation des différents biens immobiliers",
+        key: "PREPARATION_OF_INCORPORATION_LETTER",
+        title: "Élaboration de la lettre de constitution",
       },
       {
         align: "start",
@@ -44,13 +60,8 @@ const headers = ref([
       },
       {
         align: "start",
-        key: "PREPARATION_OF_REAL_ESTATE_CERTIFICATE",
-        title: "Établissement de l'attestation immobilière",
-      },
-      {
-        align: "start",
-        key: "DEPOSIT_OF_REAL_ESTATE_CERTIFICATE",
-        title: "Dépôt de l'attestation immobilière",
+        key: "BANK_DEPOSIT",
+        title: "Dépôt au près de la banque",
       },
       { align: "start", key: "DELIVERABLES", title: "Livrables" },
     ],
@@ -62,4 +73,9 @@ const headers = ref([
 
 <style>
 @import url("~/assets/css/table.css");
+
+.ga-4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
 </style>

@@ -121,6 +121,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -131,6 +132,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -141,6 +143,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -151,6 +154,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -161,6 +165,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -171,6 +176,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -183,6 +189,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -193,6 +200,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -203,6 +211,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
@@ -213,6 +222,7 @@ const statusColor = computed(() => {
                   variant="outlined"
                   density="compact"
                   hide-details
+                  readonly
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">

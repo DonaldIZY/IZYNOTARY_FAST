@@ -55,7 +55,7 @@
                       label="Nom"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -67,7 +67,7 @@
                       label="Prénoms"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -79,7 +79,7 @@
                       label="CNI"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -91,7 +91,7 @@
                       label="Date de naissance"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -103,7 +103,7 @@
                       label="Sexe"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -225,9 +225,7 @@ const config = useRuntimeConfig();
 
 const loadCustomers = async () => {
   try {
-    const fetchCustomers = await $fetch(
-      `${config.public.baseUrl}/customers`
-    );
+    const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
         ID: customer.id,

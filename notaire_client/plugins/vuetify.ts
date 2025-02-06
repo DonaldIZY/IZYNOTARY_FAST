@@ -1,9 +1,10 @@
 // import this after install `@mdi/font` package
 import '@mdi/font/css/materialdesignicons.css'
 
-import 'vuetify/styles'
-import { VDateInput } from 'vuetify/labs/VDateInput'
 import { createVuetify } from 'vuetify'
+import { VDateInput } from 'vuetify/labs/VDateInput'
+import { fr } from 'vuetify/locale'
+import 'vuetify/styles'
 
 const defaultTheme = {
   dark: false,
@@ -16,7 +17,7 @@ const defaultTheme = {
     // 'on-surface-variant': '#EEEEEE',
     primary: '#AD1919',
     // 'primary-darken-1': '#1F5592',
-    secondary: '#e4923b',
+    secondary: '#5c5c5c',
     // 'secondary-darken-1': '#018786',
     // error: '#B00020',
     // info: '#2196F3',
@@ -53,6 +54,11 @@ export default defineNuxtPlugin((app) => {
     },
     components: {
       VDateInput,
+    },
+    // Ajouter la configuration de la langue
+    locale: {
+      locale: 'fr', // Définir la locale par défaut
+      messages: { fr }, // Importer les messages en français
     },
   })
   app.vueApp.use(vuetify)

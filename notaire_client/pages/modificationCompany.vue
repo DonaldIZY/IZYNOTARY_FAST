@@ -1,13 +1,31 @@
 <template>
-  <back-button title="Procédure de vente" goBackTo="/home" />
+  <div class="ga-4">
+    <back-button
+      title="Procédure de modification de société"
+      goBackTo="/home"
+    />
+  </div>
   <v-data-table
     :headers="headers"
-    :items="sellings"
-    :search="sellingsSearch"
-    no-data-text="Aucune procédure de vente."
+    :items="modificationCompanys"
+    :search="modificationCompanysSearch"
+    no-data-text="Aucune procédure de modification de société."
     hover
     class="customTable2"
   >
+    <template v-slot:item.ACTIONS="{ item }">
+      <v-btn
+        class="actionBtn"
+        title="Voir les détails"
+        color="blue"
+        size="x-small"
+        density="comfortable"
+        icon="mdi-text-box-outline"
+        @click="selectProcedure(item.id)"
+        :to="redirectRegardingProcedure(item)"
+      >
+      </v-btn>
+    </template>
   </v-data-table>
 </template>
 
@@ -26,8 +44,8 @@ const headers = ref([
       },
       {
         align: "start",
-        key: "WRITING_DEED_OF_SALE",
-        title: "Rédaction de l'acte de vente",
+        key: "DRAFTING_OF_STATUTES",
+        title: "Rédaction des statuts",
       },
       {
         align: "start",
@@ -36,13 +54,13 @@ const headers = ref([
       },
       {
         align: "start",
-        key: "SIGNATURE_DEED_OF_SALE",
-        title: "Signature de l'acte de vente",
+        key: "SIGNATURE_OF_ACTS",
+        title: "Signature des actes",
       },
       {
         align: "start",
         key: "SIGNED_DOCUMENT_DEPOSITED",
-        title: "Dépôt de l'acte signé",
+        title: "Dépôt des actes signés",
       },
       { align: "start", key: "DELIVERABLES", title: "Livrables" },
     ],
@@ -54,4 +72,9 @@ const headers = ref([
 
 <style>
 @import url("~/assets/css/table.css");
+
+.ga-4 {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
 </style>
