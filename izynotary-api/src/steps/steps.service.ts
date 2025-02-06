@@ -5,12 +5,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Step } from './entities/step.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { translateFieldNameToFrench } from 'src/utils/usefulFunctions.util';
+import { Folder } from 'src/folders/entities/folder.entity';
+
 
 @Injectable()
 export class StepsService {
   constructor(
     @InjectRepository(Step)
     private readonly stepRepository: Repository<Step>,
+    private readonly folderRepository: Repository<Folder>,
     private readonly entityManager: EntityManager,
   ) {}
 
@@ -35,12 +38,14 @@ export class StepsService {
 
   async updateTwo(id: number, updateStepDto: UpdateStepDto) {
     const step = await this.stepRepository.findOneBy({ id });
+    const folder = await this.folderRepository.findOne({ where: {step: step}});
     console.log('Id of step : ', id);
     console.log('FOUND STEP : ', step);
 
     let searchedStepIndex = step.steps.findIndex(
       (elem) => elem.action == updateStepDto['action'],
     ); //the index of the step we need
+
     let searchedStep = step.steps.find(
       (elem) => elem.action == updateStepDto['action'],
     ); //the step we need
@@ -52,14 +57,14 @@ export class StepsService {
       step.steps[searchedStepIndex].comment = updateStepDto["comment"];
     }
 
-    for (const key of listOfKeyToUpdate) {
+    for(const key of listOfKeyToUpdate) {
       step.steps[searchedStepIndex].documents[key].path =
         updateStepDto.uploadedFiles[key]; //to change the path of the doc in the database, each key is a document name
       step.steps[searchedStepIndex].documents[key].filled = true;
     }
 
     //WE HAVE TO CHANGE THE STATUS OF A STEP WHEN ALL OF ITS SUBSTEPS ARE DONE
-    if(Object.values(step.steps[searchedStepIndex].documents).every(subStep => subStep["filled"] == true)) {
+    if (Object.values(step.steps[searchedStepIndex].documents).every(subStep => subStep["filled"] == true)) {
       step.steps[searchedStepIndex].status = "Terminée";
       //WHEN A STEP HAS A STATUS OF DONE, THE NEXT SHOULD HAVE A STATUS OF CURRENT
       if(searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminée") {
@@ -67,7 +72,14 @@ export class StepsService {
       }
     }
 
+    if(step.steps.every(stepInDb => stepInDb.status == "Terminée")) {
+      folder.status = "Terminée";
+
+      await this.entityManager.save(folder);
+    }
+
     const result = await this.entityManager.save(step);
+    
     let searchedStepAfterUpdate = result.steps.find(
       (elem) => elem.action == updateStepDto['action'],
     );
