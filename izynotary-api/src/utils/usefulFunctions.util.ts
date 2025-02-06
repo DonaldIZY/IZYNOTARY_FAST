@@ -51,6 +51,28 @@ export const translateFieldNameToFrench = function(val: string) {
     return "Dépôt de l'attestation immobilière auprès de la DGI";
   }else if(val == "statusOfRepayments") {
     return "État des reversements";
+  }else if(val == "partnerCNI") {
+    return "CNI du conjoint";
+  }else if(val == "certificateOfBirthOrMarriage") {
+    return "Extrait d'acte de naissance ou de marriage";
+  }else if(val == "CIEOrSODECIInvoice") {
+    return "Facture de CIE ou SODECI";
+  }else if(val == "taxStatusCertificate") {
+    return "Attestation de situation fiscale";
+  }else if(val == "titleDeed") {
+    return "Titre de propriété";
+  }else if(val == "landRegistry") {
+    return "État foncier";
+  }else if(val == "certificateOfLocation") {
+    return "Certificat de localisation";
+  }else if(val == "deedOfSale") {
+    return "Acte de vente";
+  }else if(val == "deedOfSaleSigned") {
+    return "Acte de vente signé par l'acquéreur et le vendeur";
+  }else if(val == "deedOfSaleDeposited") {
+    return "Dépôt de l'acte signé à la Direction Générale des Impôts";
+  }else if(val == "CMPF") {
+    return "CMPF";
   }else{
     return val;
   }
