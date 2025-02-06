@@ -85,19 +85,19 @@ export class StepsController {
     console.log("ID : ", id);
     console.log('FILES : ',files);
 
-        // Construction de l'objet uploadedFiles avec les chemins des fichiers
-        const uploadedFiles = {};
-        var filenameList = [];
-        files.forEach((file) => {
-            uploadedFiles[file.fieldname] = `/uploads/procedures/${updateStepDto.procedureType}/${updateStepDto.folderNum}/${file.filename}`;
-            filenameList.push(file.fieldname);
-        });
+    // Construction de l'objet uploadedFiles avec les chemins des fichiers
+    const uploadedFiles = {};
+    var filenameList = [];
+    files.forEach((file) => {
+        uploadedFiles[file.fieldname] = `/uploads/procedures/${updateStepDto.procedureType}/${updateStepDto.folderNum}/${file.filename}`;
+        filenameList.push(file.fieldname);
+    });
 
-        // Assignation du champ uploadedFiles au DTO
-        updateStepDto.uploadedFiles = uploadedFiles;
-        updateStepDto.documents = filenameList;
+    // Assignation du champ uploadedFiles au DTO
+    updateStepDto.uploadedFiles = uploadedFiles;
+    updateStepDto.documents = filenameList;
 
-        console.log("Final folder: ", updateStepDto);
+    console.log("Final folder: ", updateStepDto);
 
     return this.stepsService.updateTwo(+id, updateStepDto);
   }

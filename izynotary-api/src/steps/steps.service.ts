@@ -54,6 +54,15 @@ export class StepsService {
       step.steps[searchedStepIndex].documents[key].filled = true;
     }
 
+    //WE HAVE TO CHANGE THE STATUS OF A STEP WHEN ALL OF ITS SUBSTEPS ARE DONE
+    if(Object.values(step.steps[searchedStepIndex].documents).every(subStep => subStep["filled"] == true)) {
+      step.steps[searchedStepIndex].status = "Terminée";
+      //WHEN A STEP HAS A STATUS OF DONE, THE NEXT SHOULD HAVE A STATUS OF CURRENT
+      if(searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminée") {
+        step.steps[searchedStepIndex + 1].status = "En cours";
+      }
+    }
+
     const result = await this.entityManager.save(step);
     let searchedStepAfterUpdate = result.steps.find(
       (elem) => elem.action == updateStepDto['action'],
@@ -77,7 +86,7 @@ export class StepsService {
     }`;
     var message = `Acte notarié de ${updateStepDto.procedureType}
         Numéro : ${updateStepDto.folderNum}.
-        ${updateStepDto.documents.length > 1 ? 'vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + 'sont ' : 'votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
+        ${updateStepDto.documents.length > 1 ? 'vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
 
     var encodedMessage = encodeURIComponent(message);
     const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
