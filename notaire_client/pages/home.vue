@@ -1,15 +1,12 @@
 <template>
-  <div class="ma-4 center">
-    <back-button
-      title="Création de procédure"
-      goBackTo="/home"
-    />
+  <div class="justify-center ga-4">
+    <h1>Bienvenue sur votre espace de suivi de vos procédures</h1>
   </div>
   <div class="w-full d-flex justify-center">
     <div class="w-75 ma-2 center">
       <v-row>
         <v-col cols="12" sm="6" md="4">
-          <v-card class="mx-auto rounded-lg hover-card" to="/sellingBoard">
+          <v-card class="mx-auto rounded-lg hover-card" to="/selling">
             <v-img
               src="~/assets/img/vente.png"
               class="mb-2 mt-2 mx-2 rounded-lg"
@@ -39,7 +36,7 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
-            to="/companyModification"
+            to="/modificationCompany"
           >
             <v-img
               src="~/assets/img/modifSoc.png"
@@ -108,6 +105,13 @@
 <script setup></script>
 
 <style scoped>
+
+.ga-4 {
+  text-align: center;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+}
+
 .titleCardText {
   font-size: 0.95rem;
 }
