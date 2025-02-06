@@ -45,7 +45,7 @@
 
           <v-col cols="12">
             <v-sheet :elevation="4" rounded height="100%" class="pa-2">
-              <h4 class="mb-3">Aperçu informations du client</h4>
+              <h4 class="mb-3">Aperçu des informations du client</h4>
               <v-form>
                 <v-row>
                   <v-col cols="12" sm="5">
@@ -55,7 +55,7 @@
                       label="Nom"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -67,7 +67,7 @@
                       label="Prénoms"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -79,7 +79,7 @@
                       label="CNI"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -91,7 +91,7 @@
                       label="Date de naissance"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -103,7 +103,7 @@
                       label="Sexe"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -210,9 +210,7 @@ const config = useRuntimeConfig();
 
 const loadCustomers = async () => {
   try {
-    const fetchCustomers = await $fetch(
-      `${config.public.baseUrl}/customers`
-    );
+    const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
         ID: customer.id,
