@@ -20,7 +20,7 @@
                     item-title="NAME"
                     item-value="ID"
                     variant="outlined"
-                    hide-details=""
+                    hide-details
                     density="compact"
                   ></v-combobox>
                 </v-form>
@@ -51,7 +51,7 @@
                       label="Nom"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -62,7 +62,7 @@
                       label="Prénoms"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -73,7 +73,7 @@
                       label="CNI"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -84,7 +84,7 @@
                       label="Date de naissance"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -95,7 +95,7 @@
                       label="Sexe"
                       variant="outlined"
                       hide-details
-                      disabled
+                      readonly
                       density="compact"
                     ></v-text-field>
                   </v-col>
@@ -148,7 +148,7 @@
                     label="Nom"
                     variant="outlined"
                     hide-details
-                    disabled
+                    readonly
                     density="compact"
                   ></v-text-field>
                 </v-col>
@@ -159,7 +159,7 @@
                     label="Prénoms"
                     variant="outlined"
                     hide-details
-                    disabled
+                    readonly
                     density="compact"
                   ></v-text-field>
                 </v-col>
@@ -170,7 +170,7 @@
                     label="Numéro de la CNI"
                     variant="outlined"
                     hide-details
-                    disabled
+                    readonly
                     density="compact"
                   ></v-text-field>
                 </v-col>
@@ -181,7 +181,7 @@
                     label="Sexe"
                     variant="outlined"
                     hide-details
-                    disabled
+                    readonly
                     density="compact"
                   ></v-text-field>
                 </v-col>
@@ -192,7 +192,7 @@
                     label="Situation matrimoniale"
                     variant="outlined"
                     hide-details
-                    disabled
+                    readonly
                     density="compact"
                   ></v-text-field>
                 </v-col>
@@ -343,9 +343,7 @@ const config = useRuntimeConfig();
 
 const loadCustomers = async () => {
   try {
-    const fetchCustomers = await $fetch(
-      `${config.public.baseUrl}/customers`
-    );
+    const fetchCustomers = await $fetch(`${config.public.baseUrl}/customers`);
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
         ID: customer.id,
@@ -364,9 +362,7 @@ const loadCustomers = async () => {
 
 const loadSellers = async () => {
   try {
-    const fetchSellers = await $fetch(
-      `${config.public.baseUrl}/sellers`
-    );
+    const fetchSellers = await $fetch(`${config.public.baseUrl}/sellers`);
     if (fetchSellers) {
       sellers.value = fetchSellers.map((seller) => ({
         ID: seller.id,
@@ -450,7 +446,7 @@ const resetFields = () => {
   landRegistry.value = null;
   certificateOfLocation.value = null;
 
-  router.push("/proceduresManagement")
+  router.push("/proceduresManagement");
 };
 
 const isFormValid = computed(() => {
@@ -497,13 +493,10 @@ const handleProcedure = async () => {
   }
 
   try {
-    const data = await $fetch(
-      `${config.public.baseUrl}/folders/selling`,
-      {
-        method: "POST",
-        body: procedureData,
-      }
-    );
+    const data = await $fetch(`${config.public.baseUrl}/folders/selling`, {
+      method: "POST",
+      body: procedureData,
+    });
     // alert("Procédure créée avec succès.");
     showTextResultModal.value = "Procédure créée avec succès.";
     showTypeResultModal.value = "success";

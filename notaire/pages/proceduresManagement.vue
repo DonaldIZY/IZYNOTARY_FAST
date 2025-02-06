@@ -65,7 +65,6 @@
                   color="primary"
                   label="Type de procédure"
                   prepend-inner-icon="mdi-folder-open-outline"
-                  chips
                   :items="[
                     'Vente',
                     'Constitution de société',
@@ -74,44 +73,40 @@
                     'Succession de biens immobiliers',
                     'Crédit',
                   ]"
-                  multiple
                   clearable
                   variant="outlined"
                   density="compact"
                   hide-details
-                  disabled
                 ></v-select>
               </v-col>
 
-              <v-col cols="12" lg="12" sm="6">
-                <v-text-field
-                  color="primary"
+              <v-col cols="12" lg="12" sm="4">
+                <v-date-input
                   v-model="searchStartDate"
-                  type="date"
+                  color="primary"
+                  prepend-icon=""
                   label="Date de création"
-                  prepend-inner-icon="mdi-calendar"
                   variant="outlined"
                   density="compact"
+                  :max="new Date()"
+                  :year="new Date().getFullYear()"
+                  clearable
                   hide-details
-                  disabled
                 >
-                </v-text-field>
+                </v-date-input>
               </v-col>
 
-              <v-col cols="12" lg="12" sm="6">
+              <v-col cols="12" lg="12" sm="4">
                 <v-select
                   v-model="searchStatus"
                   color="primary"
                   label="Statut"
                   prepend-inner-icon="mdi-state-machine"
-                  :items="['En cours', 'Suspendu', 'Arrêté']"
-                  chips
-                  multiple
+                  :items="['En cours', 'Suspendue', 'Arrêtée', 'Terminée']"
                   clearable
                   variant="outlined"
                   density="compact"
                   hide-details
-                  disabled
                 ></v-select>
               </v-col>
 
@@ -280,20 +275,32 @@ const filteredProcedures = computed(() => {
       !searchNum.value || item.NUM.toString().includes(searchNum.value);
     const matchesFolderNum =
       !searchFolderNum.value ||
-      item.FOLDERNUM.toString().includes(searchFolderNum.value);
+      item.FOLDERNUM.toString().includes(searchFolderNum.value.toUpperCase());
     const matchesCustomer =
       !searchCustomer.value ||
       item.CUSTOMER.toLowerCase().includes(searchCustomer.value.toLowerCase());
     const matchesStartDate =
       !searchStartDate.value ||
-      new Date(item.CREATE_AT).toISOString().slice(0, 10) >=
-        searchStartDate.value;
+      new Date(item.CREATE_AT).toLocaleDateString("fr-FR", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour12: false,
+      }) ==
+        new Date(searchStartDate.value).toLocaleDateString("fr-FR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour12: false,
+        });
     const matchesProcedureType =
       !searchProcedureType.value ||
       item.PROCEDURE_TYPE.toLowerCase().includes(
         searchProcedureType.value.toLowerCase()
       );
-    const matchesStatus = !searchStatus.value || item.STATUS.toLowerCase;
+    const matchesStatus =
+      !searchStatus.value ||
+      item.STATUS.toLowerCase().includes(searchStatus.value.toLowerCase());
     return (
       matchesCNI &&
       matchesNum &&
@@ -306,13 +313,15 @@ const filteredProcedures = computed(() => {
   });
 });
 
+console.log(searchStartDate.value);
+
 const clearFilters = () => {
   searchCNI.value = null;
   searchNum.value = null;
   searchCustomer.value = null;
   searchStartDate.value = null;
-  searchProcedureType.value = [];
-  searchStatus.value = [];
+  searchProcedureType.value = null;
+  searchStatus.value = null;
 };
 
 const loadProcedures = async () => {
@@ -352,7 +361,7 @@ const selectedProcedure = ref({});
 const openModal = (val) => {
   dialog.value = true;
   /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
-          selectedProcedure.value = fakeCompanyIncorporation;  
+          selectedProcedure.value = fakeCompanyIncorporation;
       }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
           selectedProcedure.value = fakeSales;
       }else{
