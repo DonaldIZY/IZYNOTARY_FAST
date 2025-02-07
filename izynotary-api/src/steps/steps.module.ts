@@ -6,7 +6,7 @@ import { Step } from './entities/step.entity';
 import { Folder } from 'src/folders/entities/folder.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Step, Folder])],
+  imports: [TypeOrmModule.forFeature([Step/*, Folder*/])],
   controllers: [StepsController],
   providers: [StepsService],
 })
