@@ -1,4 +1,5 @@
 <script setup>
+const config = useRuntimeConfig();
 const formatDate = (dateString) => {
   if (!dateString) return "";
 
