@@ -36,8 +36,20 @@ export class StepsService {
   }
 
   async updateTwo(id: number, updateStepDto: UpdateStepDto) {
-    const step = await this.stepRepository.findOneBy({ id });
-    // const folder = await this.folderRepository.findOne({ where: {step: step}});
+    const step = await this.stepRepository.findOne({ 
+      where: {id}
+    });
+
+    if(!step) {
+      console.log("step is null");
+    }
+    console.log("updateStepDTO", updateStepDto);
+
+    const folder = await this.folderRepository.findOne({
+      where: {folderNum: updateStepDto.folderNum}
+    });
+
+    console.log('FOUND folder : ', folder);
     console.log('Id of step : ', id);
     console.log('FOUND STEP : ', step);
 
@@ -71,11 +83,11 @@ export class StepsService {
       }
     }
 
-    // if(step.steps.every(stepInDb => stepInDb.status == "Terminée")) {
-    //   folder.status = "Terminée";
+    if(step.steps.every(stepInDb => stepInDb.status == "Terminée")) {
+      folder.status = "Terminée";
 
-    //   await this.entityManager.save(folder);
-    // }
+      await this.entityManager.save(folder);
+    }
 
     const result = await this.entityManager.save(step);
     
@@ -84,8 +96,6 @@ export class StepsService {
     );
     console.log('STEP AFTER UPDATE : ', searchedStepAfterUpdate);
     console.log('STEP : ', result);
-
-    // let customerContact = folder.customer.phone;
 
     // YOU HAVE TO FIND
     const username = 'izyapp';
