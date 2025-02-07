@@ -11,9 +11,8 @@ import { Folder } from 'src/folders/entities/folder.entity';
 @Injectable()
 export class StepsService {
   constructor(
-    @InjectRepository(Step)
-    private readonly stepRepository: Repository<Step>,
-    private readonly folderRepository: Repository<Folder>,
+    @InjectRepository(Step) private readonly stepRepository: Repository<Step>,
+    @InjectRepository(Folder) private readonly folderRepository: Repository<Folder>,
     private readonly entityManager: EntityManager,
   ) {}
 
