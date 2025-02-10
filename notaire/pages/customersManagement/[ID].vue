@@ -12,12 +12,12 @@
                     <v-col
                         cols="4"
                     >
-                        <div><strong>Nom :</strong> {{ customer.LAST_NAME }}</div>
+                        <div><strong>Nom :</strong> {{ customer.lastName }}</div>
                     </v-col>
                     <v-col
                         cols="4"
                     >
-                        <div><strong>Email :</strong> {{ customer.EMAIL }}</div>
+                        <div><strong>Email :</strong> {{ customer.email }}</div>
                     </v-col>
                 </v-row>
 
@@ -25,12 +25,12 @@
                     <v-col
                         cols="4"
                     >
-                        <div><strong>Prénoms :</strong> {{ customer.FIRST_NAME }}</div>
+                        <div><strong>Prénoms :</strong> {{ customer.firstName }}</div>
                     </v-col>
                     <v-col
                     cols="4"
                     >
-                        <div><strong>Contact :</strong> {{ customer.CONTACT }}</div>
+                        <div><strong>Contact :</strong> {{ customer.phone }}</div>
                     </v-col>
                 </v-row>
             </v-card-text>
@@ -99,49 +99,21 @@
 
 <script setup>
     const text = ref("selling");
+    const customer = ref("");
     const route = useRoute();
-    const customerId = parseInt(route.params.ID);
-    // Simulation de récupération des données, à remplacer par un appel API
-    const customers = [
-        {
-            ID: 1,
-            LAST_NAME: "Smith",
-            FIRST_NAME: "John",
-            EMAIL: "john.smith@example.com",
-            CONTACT: "0123456789",
-            CURRENT_FILES: 6,
-            COMPLETED_FILES: 3,
-            HANGING_FILES: 2,
-            CLOSED_FILES: 1,
-            FILES: 12,
-        },
-        {
-            ID: 2,
-            LAST_NAME: "Johnson",
-            FIRST_NAME: "Jane",
-            EMAIL: "jane.johnson@example.com",
-            CONTACT: "9876543210",
-            CURRENT_FILES: 7,
-            COMPLETED_FILES: 5,
-            HANGING_FILES: 3,
-            CLOSED_FILES: 0,
-            FILES: 15,
-        },
-        {
-            ID: 3,
-            LAST_NAME: "Doe",
-            FIRST_NAME: "Michael",
-            EMAIL: "michael.doe@example.com",
-            CONTACT: "1234567890",
-            CURRENT_FILES: 1,
-            COMPLETED_FILES: 0,
-            HANGING_FILES: 0,
-            CLOSED_FILES: 1,
-            FILES: 2,
-        },
-    ];
+    const config = useRuntimeConfig();
 
-    // Utilisation de computed pour récupérer le client en fonction de l'ID
-    const customer = computed(() => customers.find((c) => c.ID === customerId));
+    onMounted(async () => {
+  try {
+    const response = await fetch(`${config.public.baseUrl}/customers/${route.params.ID}`);
+    console.log(response);
+    if (!(response.status === 200)) throw new Error('Donnée non trouvée');
+    customer.value = await response.json();
+    console.log("customer : ", customer.value);
+  } catch (err) {
+    //error.value = err.message;
+    console.error(err);
+  } 
+});
 
 </script>
