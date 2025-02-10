@@ -21,7 +21,7 @@ export default defineNuxtConfig({
   ],
   vite: {
     server: {
-      port: process.env.PORT ? parseInt(process.env.PORT, 10) : 2610,
+      port: 2610,
     },
     vue: {
       template: {

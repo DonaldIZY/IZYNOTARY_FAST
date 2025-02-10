@@ -114,7 +114,7 @@ const onSubmit = async () => {
   loading.value = true;
 
   try {
-    const data = await $fetch(`${config.public.baseUrl}/auth/login`, {
+    const data = await $fetch(`http://serverizynotary.izydr.net/auth/login`, {
       method: "POST",
       body: JSON.stringify({
         email: email.value,

@@ -47,7 +47,7 @@ const config = useRuntimeConfig();
 
 const loadRoles = async () => {
   try {
-    const fetchedRoles = await $fetch(`${config.public.baseUrl}/roles`);
+    const fetchedRoles = await $fetch(`http://serverizynotary.izydr.net/roles`);
     if (fetchedRoles) {
       roles.value = fetchedRoles.map((role, index) => ({
         NUM: index + 1,

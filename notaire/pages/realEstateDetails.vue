@@ -39,7 +39,7 @@ let procedureID = selectedProcedureStore.getProcedureId;
 const loadProcedures = async () => {
   try {
     const fetchedProcedures = await $fetch(
-      `${config.public.baseUrl}/folders`
+      `http://serverizynotary.izydr.net/folders`
     );
 
     // console.log("fetchedProcedures : ", fetchedProcedures);

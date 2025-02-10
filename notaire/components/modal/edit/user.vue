@@ -121,7 +121,7 @@ watchEffect(() => {
 
 // Récupération des rôles
 const { data: fetchedRoles, error } = useFetch(
-  `${config.public.baseUrl}/roles`
+  `http://serverizynotary.izydr.net/roles`
 );
 
 watchEffect(() => {
@@ -149,13 +149,16 @@ const closeModal = () => {
 // Enregistrement des modifications
 const handleUser = async () => {
   try {
-    const response = await fetch(`${config.public.baseUrl}/users/${user.id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    });
+    const response = await fetch(
+      `http://serverizynotary.izydr.net/users/${user.id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }
+    );
 
     if (!response.ok) throw new Error("Erreur lors de la modification");
 
