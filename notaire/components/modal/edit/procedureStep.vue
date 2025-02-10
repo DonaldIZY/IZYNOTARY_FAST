@@ -25,7 +25,7 @@ const newProcedureData = reactive({});
   <v-dialog v-model="props.show" max-width="900" :persistent="true">
     <v-card >
       <v-card-title>{{ `Modifier l'étape de la procédure ${procedureData.folderNum}` }}</v-card-title>
-      <v-tabs v-model="tab" color="#ad1919">
+      <v-tabs v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)" v-model="tab" color="#ad1919">
         <v-tab
           v-for="step in procedureData.steps.filter((elem) =>
             ['terminée', 'en cours'].includes(elem.status.toLowerCase())
@@ -37,7 +37,7 @@ const newProcedureData = reactive({});
       </v-tabs>
 
       <v-card-text>
-        <v-tabs-window v-model="tab">
+        <v-tabs-window v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)" v-model="tab">
           <v-tabs-window-item
             v-for="step in procedureData.steps.filter((elem) =>
               ['terminée', 'en cours'].includes(elem.status.toLowerCase())
@@ -86,9 +86,94 @@ const newProcedureData = reactive({});
                 // console.log('new procedure data:', newProcedureData);
               }"
               />
+            <v-row justify="end" >
+              <v-btn 
+              v-if="procedureData.steps.find(elem => elem.action == tab).status == 'En cours'"
+          color="orange"
+          text="Suspendre"
+          variant="flat"
+          @click="
+            () => {
+              if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
+                newProcedureData.status = 'Suspendue';
+                console.log('procedure data to cancel : ', {...newProcedureData, contact: procedureData.customer.phone,
+                folderNum: procedureData.folderNum,
+                procedureType: procedureData.PROCEDURE_TYPE,
+                id: procedureData.stepId});
+                $emit('submit', {
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.PROCEDURE_TYPE,
+              id: procedureData.stepId,
+            });
+              }else{
+                console.log('Veuillez ajouter un commentaire pour suspendre la procédure');
+              }
+            }
+          "
+          class="text-none"
+          ></v-btn>
+          <v-btn
+          v-if="procedureData.steps.find(elem => elem.action == tab).status == 'En cours'"
+          color="primary"
+          text="Arrêter"
+          variant="flat"
+          @click="
+            () => {
+              /*$emit('submit', {
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.PROCEDURE_TYPE,
+              id: procedureData.stepId,
+            })*/
+              if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
+                newProcedureData.status = 'Arrêtée';
+                console.log('procedure data to cancel : ', {...newProcedureData, contact: procedureData.customer.phone,
+                folderNum: procedureData.folderNum,
+                procedureType: procedureData.PROCEDURE_TYPE,
+                id: procedureData.stepId});
+                $emit('submit', {
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.PROCEDURE_TYPE,
+              id: procedureData.stepId,
+            });
+              }else{
+                console.log('Veuillez ajouter un commentaire pour arrêter la procédure');
+              }
+            
+            }
+          "
+          class="text-none"
+          ></v-btn>
+        
+            </v-row>
           </v-tabs-window-item>
         </v-tabs-window>
+
+        <v-text-field 
+        v-if="procedureData.STATUS == 'Suspendue'"
+        color="primary"
+        variant="outlined"
+        density="compact" 
+        label="Commentaire pour reprendre la procédure"
+        v-model="procedureData.steps.find(elem => elem.status == 'Suspendue').comment" 
+        v-on:update:model-value="(val) => {
+          console.log('suspended step comment : ', val);
+          if (newProcedureData.action == procedureData.steps.find(elem => elem.status == 'Suspendue').action) {
+            newProcedureData.comment = val;
+          } else {
+            newProcedureData = {action: procedureData.steps.find(elem => elem.status == 'Suspendue').action, comment: val};
+          }
+          // console.log('new procedure data:', newProcedureData);
+        }"
+        />
       </v-card-text>
+
+      
       <v-divider></v-divider>
 
       <v-card-actions>
@@ -107,7 +192,8 @@ const newProcedureData = reactive({});
           class="text-none"
         ></v-btn>
 
-        <v-btn
+        <v-btn 
+          v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)"
           color="primary"
           text="Enregistrer"
           variant="flat"
@@ -119,6 +205,30 @@ const newProcedureData = reactive({});
               procedureType: procedureData.PROCEDURE_TYPE,
               id: procedureData.stepId,
             })
+          "
+          class="text-none"
+        ></v-btn> 
+        <v-btn
+          v-if="procedureData.STATUS == 'Suspendue'"
+          color="primary"
+          text="Continuer la procédure"
+          variant="flat"
+          @click="
+            () => {
+              if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
+                newProcedureData.status = 'En cours';
+                $emit('submit', {
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.PROCEDURE_TYPE,
+              id: procedureData.stepId,
+            });
+              }else{
+                console.log('Veuillez ajouter un commentaire pour continuer la procédure');
+              }
+            
+            }
           "
           class="text-none"
         ></v-btn>
