@@ -90,7 +90,7 @@ const statusColor = computed(() => {
     case "terminée":
       return "#63AD19"; // Bleu pour "en cours"
     case "suspendue":
-      return "#B734EB"; // Orange pour "suspendu"
+      return "#000000"; // Noir pour "suspendu"
     case "en cours":
       return "#FFC300"; // Rouge pour "arrêté"
     default:

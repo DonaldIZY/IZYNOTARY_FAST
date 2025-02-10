@@ -24,7 +24,7 @@ const newProcedureData = reactive({});
 <template>
   <v-dialog v-model="props.show" max-width="900" :persistent="true">
     <v-card >
-      <v-card-title>{{ `Modifier l'étape de la procédure ${procedureData.folderNum}` }}</v-card-title>
+      <v-card-title>{{ `Modification de la procédure N° ${procedureData.folderNum}` }}</v-card-title>
       <v-tabs v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)" v-model="tab" color="#ad1919">
         <v-tab
           v-for="step in procedureData.steps.filter((elem) =>
@@ -71,13 +71,16 @@ const newProcedureData = reactive({});
               " 
               :disabled="step.documents[doc].path != '' ? true : false"
             />
-            <v-text-field color="primary"
+            <v-textarea 
+              color="primary"
               variant="outlined"
               density="compact" 
-              label="Commentaire"
+              label="Commentaire" 
+              rows="3"
+              :style="{marginBottom: '1rem'}"
               v-model="step.comment" 
               v-on:update:model-value="(val) => {
-                console.log('comment : ', val);
+                // console.log('comment : ', val);
                 if (newProcedureData.action == step.action) {
                   newProcedureData.comment = val;
                 } else {
@@ -96,10 +99,6 @@ const newProcedureData = reactive({});
             () => {
               if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
                 newProcedureData.status = 'Suspendue';
-                console.log('procedure data to cancel : ', {...newProcedureData, contact: procedureData.customer.phone,
-                folderNum: procedureData.folderNum,
-                procedureType: procedureData.PROCEDURE_TYPE,
-                id: procedureData.stepId});
                 $emit('submit', {
               ...newProcedureData,
               contact: procedureData.customer.phone,
@@ -121,19 +120,8 @@ const newProcedureData = reactive({});
           variant="flat"
           @click="
             () => {
-              /*$emit('submit', {
-              ...newProcedureData,
-              contact: procedureData.customer.phone,
-              folderNum: procedureData.folderNum,
-              procedureType: procedureData.PROCEDURE_TYPE,
-              id: procedureData.stepId,
-            })*/
               if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
                 newProcedureData.status = 'Arrêtée';
-                console.log('procedure data to cancel : ', {...newProcedureData, contact: procedureData.customer.phone,
-                folderNum: procedureData.folderNum,
-                procedureType: procedureData.PROCEDURE_TYPE,
-                id: procedureData.stepId});
                 $emit('submit', {
               ...newProcedureData,
               contact: procedureData.customer.phone,
@@ -156,7 +144,7 @@ const newProcedureData = reactive({});
 
         <img v-if="procedureData.STATUS == 'Arrêtée'" :style="{width: '50%', maxWidth: '150px', display: 'block', margin: '0 auto'}" src="/public/sorry.png" />
         <h4 v-if="procedureData.STATUS == 'Arrêtée'" :style="{textAlign: 'center'}">Vous ne pouvez pas modifier une procédure arrêtée</h4>
-        <v-text-field 
+        <v-textarea 
         v-if="procedureData.STATUS == 'Suspendue'"
         color="primary"
         variant="outlined"
@@ -164,7 +152,7 @@ const newProcedureData = reactive({});
         label="Commentaire pour reprendre la procédure"
         v-model="procedureData.steps.find(elem => elem.status == 'Suspendue').comment" 
         v-on:update:model-value="(val) => {
-          console.log('suspended step comment : ', val);
+          // console.log('suspended step comment : ', val);
           if (newProcedureData.action == procedureData.steps.find(elem => elem.status == 'Suspendue').action) {
             newProcedureData.comment = val;
           } else {
