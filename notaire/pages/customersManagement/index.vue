@@ -5,7 +5,7 @@ X
   </div>
   <div class="ma-4 customerField">
     <div class="d-flex justify-end align-center ga-5">
-      <div class="searchField"> 
+      <div class="searchField">
         <v-text-field
           color="primary"
           v-model="customersSearch"
@@ -43,6 +43,7 @@ X
           density="compact"
           fixed-header
           hover
+          :loading="loading"
         >
           <template #item="{ item }">
             <tr @click="goToCustomerDetails(item)">
@@ -56,6 +57,15 @@ X
               <td>{{ item.CLOSED_FILES }}</td>
               <td>{{ item.FILES }}</td>
             </tr>
+          </template>
+          <!-- Slot pour afficher un loader quand la table est vide -->
+          <template v-slot:loading>
+            <div class="d-flex justify-center my-10">
+              <v-progress-circular
+                color="red"
+                indeterminate
+              ></v-progress-circular>
+            </div>
           </template>
           <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
           <template #no-data>
@@ -77,6 +87,10 @@ X
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
+const loading = ref(true);
+
 const customersHeaders = ref([
   { align: "start", key: "LAST_NAME", title: "Nom" },
   { align: "start", key: "FIRST_NAME", title: "Prénoms" },
@@ -105,13 +119,9 @@ const goToCustomerDetails = (customer) => {
   router.push(`/customersManagement/${customer.ID}`);
 };
 
-const config = useRuntimeConfig();
-
 const loadCustomer = async () => {
   try {
-    const fetchedCustomers = await $fetch(
-      `${config.public.baseUrl}/customers`
-    );
+    const fetchedCustomers = await $fetch(API_SERVER_URL + `/customers`);
 
     if (fetchedCustomers) {
       customers.value = fetchedCustomers.map((customer) => ({
@@ -127,8 +137,10 @@ const loadCustomer = async () => {
         FILES: customer.folders.length,
       }));
     }
+    loading.value = false;
   } catch (err) {
     console.error("Erreur lors du chargement des clients :", err);
+    loading.value = false;
   }
 };
 

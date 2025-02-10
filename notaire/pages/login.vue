@@ -72,6 +72,8 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
@@ -114,7 +116,7 @@ const onSubmit = async () => {
   loading.value = true;
 
   try {
-    const data = await $fetch(`${config.public.baseUrl}/auth/login`, {
+    const data = await $fetch(API_SERVER_URL + `/auth/login`, {
       method: "POST",
       body: JSON.stringify({
         email: email.value,

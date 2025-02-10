@@ -100,6 +100,8 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
@@ -154,7 +156,7 @@ const handleUser = async () => {
   };
 
   try {
-    const data = await $fetch(`${config.public.baseUrl}/users`, {
+    const data = await $fetch(API_SERVER_URL + `/users`, {
       method: "POST",
       body: JSON.stringify(userData),
     });
@@ -185,9 +187,7 @@ const emailRule = (v) => {
   );
 };
 
-const { data: fetchedRoles, error } = useFetch(
-  `${config.public.baseUrl}/roles`
-);
+const { data: fetchedRoles, error } = useFetch(API_SERVER_URL + `/roles`);
 
 onMounted(() => {
   if (fetchedRoles.value) {

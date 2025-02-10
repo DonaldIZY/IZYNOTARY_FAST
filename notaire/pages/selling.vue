@@ -286,6 +286,8 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
@@ -343,9 +345,7 @@ const config = useRuntimeConfig();
 
 const loadCustomers = async () => {
   try {
-    const fetchCustomers = await $fetch(
-      `${config.public.baseUrl}/customers`
-    );
+    const fetchCustomers = await $fetch(API_SERVER_URL + `/customers`);
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
         ID: customer.id,
@@ -364,9 +364,7 @@ const loadCustomers = async () => {
 
 const loadSellers = async () => {
   try {
-    const fetchSellers = await $fetch(
-      `${config.public.baseUrl}/sellers`
-    );
+    const fetchSellers = await $fetch(API_SERVER_URL + `/sellers`);
     if (fetchSellers) {
       sellers.value = fetchSellers.map((seller) => ({
         ID: seller.id,
@@ -460,7 +458,7 @@ const isFormValid = computed(() => {
 const handleProcedure = async () => {
   const procedureData = new FormData();
 
-  const folders = await $fetch(`${config.public.baseUrl}/folders`);
+  const folders = await $fetch(API_SERVER_URL + `/folders`);
 
   const count = folders.length;
   if (isNaN(count)) {
@@ -497,13 +495,10 @@ const handleProcedure = async () => {
   }
 
   try {
-    const data = await $fetch(
-      `${config.public.baseUrl}/folders/selling`,
-      {
-        method: "POST",
-        body: procedureData,
-      }
-    );
+    const data = await $fetch(API_SERVER_URL + `/folders/selling`, {
+      method: "POST",
+      body: procedureData,
+    });
     // alert("Procédure créée avec succès.");
     showTextResultModal.value = "Procédure créée avec succès.";
     showTypeResultModal.value = "success";

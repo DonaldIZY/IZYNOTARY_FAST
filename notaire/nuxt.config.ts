@@ -3,6 +3,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+  ssr: false, // Désactive le SSR pour passer en CSR
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   buildModules: ['@nuxtjs/dotenv'],
@@ -27,11 +28,6 @@ export default defineNuxtConfig({
       template: {
         transformAssetUrls,
       },
-    },
-  },
-  runtimeConfig: {
-    public: {
-      baseUrl: process.env.API_BASE_URL,
     },
   },
 })

@@ -13,7 +13,17 @@
         fixed-header
         hover
         hide-default-footer
+        :loading="loading"
       >
+        <!-- Slot pour afficher un loader quand la table est vide -->
+        <template v-slot:loading>
+          <div class="d-flex justify-center my-10">
+            <v-progress-circular
+              color="red"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
         <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
         <template #no-data>
           <div class="no-data-container">
@@ -33,6 +43,10 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
+const loading = ref(true);
+
 const rolesHeaders = ref([
   { align: "start", key: "NUM", title: "N°" },
   { align: "start", key: "NAME", title: "Nom" },
@@ -47,7 +61,7 @@ const config = useRuntimeConfig();
 
 const loadRoles = async () => {
   try {
-    const fetchedRoles = await $fetch(`${config.public.baseUrl}/roles`);
+    const fetchedRoles = await $fetch(API_SERVER_URL + `/roles`);
     if (fetchedRoles) {
       roles.value = fetchedRoles.map((role, index) => ({
         NUM: index + 1,
@@ -55,8 +69,10 @@ const loadRoles = async () => {
         DESCRIPTION: role.description,
       }));
     }
+    loading.value = false;
   } catch (err) {
     console.error("Erreur lors du chargement des rôles :", err);
+    loading.value = false;
   }
 };
 

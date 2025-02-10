@@ -14,7 +14,17 @@
         fixed-header
         hide-default-footer
         hover
+        :loading="loading"
       >
+        <!-- Slot pour afficher un loader quand la table est vide -->
+        <template v-slot:loading>
+          <div class="d-flex justify-center my-10">
+            <v-progress-circular
+              color="red"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
         <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
         <template #no-data>
           <div class="no-data-container">
@@ -34,6 +44,10 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
+const loading = ref(true);
+
 const permissionsHeaders = ref([
   { align: "start", key: "NUM", title: "N°" },
   { align: "start", key: "NAME", title: "Nom" },
@@ -48,9 +62,7 @@ const config = useRuntimeConfig();
 
 const loadPermissions = async () => {
   try {
-    const fetchedPermissions = await $fetch(
-      `${config.public.baseUrl}/permissions`
-    );
+    const fetchedPermissions = await $fetch(API_SERVER_URL + `/permissions`);
     if (fetchedPermissions) {
       permissions.value = fetchedPermissions.map((permission, index) => ({
         NUM: index + 1,
@@ -58,8 +70,10 @@ const loadPermissions = async () => {
         DESCRIPTION: permission.description,
       }));
     }
+    loading.value = false;
   } catch (err) {
     console.error("Erreur lors du chargement des permissions :", err);
+    loading.value = false;
   }
 };
 
