@@ -123,7 +123,7 @@ const toggleEditModal = (item) => {
 
 const loadUsers = async () => {
   try {
-    const fetchedUsers = await $fetch(`${config.public.baseUrl}/users`);
+    const fetchedUsers = await $fetch(`http://serverizynotary.izydr.net/users`);
     if (fetchedUsers) {
       users.value = fetchedUsers.map((user, index) => ({
         NUM: index + 1,
@@ -150,7 +150,7 @@ watchEffect(() => {
 
 const deleteUser = async (id) => {
   try {
-    await $fetch(`${config.public.baseUrl}/users/${id}`, {
+    await $fetch(`http://serverizynotary.izydr.net/users/${id}`, {
       method: "DELETE",
     });
     alert("Utilisateur supprimé avec succès!");

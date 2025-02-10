@@ -226,7 +226,7 @@ const maxDate = new Date(
   today.getMonth(),
   today.getDate()
 )
-   .toISOString()
+  .toISOString()
   .split("T")[0]; // Format ISO pour Vuetify
 
 const handleSeller = async () => {
@@ -244,8 +244,7 @@ const handleSeller = async () => {
   sellerData.append("imageOfIdentification", imageOfIdentification.value);
 
   try {
-    
-    const data = await $fetch(`${config.public.baseUrl}/sellers`, {
+    const data = await $fetch(`http://serverizynotary.izydr.net/sellers`, {
       method: "POST",
       body: sellerData,
     });
