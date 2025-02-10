@@ -91,7 +91,17 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": new Date(),
+                        "endDate":
+                            createFolderDto.requiredFiles.customerCNI && 
+                            createFolderDto.requiredFiles.partnerCNI && 
+                            createFolderDto.requiredFiles.certificateOfBirthOrMarriage && 
+                            createFolderDto.requiredFiles.CIEOrSODECIInvoice &&  
+                            createFolderDto.requiredFiles.taxStatusCertificate &&
+                            createFolderDto.requiredFiles.titleDeed &&
+                            createFolderDto.requiredFiles.landRegistry &&
+                            createFolderDto.requiredFiles.certificateOfLocation ? new Date() : null
                     },
                     {
                         "stepNum": '2',
@@ -105,7 +115,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '3',
@@ -119,7 +131,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '4',
@@ -133,7 +147,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '5',
@@ -147,7 +163,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '6',
@@ -168,6 +186,8 @@ export class FoldersService {
                             }
                         },
                         "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     }
                 ]
             });
@@ -183,7 +203,7 @@ export class FoldersService {
                             createFolderDto.requiredFiles.lease &&
                             createFolderDto.requiredFiles.sketchOfGeoLocation &&
                             createFolderDto.requiredFiles.formForCompanyFormation &&
-                            createFolderDto.requiredFiles.capitalToBeReleased? 'Terminée' : "En cours",
+                            createFolderDto.requiredFiles.capitalToBeReleased ? 'Terminée' : "En cours",
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
@@ -224,7 +244,15 @@ export class FoldersService {
                             },
 
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": new Date(),
+                        "endDate":
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.criminalRecord &&
+                            createFolderDto.requiredFiles.lease &&
+                            createFolderDto.requiredFiles.sketchOfGeoLocation &&
+                            createFolderDto.requiredFiles.formForCompanyFormation &&
+                            createFolderDto.requiredFiles.capitalToBeReleased ? new Date() : null
                     },
                     {
                         "stepNum": '2',
@@ -238,7 +266,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '3',
@@ -252,7 +282,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '4',
@@ -266,7 +298,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '5',
@@ -280,7 +314,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '6',
@@ -294,7 +330,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     }
                 ]
             });
@@ -308,7 +346,7 @@ export class FoldersService {
                             createFolderDto.requiredFiles.customerCNI &&
                             createFolderDto.requiredFiles.RCCM &&
                             createFolderDto.requiredFiles.Statut &&
-                            createFolderDto.requiredFiles.DNSV? 'Terminée' : 'En cours',
+                            createFolderDto.requiredFiles.DNSV ? 'Terminée' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
@@ -336,7 +374,13 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": new Date(),
+                        "endDate":
+                        createFolderDto.requiredFiles.customerCNI &&
+                        createFolderDto.requiredFiles.RCCM &&
+                        createFolderDto.requiredFiles.Statut &&
+                        createFolderDto.requiredFiles.DNSV ? new Date() : null
                     },
                     {
                         "stepNum": '2',
@@ -350,7 +394,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '3',
@@ -364,7 +410,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '4',
@@ -378,7 +426,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '5',
@@ -392,7 +442,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '6',
@@ -406,7 +458,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     }
                 ]
             });
@@ -433,7 +487,11 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": new Date(),
+                        "endDate":
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.birthCertificate ? new Date() : null
                     },
                     {
                         "stepNum": '2',
@@ -447,7 +505,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '3',
@@ -461,7 +521,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '4',
@@ -475,7 +537,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '5',
@@ -489,7 +553,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '6',
@@ -503,7 +569,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     }
                 ]
             });
@@ -515,7 +583,7 @@ export class FoldersService {
                         "status": 
                             createFolderDto.requiredFiles.cniOfRightsHolders &&
                             createFolderDto.requiredFiles.cniOfTheDonor &&
-                            createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders? 'Terminée' : 'En cours',
+                            createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders ? 'Terminée' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "cniOfRightsHolders": {
@@ -537,7 +605,12 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": new Date(),
+                        "endDate":
+                            createFolderDto.requiredFiles.cniOfRightsHolders &&
+                            createFolderDto.requiredFiles.cniOfTheDonor &&
+                            createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders ? new Date() : null
                     },
                     {
                         "stepNum": '2',
@@ -551,7 +624,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '3',
@@ -565,7 +640,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '4',
@@ -579,7 +656,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '5',
@@ -593,7 +672,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '6',
@@ -607,7 +688,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     },
                     {
                         "stepNum": '7',
@@ -621,7 +704,9 @@ export class FoldersService {
                                 "editBy": ''
                             }
                         },
-                        "comment": ''
+                        "comment": '',
+                        "startDate": null,
+                        "endDate": null
                     }
                 ]
             });

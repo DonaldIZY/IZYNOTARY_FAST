@@ -170,6 +170,7 @@
             </template>
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
+                v-if="item.STATUS != 'Arrêtée'"
                 class="actionBtn"
                 title="Modifier la procédure"
                 color="gray"
@@ -199,7 +200,7 @@
                     : item.STATUS == 'En cours'
                     ? '#FFC300'
                     : item.STATUS == 'Suspendue'
-                    ? '#B734EB'
+                    ? '#000000'
                     : '#AD1919'
                 "
                 :text="item.STATUS"
@@ -327,7 +328,7 @@ const clearFilters = () => {
 const loadProcedures = async () => {
   try {
     const fetchedProcedures = await $fetch(
-      `http://serverizynotary.izydr.net/folders`
+      `${config.public.baseUrl}/folders`
     );
 
     console.log("fetchedProcedures : ", fetchedProcedures);
@@ -406,18 +407,17 @@ const updateProcedure = async (val) => {
     dataToSend.append("folderNum", val.folderNum);
     dataToSend.append("procedureType", val.procedureType);
     dataToSend.append("contact", val.contact);
-    dataToSend.append("comment", val.comment);
+    Object.keys(val).includes("comment") ? dataToSend.append("comment", val.comment) : null ;
+    Object.keys(val).includes("status") ? dataToSend.append("status", val.status) : null;
 
-    for (const fileKey of Object.keys(val.documents)) {
-      dataToSend.append(fileKey, val.documents[fileKey]);
+    if(val.documents) {
+      for (const fileKey of Object.keys(val.documents)) {
+        dataToSend.append(fileKey, val.documents[fileKey]);
+      }
     }
 
-    // for(const [key, value] of dataToSend.entries()) {
-    //     console.log(key, value);
-    // }
-
     const resultOfProcedureUpdate = await $fetch(
-      `http://serverizynotary.izydr.net/steps/update/${val.id}`,
+      `${config.public.baseUrl}/steps/update/${val.id}`,
       {
         method: "PATCH",
         body: dataToSend,

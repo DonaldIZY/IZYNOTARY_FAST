@@ -24,8 +24,8 @@ const newProcedureData = reactive({});
 <template>
   <v-dialog v-model="props.show" max-width="900" :persistent="true">
     <v-card >
-      <v-card-title>{{ `Modifier l'étape de la procédure ${procedureData.folderNum}` }}</v-card-title>
-      <v-tabs v-model="tab" color="#ad1919">
+      <v-card-title>{{ `Modification de la procédure N° ${procedureData.folderNum}` }}</v-card-title>
+      <v-tabs v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)" v-model="tab" color="#ad1919">
         <v-tab
           v-for="step in procedureData.steps.filter((elem) =>
             ['terminée', 'en cours'].includes(elem.status.toLowerCase())
@@ -37,7 +37,7 @@ const newProcedureData = reactive({});
       </v-tabs>
 
       <v-card-text>
-        <v-tabs-window v-model="tab">
+        <v-tabs-window v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)" v-model="tab">
           <v-tabs-window-item
             v-for="step in procedureData.steps.filter((elem) =>
               ['terminée', 'en cours'].includes(elem.status.toLowerCase())
@@ -71,13 +71,16 @@ const newProcedureData = reactive({});
               " 
               :disabled="step.documents[doc].path != '' ? true : false"
             />
-            <v-text-field color="primary"
+            <v-textarea 
+              color="primary"
               variant="outlined"
               density="compact" 
-              label="Commentaire"
+              label="Commentaire" 
+              rows="3"
+              :style="{marginBottom: '1rem'}"
               v-model="step.comment" 
               v-on:update:model-value="(val) => {
-                console.log('comment : ', val);
+                // console.log('comment : ', val);
                 if (newProcedureData.action == step.action) {
                   newProcedureData.comment = val;
                 } else {
@@ -86,9 +89,81 @@ const newProcedureData = reactive({});
                 // console.log('new procedure data:', newProcedureData);
               }"
               />
+            <v-row justify="end" >
+              <v-btn 
+              v-if="procedureData.steps.find(elem => elem.action == tab).status == 'En cours'"
+          color="orange"
+          text="Suspendre"
+          variant="flat"
+          @click="
+            () => {
+              if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
+                newProcedureData.status = 'Suspendue';
+                $emit('submit', {
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.PROCEDURE_TYPE,
+              id: procedureData.stepId,
+            });
+              }else{
+                console.log('Veuillez ajouter un commentaire pour suspendre la procédure');
+              }
+            }
+          "
+          class="text-none"
+          ></v-btn>
+          <v-btn
+          v-if="procedureData.steps.find(elem => elem.action == tab).status == 'En cours'"
+          color="primary"
+          text="Arrêter"
+          variant="flat"
+          @click="
+            () => {
+              if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
+                newProcedureData.status = 'Arrêtée';
+                $emit('submit', {
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.PROCEDURE_TYPE,
+              id: procedureData.stepId,
+            });
+              }else{
+                console.log('Veuillez ajouter un commentaire pour arrêter la procédure');
+              }
+            
+            }
+          "
+          class="text-none"
+          ></v-btn>
+        
+            </v-row>
           </v-tabs-window-item>
         </v-tabs-window>
+
+        <img v-if="procedureData.STATUS == 'Arrêtée'" :style="{width: '50%', maxWidth: '150px', display: 'block', margin: '0 auto'}" src="/public/sorry.png" />
+        <h4 v-if="procedureData.STATUS == 'Arrêtée'" :style="{textAlign: 'center'}">Vous ne pouvez pas modifier une procédure arrêtée</h4>
+        <v-textarea 
+        v-if="procedureData.STATUS == 'Suspendue'"
+        color="primary"
+        variant="outlined"
+        density="compact" 
+        label="Commentaire pour reprendre la procédure"
+        v-model="procedureData.steps.find(elem => elem.status == 'Suspendue').comment" 
+        v-on:update:model-value="(val) => {
+          // console.log('suspended step comment : ', val);
+          if (newProcedureData.action == procedureData.steps.find(elem => elem.status == 'Suspendue').action) {
+            newProcedureData.comment = val;
+          } else {
+            newProcedureData = {action: procedureData.steps.find(elem => elem.status == 'Suspendue').action, comment: val};
+          }
+          // console.log('new procedure data:', newProcedureData);
+        }"
+        />
       </v-card-text>
+
+      
       <v-divider></v-divider>
 
       <v-card-actions>
@@ -107,7 +182,8 @@ const newProcedureData = reactive({});
           class="text-none"
         ></v-btn>
 
-        <v-btn
+        <v-btn 
+          v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)"
           color="primary"
           text="Enregistrer"
           variant="flat"
@@ -119,6 +195,30 @@ const newProcedureData = reactive({});
               procedureType: procedureData.PROCEDURE_TYPE,
               id: procedureData.stepId,
             })
+          "
+          class="text-none"
+        ></v-btn> 
+        <v-btn
+          v-if="procedureData.STATUS == 'Suspendue'"
+          color="primary"
+          text="Continuer la procédure"
+          variant="flat"
+          @click="
+            () => {
+              if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
+                newProcedureData.status = 'En cours';
+                $emit('submit', {
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.PROCEDURE_TYPE,
+              id: procedureData.stepId,
+            });
+              }else{
+                console.log('Veuillez ajouter un commentaire pour continuer la procédure');
+              }
+            
+            }
           "
           class="text-none"
         ></v-btn>

@@ -244,7 +244,7 @@ const handleSeller = async () => {
   sellerData.append("imageOfIdentification", imageOfIdentification.value);
 
   try {
-    const data = await $fetch(`http://serverizynotary.izydr.net/sellers`, {
+    const data = await $fetch(`${config.public.baseUrl}/sellers`, {
       method: "POST",
       body: sellerData,
     });

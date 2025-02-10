@@ -121,7 +121,7 @@ watchEffect(() => {
 
 // Récupération des rôles
 const { data: fetchedRoles, error } = useFetch(
-  `http://serverizynotary.izydr.net/roles`
+  `${config.public.baseUrl}/roles`
 );
 
 watchEffect(() => {
@@ -150,7 +150,7 @@ const closeModal = () => {
 const handleUser = async () => {
   try {
     const response = await fetch(
-      `http://serverizynotary.izydr.net/users/${user.id}`,
+      `${config.public.baseUrl}/users/${user.id}`,
       {
         method: "PATCH",
         headers: {

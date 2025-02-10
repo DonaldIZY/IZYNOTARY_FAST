@@ -154,7 +154,7 @@ const handleUser = async () => {
   };
 
   try {
-    const data = await $fetch(`http://serverizynotary.izydr.net/users`, {
+    const data = await $fetch(`${config.public.baseUrl}/users`, {
       method: "POST",
       body: JSON.stringify(userData),
     });
@@ -186,7 +186,7 @@ const emailRule = (v) => {
 };
 
 const { data: fetchedRoles, error } = useFetch(
-  `http://serverizynotary.izydr.net/roles`
+  `${config.public.baseUrl}/roles`
 );
 
 onMounted(() => {
