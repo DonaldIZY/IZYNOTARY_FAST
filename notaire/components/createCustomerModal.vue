@@ -254,13 +254,10 @@ const handleCustomer = async () => {
 
   console.log(customerData.get("imageOfIdentification"));
   try {
-    const data = await $fetch(
-      `${config.public.baseUrl}/customers`,
-      {
-        method: "POST",
-        body: customerData,
-      }
-    );
+    const data = await $fetch(`http://serverizynotary.izydr.net/customers`, {
+      method: "POST",
+      body: customerData,
+    });
     closeModal();
     showTextResultModal.value = "Client créé avec succès !";
     showTypeResultModal.value = "success";

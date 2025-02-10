@@ -326,7 +326,9 @@ const clearFilters = () => {
 
 const loadProcedures = async () => {
   try {
-    const fetchedProcedures = await $fetch(`${config.public.baseUrl}/folders`);
+    const fetchedProcedures = await $fetch(
+      `http://serverizynotary.izydr.net/folders`
+    );
 
     console.log("fetchedProcedures : ", fetchedProcedures);
 
@@ -415,7 +417,7 @@ const updateProcedure = async (val) => {
     // }
 
     const resultOfProcedureUpdate = await $fetch(
-      `${config.public.baseUrl}/steps/update/${val.id}`,
+      `http://serverizynotary.izydr.net/steps/update/${val.id}`,
       {
         method: "PATCH",
         body: dataToSend,
