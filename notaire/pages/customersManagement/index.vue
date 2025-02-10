@@ -109,7 +109,9 @@ const config = useRuntimeConfig();
 
 const loadCustomer = async () => {
   try {
-    const fetchedCustomers = await $fetch(`${config.public.baseUrl}/customers`);
+    const fetchedCustomers = await $fetch(
+      `http://serverizynotary.izydr.net/customers`
+    );
 
     if (fetchedCustomers) {
       customers.value = fetchedCustomers.map((customer) => ({
