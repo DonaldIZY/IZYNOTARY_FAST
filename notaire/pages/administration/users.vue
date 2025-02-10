@@ -23,7 +23,17 @@
         density="compact"
         fixed-header
         hover
+        :loading="loading"
       >
+        <!-- Slot pour afficher un loader quand la table est vide -->
+        <template v-slot:loading>
+          <div class="d-flex justify-center my-10">
+            <v-progress-circular
+              color="red"
+              indeterminate
+            ></v-progress-circular>
+          </div>
+        </template>
         <template v-slot:item.ROLE="{ item }">
           {{ item.ROLE.name }}
         </template>
@@ -88,7 +98,9 @@
 </template>
 
 <script setup>
-const config = useRuntimeConfig();
+import { API_SERVER_URL } from "~/utils/constants";
+
+const loading = ref(true);
 
 // Références
 const usersHeaders = ref([
@@ -123,7 +135,7 @@ const toggleEditModal = (item) => {
 
 const loadUsers = async () => {
   try {
-    const fetchedUsers = await $fetch(`${config.public.baseUrl}/users`);
+    const fetchedUsers = await $fetch(API_SERVER_URL + `/users`);
     if (fetchedUsers) {
       users.value = fetchedUsers.map((user, index) => ({
         NUM: index + 1,
@@ -135,8 +147,10 @@ const loadUsers = async () => {
         ROLE: user.role,
       }));
     }
+    loading.value = false;
   } catch (err) {
     console.error("Erreur lors du chargement des utilisateurs :", err);
+    loading.value = false;
   }
 };
 
@@ -150,7 +164,7 @@ watchEffect(() => {
 
 const deleteUser = async (id) => {
   try {
-    await $fetch(`${config.public.baseUrl}/users/${id}`, {
+    await $fetch(API_SERVER_URL + `/users/${id}`, {
       method: "DELETE",
     });
     alert("Utilisateur supprimé avec succès!");

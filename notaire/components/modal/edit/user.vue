@@ -90,6 +90,8 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
 const props = defineProps({
   open: Boolean,
   userData: Object, // Données de l'utilisateur à modifier
@@ -120,9 +122,7 @@ watchEffect(() => {
 });
 
 // Récupération des rôles
-const { data: fetchedRoles, error } = useFetch(
-  `${config.public.baseUrl}/roles`
-);
+const { data: fetchedRoles, error } = useFetch(API_SERVER_URL + `/roles`);
 
 watchEffect(() => {
   if (fetchedRoles.value) {
@@ -149,16 +149,13 @@ const closeModal = () => {
 // Enregistrement des modifications
 const handleUser = async () => {
   try {
-    const response = await fetch(
-      `${config.public.baseUrl}/users/${user.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(user),
-      }
-    );
+    const response = await fetch(API_SERVER_URL + `/users/${user.id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(user),
+    });
 
     if (!response.ok) throw new Error("Erreur lors de la modification");
 

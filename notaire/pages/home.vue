@@ -42,11 +42,7 @@
         </v-col>
 
         <v-col cols="4">
-          <v-card
-            disabled
-            class="mx-auto rounded-lg hover-card"
-            to="/dashboard"
-          >
+          <v-card class="mx-auto rounded-lg hover-card" to="/dashboard">
             <v-img
               src="~/assets/img/tab_bord.png"
               class="mb-3 mt-2 mx-2 rounded-lg"

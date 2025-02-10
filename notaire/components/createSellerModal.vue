@@ -168,6 +168,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { API_SERVER_URL } from "~/utils/constants";
 
 const props = defineProps({
   open: {
@@ -244,7 +245,7 @@ const handleSeller = async () => {
   sellerData.append("imageOfIdentification", imageOfIdentification.value);
 
   try {
-    const data = await $fetch(`${config.public.baseUrl}/sellers`, {
+    const data = await $fetch(API_SERVER_URL + `/sellers`, {
       method: "POST",
       body: sellerData,
     });

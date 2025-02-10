@@ -162,6 +162,8 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
@@ -197,9 +199,7 @@ const config = useRuntimeConfig();
 
 const loadCustomers = async () => {
   try {
-    const fetchCustomers = await $fetch(
-      `${config.public.baseUrl}/customers`
-    );
+    const fetchCustomers = await $fetch(API_SERVER_URL + `/customers`);
     if (fetchCustomers) {
       customers.value = fetchCustomers.map((customer) => ({
         ID: customer.id,
@@ -259,7 +259,7 @@ const isFormValid = computed(() => {
 const handleProcedure = async () => {
   const procedureData = new FormData();
 
-  const folders = await $fetch(`${config.public.baseUrl}/folders`);
+  const folders = await $fetch(API_SERVER_URL + `/folders`);
 
   const count = folders.length;
   if (isNaN(count)) {
@@ -293,7 +293,7 @@ const handleProcedure = async () => {
 
   try {
     const date = await $fetch(
-      `${config.public.baseUrl}/folders/transferOfMovableProperty`,
+      API_SERVER_URL + `/folders/transferOfMovableProperty`,
       {
         method: "POST",
         body: procedureData,

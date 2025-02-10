@@ -139,8 +139,18 @@
             item-value="NUM"
             class="customTable1"
             density="compact"
+            :loading="loading"
             fixed-header
           >
+            <!-- Slot pour afficher un loader quand la table est vide -->
+            <template v-slot:loading>
+              <div class="d-flex justify-center my-10">
+                <v-progress-circular
+                  color="red"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+            </template>
             <template v-slot:item.PROCEDURE_TYPE="{ item }">
               <v-row no-gutters>
                 <v-col class="d-flex">
@@ -237,6 +247,10 @@
 </template>
 
 <script setup>
+import { API_SERVER_URL } from "~/utils/constants";
+
+const loading = ref(true);
+
 const selectedProcedureStore = useSelectedDataStore();
 
 function selectProcedure(val) {
@@ -265,8 +279,6 @@ const searchStartDate = ref(null);
 const searchProcedureType = ref(null);
 const searchStatus = ref(null);
 const form = ref(null);
-
-const config = useRuntimeConfig();
 
 const filteredProcedures = computed(() => {
   return procedures.value.filter((item) => {
@@ -327,9 +339,7 @@ const clearFilters = () => {
 
 const loadProcedures = async () => {
   try {
-    const fetchedProcedures = await $fetch(
-      `${config.public.baseUrl}/folders`
-    );
+    const fetchedProcedures = await $fetch(API_SERVER_URL + `/folders`);
 
     console.log("fetchedProcedures : ", fetchedProcedures);
 
@@ -351,8 +361,10 @@ const loadProcedures = async () => {
         folderNum: procedure.folderNum,
       }));
     }
+    loading.value = false;
   } catch (err) {
     console.error("erreur lors de la reception des procédures : ", err);
+    loading.value = false;
   }
 };
 
@@ -407,17 +419,21 @@ const updateProcedure = async (val) => {
     dataToSend.append("folderNum", val.folderNum);
     dataToSend.append("procedureType", val.procedureType);
     dataToSend.append("contact", val.contact);
-    Object.keys(val).includes("comment") ? dataToSend.append("comment", val.comment) : null ;
-    Object.keys(val).includes("status") ? dataToSend.append("status", val.status) : null;
+    Object.keys(val).includes("comment")
+      ? dataToSend.append("comment", val.comment)
+      : null;
+    Object.keys(val).includes("status")
+      ? dataToSend.append("status", val.status)
+      : null;
 
-    if(val.documents) {
+    if (val.documents) {
       for (const fileKey of Object.keys(val.documents)) {
         dataToSend.append(fileKey, val.documents[fileKey]);
       }
     }
 
     const resultOfProcedureUpdate = await $fetch(
-      `${config.public.baseUrl}/steps/update/${val.id}`,
+      API_SERVER_URL + `/steps/update/${val.id}`,
       {
         method: "PATCH",
         body: dataToSend,
