@@ -49,7 +49,7 @@ const config = useRuntimeConfig();
 const loadPermissions = async () => {
   try {
     const fetchedPermissions = await $fetch(
-      `http://serverizynotary.izydr.net/permissions`
+      `${config.public.baseUrl}/permissions`
     );
     if (fetchedPermissions) {
       permissions.value = fetchedPermissions.map((permission, index) => ({

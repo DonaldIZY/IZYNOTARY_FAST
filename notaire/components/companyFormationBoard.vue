@@ -29,6 +29,49 @@
         { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
         { align: "start", key: "STATUS", title: "Statut" },
     ]);
+
+    const config = useRuntimeConfig();
+    const route = useRoute();
+
+    onMounted(async () => {
+    try {
+        const response = await fetch(`${config.public.baseUrl}/customers/${route.params.ID}`);
+        const data = await response.json();
+
+        console.log(data);
+
+        console.log(data.folders);
+
+        const consSocDatas = data.folders.map(folder => ({
+        num: folder.folderNum,
+        proced: folder.procedureType,
+        statut: folder.status,
+        }));
+
+        console.log(consSocDatas);
+
+    } catch (error) {
+        console.error('Erreur lors du chargement des données', error);
+    }
+});
+
+// const consSocDatas = data.folders.procedureType;
+
+
+// if (fetchedCustomers) {
+//       customers.value = fetchedCustomers.map((customer) => ({
+//         ID: customer.id,
+//         LAST_NAME: customer.lastName,
+//         FIRST_NAME: customer.firstName,
+//         EMAIL: customer.email,
+//         PHONE: customer.phone,
+//         CURRENT_FILES: 0,
+//         COMPLETED_FILES: 0,
+//         HANGING_FILES: 0,
+//         CLOSED_FILES: 0,
+//         FILES: customer.folders.length,
+//       }));
+//     }
 </script>
 
 <style>

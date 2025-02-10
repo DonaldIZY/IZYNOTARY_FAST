@@ -44,7 +44,7 @@ function statusToColor(val) {
   } else if (val.toLowerCase() == "arrêtée") {
     return "red";
   } else if (val.toLowerCase() == "suspendue") {
-    return "purple";
+    return "black";
   }
 }
 </script>

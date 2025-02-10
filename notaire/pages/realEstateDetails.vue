@@ -39,7 +39,7 @@ let procedureID = selectedProcedureStore.getProcedureId;
 const loadProcedures = async () => {
   try {
     const fetchedProcedures = await $fetch(
-      `http://serverizynotary.izydr.net/folders`
+      `${config.public.baseUrl}/folders`
     );
 
     // console.log("fetchedProcedures : ", fetchedProcedures);
@@ -91,7 +91,7 @@ const statusColor = computed(() => {
     case "terminée":
       return "#63AD19"; // Bleu pour "en cours"
     case "suspendue":
-      return "#B734EB"; // Orange pour "suspendu"
+      return "#000000"; // Noir pour "suspendu"
     case "en cours":
       return "#FFC300"; // Rouge pour "arrêté"
     default:
