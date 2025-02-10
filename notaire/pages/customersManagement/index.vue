@@ -110,7 +110,7 @@ const config = useRuntimeConfig();
 const loadCustomer = async () => {
   try {
     const fetchedCustomers = await $fetch(
-      `http://serverizynotary.izydr.net/customers`
+      `${config.public.baseUrl}/customers`
     );
 
     if (fetchedCustomers) {

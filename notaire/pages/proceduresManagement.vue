@@ -170,6 +170,7 @@
             </template>
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
+                v-if="item.STATUS != 'Arrêtée'"
                 class="actionBtn"
                 title="Modifier la procédure"
                 color="gray"
@@ -199,7 +200,7 @@
                     : item.STATUS == 'En cours'
                     ? '#FFC300'
                     : item.STATUS == 'Suspendue'
-                    ? '#B734EB'
+                    ? '#000000'
                     : '#AD1919'
                 "
                 :text="item.STATUS"
@@ -327,7 +328,7 @@ const clearFilters = () => {
 const loadProcedures = async () => {
   try {
     const fetchedProcedures = await $fetch(
-      `http://serverizynotary.izydr.net/folders`
+      `${config.public.baseUrl}/folders`
     );
 
     console.log("fetchedProcedures : ", fetchedProcedures);
@@ -416,7 +417,7 @@ const updateProcedure = async (val) => {
     }
 
     const resultOfProcedureUpdate = await $fetch(
-      `http://serverizynotary.izydr.net/steps/update/${val.id}`,
+      `${config.public.baseUrl}/steps/update/${val.id}`,
       {
         method: "PATCH",
         body: dataToSend,

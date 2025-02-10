@@ -154,6 +154,8 @@ const newProcedureData = reactive({});
           </v-tabs-window-item>
         </v-tabs-window>
 
+        <img v-if="procedureData.STATUS == 'Arrêtée'" :style="{width: '50%', maxWidth: '150px', display: 'block', margin: '0 auto'}" src="/public/sorry.png" />
+        <h4 v-if="procedureData.STATUS == 'Arrêtée'" :style="{textAlign: 'center'}">Vous ne pouvez pas modifier une procédure arrêtée</h4>
         <v-text-field 
         v-if="procedureData.STATUS == 'Suspendue'"
         color="primary"
