@@ -5,7 +5,7 @@ X
   </div>
   <div class="ma-4 customerField">
     <div class="d-flex justify-end align-center ga-5">
-      <div class="searchField">
+      <div class="searchField"> 
         <v-text-field
           color="primary"
           v-model="customersSearch"
