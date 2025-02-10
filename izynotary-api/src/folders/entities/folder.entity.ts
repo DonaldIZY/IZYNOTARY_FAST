@@ -21,6 +21,9 @@ export class Folder {
     @UpdateDateColumn()
     updateAt: Date;
 
+    @Column({ type: "date" })
+    endDate: Date;
+
     @Column({ type: "decimal", precision: 5, scale: 2 })
     progression: number;
 
