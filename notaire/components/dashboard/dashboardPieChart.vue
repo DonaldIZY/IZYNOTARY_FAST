@@ -1,33 +1,24 @@
 <template>
-  <v-card class="pa-2">
+  <v-card class="pa-2 card">
     <v-card-title>{{ title }}</v-card-title>
     <v-card-text>
-      <canvas ref="barChartCanvas"></canvas>
+      <canvas ref="pieChartCanvas"></canvas>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
 import {
-  BarController,
-  BarElement,
-  CategoryScale,
+  ArcElement,
   Chart,
   Legend,
-  LinearScale,
+  PieController,
   Title,
   Tooltip,
 } from "chart.js";
 
-Chart.register(
-  BarController,
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Title,
-  Tooltip,
-  Legend
-);
+// Enregistrement des composants nécessaires pour un Pie Chart
+Chart.register(PieController, ArcElement, Tooltip, Legend, Title);
 
 export default {
   props: {
@@ -43,13 +34,9 @@ export default {
       type: Array,
       required: true,
     },
-    horizontal: {
-      type: Boolean,
-      default: false, // false = vertical, true = horizontal
-    },
     legend: {
       type: Boolean,
-      default: false, // false = vertical, true = horizontal
+      default: true, // Affichage de la légende par défaut
     },
     legendPosition: {
       type: String,
@@ -61,20 +48,22 @@ export default {
   },
   methods: {
     createChart() {
-      new Chart(this.$refs.barChartCanvas, {
-        type: "bar",
+      new Chart(this.$refs.pieChartCanvas, {
+        type: "pie",
         data: {
           labels: this.labels,
           datasets: this.datasets,
         },
         options: {
-          indexAxis: this.horizontal ? "y" : "x", // Permet d'afficher les barres horizontalement
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              display: this.legend ? true : false,
+              display: this.legend,
               position: this.legendPosition,
+            },
+            tooltip: {
+              enabled: true,
             },
           },
         },
@@ -92,7 +81,7 @@ export default {
 }
 
 canvas {
-  max-height: 10rem;
+  max-height: 12rem;
   min-height: 8rem;
   width: 100%;
   height: 100% !important;
