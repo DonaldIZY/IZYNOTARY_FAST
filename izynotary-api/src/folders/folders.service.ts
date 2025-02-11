@@ -712,6 +712,8 @@ export class FoldersService {
             });
         }
 
+        console.log("STEP : ", step);
+
         const folder = new Folder({
             ...createFolderDto
         });

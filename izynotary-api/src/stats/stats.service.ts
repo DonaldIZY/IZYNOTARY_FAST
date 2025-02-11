@@ -15,7 +15,7 @@ export class StatsService {
 
     async getStats() {
 
-        const procedure = await this.folderRepository.find({relations: ["folders", "folders.step"]});
+        const procedure = await this.folderRepository.find({relations: [ "step" ]});
         const customers = await this.customerRepository.find();
 
         const durations = {};
