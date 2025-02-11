@@ -17,7 +17,7 @@ export class User {
     @Column()
     email: string;
 
-    @Column()
+    @Column({nullable:true})
     phoneNumber: string;
 
     @OneToOne(() => Identifier, identifier => identifier.user, { cascade: true })

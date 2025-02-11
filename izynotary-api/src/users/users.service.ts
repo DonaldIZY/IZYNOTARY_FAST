@@ -104,17 +104,5 @@ export class UsersService {
 	
 		await this.usersRepository.remove(user);
 	}
-
-	async validateUser(email: string, password: string) {
-		const user = await this.usersRepository.findOne({
-			where: { email },
-            relations: { role: true, identifier: true},
-		});
-
-		if (user && (await Password.validatePassword(password, user.identifier.hashedValue))) {
-            return user;
-        }
-		return null;
-	}
   
 }

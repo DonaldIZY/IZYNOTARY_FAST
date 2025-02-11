@@ -167,7 +167,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { API_SERVER_URL } from "~/utils/constants";
 
 const props = defineProps({
@@ -255,7 +254,7 @@ const handleSeller = async () => {
     showTypeResultModal.value = "success";
     showResultModal.value = true;
   } catch (error) {
-    console.error("Erreur lors de la création du client :", error);
+    console.error("Erreur lors de la création du vendeur :", error);
     closeModal();
     showTextResultModal.value = "Erreur lors de la création du vendeur";
     showTypeResultModal.value = "error";

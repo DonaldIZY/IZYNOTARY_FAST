@@ -13,22 +13,24 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async login(email: string, password: string): Promise<{ accessToken: string }> {
-        const user = await this.userRepository.findOne({ 
-            where: { email },
-            relations: {
-                role: true, 
-                identifier: true
-            }
-        });
+    async validateUser(email: string, pass: string): Promise<any> {
 
-        if(!user || !(await Password.validatePassword(password, user.identifier.hashedValue))) {
-            throw new UnauthorizedException('Invalid credentials')
+		const user = await this.userRepository.findOne({
+			where: { email },
+            relations: { role: true, identifier: true},
+		});
+
+		if (user && (await Password.validatePassword(pass, user.identifier.hashedValue))) {
+            const { identifier, ...result } = user;
+            return result;
         }
+		return null;
+	}
 
-        const payload = { id: user.id, email: user.email };
-        const accessToken = this.jwtService.sign(payload);
-
-        return { accessToken };
+    async login(user: any) {
+        const payload = { username: user.lastName+" "+user.firstName, role: user.role.name, sub: user.id };
+        return {
+            accessToken: this.jwtService.sign(payload),
+        };
     }
 }
