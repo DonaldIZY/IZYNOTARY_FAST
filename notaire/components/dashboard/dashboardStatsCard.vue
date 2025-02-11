@@ -36,8 +36,8 @@ const props = defineProps({
   },
   title: String,
   text: {
-    type: String,
-    default: "XXXXX",
+    type: Number,
+    default: 0,
   },
   subText: {
     type: String,
