@@ -93,7 +93,7 @@ export class FoldersController {
 
         // Assignation du champ requiredFiles au DTO
         createFolderDto.requiredFiles = uploadedFiles;
-            createFolderDto.endDate = null;
+        createFolderDto.endDate = null;
         console.log("Final folder: ", createFolderDto);
 
         // Sauvegarde dans la base de données via le service
@@ -137,7 +137,7 @@ export class FoldersController {
 
         // Assignation du champ requiredFiles au DTO
         createFolderDto.requiredFiles = uploadedFiles;
-            createFolderDto.endDate = null;
+        createFolderDto.endDate = null;
         console.log("Final folder: ", createFolderDto);
 
         // Sauvegarde dans la base de données via le service
@@ -181,7 +181,7 @@ export class FoldersController {
 
         // Assignation du champ requiredFiles au DTO
         createFolderDto.requiredFiles = uploadedFiles;
-            createFolderDto.endDate = null;
+        createFolderDto.endDate = null;
         console.log("Final folder: ", createFolderDto);
 
         // Sauvegarde dans la base de données via le service
@@ -225,7 +225,7 @@ export class FoldersController {
 
         // Assignation du champ requiredFiles au DTO
         createFolderDto.requiredFiles = uploadedFiles;
-            createFolderDto.endDate = null;
+        createFolderDto.endDate = null;
         console.log("Final folder: ", createFolderDto);
 
         // Sauvegarde dans la base de données via le service

@@ -17,6 +17,9 @@ export class User {
     @Column()
     email: string;
 
+    @Column()
+    phoneNumber: string;
+
     @OneToOne(() => Identifier, identifier => identifier.user, { cascade: true })
     identifier: Identifier;
 
