@@ -36,8 +36,8 @@ const props = defineProps({
   },
   title: String,
   text: {
-    type: String,
-    default: "XXXXX",
+    type: Number,
+    default: 0,
   },
   subText: {
     type: String,
@@ -48,7 +48,7 @@ const props = defineProps({
 
 <style>
 .cardStat {
-  margin: 0.5rem;
+  margin: 0.15rem;
   width: 100%;
   max-width: 30rem;
   min-width: 15rem;
