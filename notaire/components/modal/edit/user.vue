@@ -14,6 +14,7 @@
               label="Nom"
               variant="outlined"
               density="compact"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -24,6 +25,7 @@
               label="Prénoms"
               variant="outlined"
               density="compact"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -33,7 +35,7 @@
               color="primary"
               label="Email"
               variant="outlined"
-              :rules="[required, emailRule]"
+              :rules="validationRules.email"
               density="compact"
             ></v-text-field>
           </v-col>
@@ -41,10 +43,12 @@
           <v-col cols="12">
             <v-text-field
               v-model="user.phone"
+              type="number"
               color="primary"
               label="Téléphone"
               variant="outlined"
               density="compact"
+              :rules="validationRules.phone"
             ></v-text-field>
           </v-col>
 
@@ -59,6 +63,7 @@
               variant="outlined"
               density="compact"
               hide-details
+              :rules="validationRules.required"
             ></v-select>
           </v-col>
         </v-row>
@@ -91,6 +96,9 @@
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
+// import rules from
+import { validationRules } from '~/utils/validationRules';
+
 
 const props = defineProps({
   open: Boolean,
@@ -107,6 +115,7 @@ const user = reactive({
   lastName: "",
   firstName: "",
   email: "",
+  phone: "",
   roleId: null,
 });
 
@@ -117,6 +126,7 @@ watchEffect(() => {
     user.lastName = props.userData.LAST_NAME;
     user.firstName = props.userData.FIRST_NAME;
     user.email = props.userData.EMAIL;
+    user.phone = props.userData.PHONE;
     user.roleId = props.userData.ROLE?.id;
   }
 });
@@ -135,11 +145,6 @@ watchEffect(() => {
   }
 });
 
-// Validation
-const required = (v) => !!v || "Le champ est requis.";
-const emailRule = (v) =>
-  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ||
-  "Veuillez entrer une adresse email valide.";
 
 // Fermeture du modal
 const closeModal = () => {
