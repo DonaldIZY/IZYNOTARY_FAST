@@ -18,7 +18,7 @@
               variant="outlined"
               density="compact"
               clearable
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -30,7 +30,7 @@
               variant="outlined"
               density="compact"
               clearable
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -43,7 +43,7 @@
               variant="outlined"
               density="compact"
               clearable
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-select>
           </v-col>
 
@@ -58,7 +58,7 @@
               :max="maxDate"
               :year="new Date(maxDate).getFullYear()"
               clearable
-              :rules="[required]"
+              :rules="validationRules.required"
             >
             </v-date-input>
           </v-col>
@@ -71,22 +71,22 @@
               variant="outlined"
               density="compact"
               clearable
-              :rules="[required, emailRule]"
+              :rules="validationRules.email"
             ></v-text-field>
           </v-col>
 
           <v-col cols="6">
             <v-text-field
               v-model="phone"
+              type="number"
               color="primary"
               label="Téléphone"
               variant="outlined"
               density="compact"
               clearable
-              :rules="[required]"
+              :rules="validationRules.phone"
             ></v-text-field>
           </v-col>
-
           <v-col cols="6">
             <v-select
               v-model="identification"
@@ -96,7 +96,7 @@
               :items="['CNI', 'Passeport']"
               variant="outlined"
               clearable
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-select>
           </v-col>
           <v-col cols="6">
@@ -109,7 +109,7 @@
                   label="Numéro de la pièce d'identité"
                   variant="outlined"
                   clearable
-                  :rules="[required]"
+                  :rules="validationRules.required"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -122,6 +122,7 @@
               :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
               variant="outlined"
               density="compact"
+              :rules="validationRules.required"
             ></v-select>
           </v-col>
           <v-col cols="12">
@@ -135,7 +136,7 @@
               variant="outlined"
               clearable
               hide-details
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-file-input>
           </v-col>
         </v-row>
@@ -176,6 +177,8 @@
 <script setup>
 import { computed } from "vue";
 import { API_SERVER_URL } from "~/utils/constants";
+// import rules from
+import { validationRules } from "~/utils/validationRules";
 
 const props = defineProps({
   open: {
