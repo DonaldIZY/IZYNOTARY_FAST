@@ -9,7 +9,7 @@
         <v-row dense>
           <v-col cols="12">
             <v-text-field
-              v-model="user.lastName"
+              v-model="customer.lastName"
               color="primary"
               label="Nom"
               variant="outlined"
@@ -17,10 +17,9 @@
               :rules="validationRules.required"
             ></v-text-field>
           </v-col>
-
           <v-col cols="12">
             <v-text-field
-              v-model="user.firstName"
+              v-model="customer.firstName"
               color="primary"
               label="Prénoms"
               variant="outlined"
@@ -28,10 +27,44 @@
               :rules="validationRules.required"
             ></v-text-field>
           </v-col>
+          <v-col cols="12">
+            <v-text-field
+              v-model="customer.identificationNumber"
+              color="primary"
+              label="NNI"
+              variant="outlined"
+              density="compact"
+              :rules="validationRules.required"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-date-input
+              v-model="customer.birthDate"
+              color="primary"
+              prepend-icon=""
+              label="Date de naissance"
+              variant="outlined"
+              density="compact"
+              clearable
+              :rules="validationRules.required"
+            >
+            </v-date-input>
+          </v-col>
+          <v-col cols="12">
+            <v-select
+              v-model="customer.maritalStatus"
+              color="primary"
+              label="Situation matrimoniale"
+              :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
+              variant="outlined"
+              density="compact"
+              :rules="validationRules.required"
+            ></v-select>
+          </v-col>
 
           <v-col cols="12">
             <v-text-field
-              v-model="user.email"
+              v-model="customer.email"
               color="primary"
               label="Email"
               variant="outlined"
@@ -42,29 +75,15 @@
 
           <v-col cols="12">
             <v-text-field
-              v-model="user.phone"
+              v-model="customer.phone"
               type="number"
               color="primary"
               label="Téléphone"
               variant="outlined"
               density="compact"
               :rules="validationRules.phone"
-            ></v-text-field>
-          </v-col>
-
-          <v-col cols="12">
-            <v-select
-              v-model="user.roleId"
-              color="primary"
-              label="Rôle"
-              :items="roles"
-              item-title="NAME"
-              item-value="ID"
-              variant="outlined"
-              density="compact"
               hide-details
-              :rules="validationRules.required"
-            ></v-select>
+            ></v-text-field>
           </v-col>
         </v-row>
       </v-card-text>
@@ -86,59 +105,57 @@
           color="primary"
           text="Enregistrer"
           variant="flat"
-          @click="handleUser"
+          @click="handleCustomer"
           class="text-none"
         ></v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
+  <result-modal-redirection
+    :text="showTextResultModal"
+    :open="showResultModal"
+    :type="showTypeResultModal"
+    destination="/customersManagement"
+    @update:open="showResultModal = $event"
+  />
 </template>
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
 
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
+
 const props = defineProps({
   open: Boolean,
-  userData: Object, // Données de l'utilisateur à modifier
+  customerData: Object, // Données de l'utilisateur à modifier
 });
 
 const emit = defineEmits(["update:open"]);
 
-const config = useRuntimeConfig();
-const roles = ref([]);
-
-const user = reactive({
+const customer = reactive({
   id: null,
   lastName: "",
   firstName: "",
   email: "",
   phone: "",
-  roleId: null,
+  maritalStatus: "",
+  birthDate: "",
+  identificationNumber: "",
 });
 
 // Met à jour `user` lorsque `userData` change
 watchEffect(() => {
-  if (props.userData) {
-    user.id = props.userData.ID;
-    user.lastName = props.userData.LAST_NAME;
-    user.firstName = props.userData.FIRST_NAME;
-    user.email = props.userData.EMAIL;
-    user.phone = props.userData.PHONE;
-    user.roleId = props.userData.ROLE?.id;
-  }
-});
-
-// Récupération des rôles
-const { data: fetchedRoles, error } = useFetch(API_SERVER_URL + `/roles`);
-
-watchEffect(() => {
-  if (fetchedRoles.value) {
-    roles.value = fetchedRoles.value.map((role) => ({
-      ID: role.id,
-      NAME: role.name,
-    }));
-  } else if (error.value) {
-    console.error("Erreur lors du chargement des rôles :", error.value);
+  if (props.customerData) {
+    customer.id = props.customerData.id;
+    customer.lastName = props.customerData.lastName;
+    customer.firstName = props.customerData.firstName;
+    customer.email = props.customerData.email;
+    customer.phone = props.customerData.phone;
+    customer.maritalStatus = props.customerData.maritalStatus;
+    customer.birthDate = props.customerData.birthDate;
+    customer.identificationNumber = props.customerData.identificationNumber;
   }
 });
 
@@ -148,23 +165,27 @@ const closeModal = () => {
 };
 
 // Enregistrement des modifications
-const handleUser = async () => {
+const handleCustomer = async () => {
   try {
-    const response = await fetch(API_SERVER_URL + `/users/${user.id}`, {
+    const response = await fetch(API_SERVER_URL + `/customers/${customer.id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(user),
+      body: JSON.stringify(customer),
     });
 
-    if (!response.ok) throw new Error("Erreur lors de la modification");
-
-    alert("Utilisateur modifié avec succès.");
     emit("userUpdated");
+    showTextResultModal.value = "Client modifié avec succès !";
+    showTypeResultModal.value = "success";
     closeModal();
+    showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la modification de l'utilisateur :", error);
+    showTextResultModal.value = "Erreur lors de la modification du client";
+    showTypeResultModal.value = "error";
+    closeModal();
+    showResultModal.value = true;
   }
 };
 </script>

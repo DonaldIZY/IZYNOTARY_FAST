@@ -252,15 +252,16 @@ const handleCustomer = async () => {
       method: "POST",
       body: customerData,
     });
-    closeModal();
+
     showTextResultModal.value = "Client créé avec succès !";
     showTypeResultModal.value = "success";
+    closeModal();
     showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création du client :", error);
-    closeModal();
     showTextResultModal.value = "Erreur lors de la création du client";
     showTypeResultModal.value = "error";
+    closeModal();
     showResultModal.value = true;
   } finally {
     //Réinitialisation des données du formulaire

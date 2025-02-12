@@ -24,7 +24,7 @@
                 <v-text-field
                   v-model="customer.lastName"
                   color="primary"
-                  label="Nom du client"
+                  label="Nom"
                   variant="outlined"
                   density="compact"
                   hide-details
@@ -35,7 +35,7 @@
                 <v-text-field
                   v-model="customer.firstName"
                   color="primary"
-                  label="Prénoms du client"
+                  label="Prénoms"
                   variant="outlined"
                   density="compact"
                   hide-details
@@ -130,7 +130,7 @@
               color="secondary"
               variant="tonal"
               prepend-icon="mdi-pencil"
-              @click="closeModal"
+              @click="toggleEditModal(customer)"
               class="text-none"
             ></v-btn>
             <v-btn
@@ -138,7 +138,7 @@
               color="primary"
               variant="tonal"
               prepend-icon="mdi-delete"
-              @click="closeModal"
+              @click="toggleConfModal"
               class="text-none"
             ></v-btn>
           </v-card-actions>
@@ -193,10 +193,40 @@
       :realEstateData="realEstateData"
     ></transfer-of-real-estate-board>
   </div>
+
+  <confirmation-with-password
+    :text="`Vous êtes sur le point de supprimer le client ${customer.lastName} ${customer.firstName}. Toutes les procédures liées à ce client seront automatiquement supprimées. Voulez-vous continuer ?`"
+    :open="openConf"
+    :submit="deleteCustomer(customer.id)"
+    @update:open="openConf = $event"
+  ></confirmation-with-password>
+  <modal-edit-customer
+    :open="openEdit"
+    :customerData="customer"
+    @update:open="openEdit = $event"
+  />
 </template>
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
+
+const openConf = ref(false);
+const openEdit = ref(false);
+const selectedCustomer = ref(null);
+
+const toggleConfModal = (item) => {
+  selectedCustomer.value = item;
+  openConf.value = !openConf.value;
+};
+
+const deleteCustomer = (item) => {
+  console.log(item);
+};
+
+const toggleEditModal = (item) => {
+  selectedCustomer.value = item;
+  openEdit.value = !openEdit.value;
+};
 
 const text = ref("selling");
 const customer = ref("");
@@ -216,7 +246,7 @@ onMounted(async () => {
 
     customer.value = customerFetch;
 
-    console.log("datas : ", customer.value);
+    // console.log("datas : ", customer.value);
 
     companyFormationData.value = customerFetch.folders.filter(
       (procedure) => procedure.procedureType == "Constitution de société"

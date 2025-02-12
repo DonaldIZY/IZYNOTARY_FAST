@@ -104,7 +104,6 @@ const props = defineProps({
 
 const emit = defineEmits(["update:open"]);
 
-const config = useRuntimeConfig();
 const roles = ref([]);
 
 const user = reactive({
@@ -141,7 +140,6 @@ watchEffect(() => {
     console.error("Erreur lors du chargement des rôles :", error.value);
   }
 });
-
 
 // Fermeture du modal
 const closeModal = () => {
