@@ -105,7 +105,6 @@ const passwordRule = (v) => {
 };
 
 const config = useRuntimeConfig();
-const authStore = useAuthStore();
 
 // Router
 const router = useRouter();
@@ -124,8 +123,8 @@ const onSubmit = async () => {
       }),
     });
 
-    if (data?.accessToken) {
-      // Stocker le token, par exemple dans localStorage ou Vuex/Pinia
+    if (data.accessToken) {
+      const authStore = useAuthStore();
       authStore.setToken(data.accessToken);
 
       // Rediriger vers une autre page

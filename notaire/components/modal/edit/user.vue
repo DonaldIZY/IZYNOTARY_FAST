@@ -96,9 +96,6 @@
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
-// import rules from
-import { validationRules } from '~/utils/validationRules';
-
 
 const props = defineProps({
   open: Boolean,

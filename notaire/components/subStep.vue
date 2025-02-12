@@ -27,7 +27,7 @@
 
 <template>
   <div class="subStep">
-    <input v-if="parentDoor == 'arrêtée' || status == 'false'" disabled="true" :name="inputName" type="checkbox" :style="styleObject" />
+    <input v-if="parentDoor == 'arrêté' || status == 'false'" disabled="true" :name="inputName" type="checkbox" :style="styleObject" />
     <input v-else-if="status == 'true'" :name="inputName" type="checkbox" :style="styleObject" checked /> 
     <input v-else :name="inputName" type="checkbox" :style="styleObject" />
     <p>{{ text }}</p>

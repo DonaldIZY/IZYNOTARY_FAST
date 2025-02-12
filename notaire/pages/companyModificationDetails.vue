@@ -71,9 +71,9 @@ const progressColor = computed(() => {
 // Définition des couleurs en fonction du statut
 const statusColor = computed(() => {
   switch (procedureGeneralInfo.value.status.toLowerCase()) {
-    case "terminée":
+    case "terminé":
       return "#63AD19"; // Bleu pour "en cours"
-    case "suspendue":
+    case "suspendu":
       return "#000000"; // Noir pour "suspendu"
     case "en cours":
       return "#FFC300"; // Rouge pour "arrêté"
