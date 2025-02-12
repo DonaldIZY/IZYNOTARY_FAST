@@ -102,7 +102,7 @@
                   color="primary"
                   label="Statut"
                   prepend-inner-icon="mdi-state-machine"
-                  :items="['En cours', 'Suspendue', 'Arrêtée', 'Terminée']"
+                  :items="['En cours', 'Suspendu', 'Arrêté', 'Terminé']"
                   clearable
                   variant="outlined"
                   density="compact"
@@ -180,7 +180,7 @@
             </template>
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
-                v-if="item.STATUS != 'Arrêtée'"
+                v-if="item.STATUS != 'Arrêté'"
                 class="actionBtn"
                 title="Modifier la procédure"
                 color="gray"
@@ -205,11 +205,11 @@
             <template v-slot:item.STATUS="{ item }">
               <v-chip
                 :color="
-                  item.STATUS == 'Terminée'
+                  item.STATUS == 'Terminé'
                     ? '#63AD19'
                     : item.STATUS == 'En cours'
                     ? '#FFC300'
-                    : item.STATUS == 'Suspendue'
+                    : item.STATUS == 'Suspendu'
                     ? '#000000'
                     : '#AD1919'
                 "

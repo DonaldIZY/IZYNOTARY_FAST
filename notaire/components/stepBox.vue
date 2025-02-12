@@ -35,15 +35,15 @@ const props = defineProps({
 console.log("PROPS : ", props);
 
 function statusToColor(val) {
-  if (val.toLowerCase() == "terminée") {
+  if (val.toLowerCase() == "terminé") {
     return "green";
   } else if (val.toLowerCase() == "non débuté") {
     return "#EAE8E6";
   } else if (val.toLowerCase() == "en cours") {
     return "orange";
-  } else if (val.toLowerCase() == "arrêtée") {
+  } else if (val.toLowerCase() == "arrêté") {
     return "red";
-  } else if (val.toLowerCase() == "suspendue") {
+  } else if (val.toLowerCase() == "suspendu") {
     return "black";
   }
 }

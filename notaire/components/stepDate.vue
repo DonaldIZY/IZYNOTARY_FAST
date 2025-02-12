@@ -9,7 +9,7 @@
       type: String,
       required: true
     },
-    parentDoor: { //["non débuté", "en cours", "suspendue", "arrêtée", "terminée"]
+    parentDoor: { //["non débuté", "en cours", "suspendu", "arrêté", "terminé"]
       type: String,
       required: true
     }
