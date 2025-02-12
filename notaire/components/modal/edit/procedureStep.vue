@@ -6,7 +6,7 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    // required: true
+    required: true
   },
 });
 
@@ -19,6 +19,8 @@ const procedureData = toRef(props, "data");
 console.log("procedureData : ", procedureData);
 
 const newProcedureData = reactive({});
+
+console.log("newProcedureData after procedure has been selected: ", newProcedureData);
 </script>
 
 <template>
@@ -39,7 +41,15 @@ const newProcedureData = reactive({});
           v-for="step in procedureData.steps.filter((elem) =>
             ['terminé', 'en cours'].includes(elem.status.toLowerCase())
           )"
-          :value="step.action"
+          :value="step.action" 
+          @click="() => {
+              newProcedureData.action = step.action;
+              newProcedureData.documents = {};
+              for(const docName of Object.keys(step.documents)) {
+                newProcedureData.documents[docName] = '';
+              }
+              console.log('newProcedureData : ', newProcedureData);
+            }"
         >
           {{
             `Etape ${
@@ -58,7 +68,7 @@ const newProcedureData = reactive({});
             v-for="step in procedureData.steps.filter((elem) =>
               ['terminé', 'en cours'].includes(elem.status.toLowerCase())
             )"
-            :value="step.action"
+            :value="step.action" 
           >
             <v-row>
               <v-chip
@@ -93,7 +103,13 @@ const newProcedureData = reactive({});
                   "
                   :disabled="step.documents[doc].path != '' ? true : false"
                 />
+                <!-- <required-document 
+                v-for="doc in Object.keys(step.documents)"
+                :label="step.documents[doc].name"
+                v-model:file="newProcedureData.documents[doc]"
+              ></required-document> -->
               </v-col>
+              
 
               <v-col cols="12" md="5">
                 <v-row>
