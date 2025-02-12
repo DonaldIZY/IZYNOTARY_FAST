@@ -156,35 +156,47 @@
     <selling-board v-if="text == 'selling'"></selling-board>
     <company-formation-board
       v-else-if="text == 'companyFormation'"
+      :companyFormationData="companyFormationData"
     ></company-formation-board>
     <modification-company-board
       v-else-if="text == 'modificationCompany'"
+      :companyModificationData="companyModificationData"
     ></modification-company-board>
     <transfer-of-movable-property-board
       v-else-if="text == 'transferOfMovableProperty'"
+      :movablePropertyData="movablePropertyData"
     ></transfer-of-movable-property-board>
     <transfer-of-real-estate-board
       v-else-if="text == 'transferOfRealEstate'"
+      :realEstateData="realEstateData"
     ></transfer-of-real-estate-board>
   </div>
 </template>
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
-import { formatDate, formatDateWithoutTime } from "~/utils/formatDate";
 
 const text = ref("selling");
 const customer = ref("");
 const route = useRoute();
 
+const companyFormationData = ref(null);
+const companyModificationData = ref(null);
+const movablePropertyData = ref(null);
+const realEstateData = ref(null);
+
 onMounted(async () => {
   try {
-    const response = await fetch(
-      API_SERVER_URL + `/customers/${route.params.ID}`
-    );
-    //console.log(response);
-    if (!(response.status === 200)) throw new Error("Donnée non trouvée");
-    customer.value = await response.json();
+    const customerFetch = await $fetch(API_SERVER_URL + `/customers/${route.params.ID}`);
+
+    customer.value = customerFetch;
+
+    console.log('datas : ',customer.value);
+
+    companyFormationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Constitution de société");
+    companyModificationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Modification de société");
+    movablePropertyData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens mobiliers")
+    realEstateData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens immobiliers");
   } catch (err) {
     //error.value = err.message;
     console.error(err);

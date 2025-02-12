@@ -73,8 +73,8 @@ export class StepsService {
         step.steps[searchedStepIndex].documents[key].filled = true;
       }
 
-      if(step.steps.every(stepInDb => stepInDb.status == "Terminée")) {
-        folder.status = "Terminée";
+      if(step.steps.every(stepInDb => stepInDb.status == "Terminé")) {
+        folder.status = "Terminé";
   
         await this.entityManager.save(folder);
       }
@@ -86,8 +86,8 @@ export class StepsService {
     }
 
     if(updateStepDto["status"]) {
-      if(["Suspendue", "Arrêtée", "En cours"].includes(updateStepDto["status"])) {
-        if(["Suspendue", "Arrêtée"].includes(updateStepDto["status"])) {
+      if(["Suspendu", "Arrêté", "En cours"].includes(updateStepDto["status"])) {
+        if(["Suspendu", "Arrêté"].includes(updateStepDto["status"])) {
           if(step.steps[searchedStepIndex].status == "En cours") {
             step.steps[searchedStepIndex].status = updateStepDto["status"];
           }else{
@@ -97,7 +97,7 @@ export class StepsService {
             };
           }
         }else if(updateStepDto["status"] == "En cours") {
-          if(["Suspendue", "Arrêtée"].includes(step.steps[searchedStepIndex].status)) {
+          if(["Suspendu", "Arrêté"].includes(step.steps[searchedStepIndex].status)) {
             step.steps[searchedStepIndex].status = updateStepDto["status"];
           }else{
             return {
@@ -118,9 +118,9 @@ export class StepsService {
     }else{
       //WE HAVE TO CHANGE THE STATUS OF A STEP WHEN ALL OF ITS SUBSTEPS ARE DONE AND WHE DON'T TRY TO CANCEL OR SUSPEND IT
       if(Object.values(step.steps[searchedStepIndex].documents).every(subStep => subStep["filled"] == true)) {
-        step.steps[searchedStepIndex].status = "Terminée";
+        step.steps[searchedStepIndex].status = "Terminé";
         //WHEN A STEP HAS A STATUS OF DONE, THE NEXT SHOULD HAVE A STATUS OF CURRENT
-        if(searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminée") {
+        if(searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminé") {
           step.steps[searchedStepIndex + 1].status = "En cours";
         }
       }

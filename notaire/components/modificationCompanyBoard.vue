@@ -1,8 +1,8 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="modificationCompanys"
-    :search="modificationCompanysSearch"
+    :items="modificationCompanies"
+    :search="modificationCompaniesSearch"
     no-data-text="Aucune procédure de modification de société."
     hover
     class="customTable2"
@@ -31,7 +31,13 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  companyModificationData: Array,
+});
+
 const loading = ref(true);
+
+const modificationCompanies = ref([]);
 
 const headers = ref([
   { align: "start", key: "NUM", title: "N° du dossier" },
@@ -71,6 +77,28 @@ const headers = ref([
   { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "start", key: "STATUS", title: "Statut" },
 ]);
+
+watchEffect(() => {
+  console.log("props companyModificationData: ", props.companyModificationData)
+  if (props.companyModificationData) {
+    props.companyModificationData.forEach((procedure, index) => {
+      modificationCompanies.value.push({
+        NUM: index + 1,
+        CREATE_AT: procedure.createAt.toString(),
+        SUPPLY_OF_PARTS: procedure.step.steps[0].status,
+        DRAFTING_OF_STATUTES: procedure.step.steps[1].status,
+        SETTLEMENT_OF_FEES: procedure.step.steps[2].status,
+        SIGNATURE_OF_ACTS: procedure.step.steps[3].status,
+        SIGNED_DOCUMENT_DEPOSITED: procedure.step.steps[4].status,
+        DELIVERABLES: procedure.step.steps[5].status,
+        PERCENTAGE: procedure.progression,
+        STATUS: procedure.status,
+      });
+    });
+    loading.value = false;
+  }
+});
+
 </script>
 
 <style>

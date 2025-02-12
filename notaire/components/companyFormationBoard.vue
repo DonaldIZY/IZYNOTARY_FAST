@@ -8,6 +8,20 @@
     class="customTable2"
     :loading="loading"
   >
+  <template #item="{ item }">
+            <tr >
+              <td>{{ item.NUM }}</td>
+              <td>{{ formatDate(item.CREATE_AT) }}</td>
+              <td style="text-align: center;"><v-icon :color="getStatusColorIcon(item.SUPPLY_OF_PARTS)">{{ getStatusIcon(item.SUPPLY_OF_PARTS) }}</v-icon></td>
+              <td style="text-align: center;"><v-icon :color="getStatusColorIcon(item.WRITING_DEED_OF_SALE)">{{ getStatusIcon(item.WRITING_DEED_OF_SALE) }}</v-icon></td>
+              <td style="text-align: center;"><v-icon :color="getStatusColorIcon(item.SETTLEMENT_OF_FEES)">{{ getStatusIcon(item.SETTLEMENT_OF_FEES) }}</v-icon></td>
+              <td style="text-align: center;"><v-icon :color="getStatusColorIcon(item.SIGNATURE_OF_ACTS)">{{ getStatusIcon(item.SIGNATURE_OF_ACTS) }}</v-icon></td>
+              <td style="text-align: center;"><v-icon :color="getStatusColorIcon(item.SIGNED_DOCUMENT_DEPOSITED)">{{ getStatusIcon(item.SIGNED_DOCUMENT_DEPOSITED) }}</v-icon></td>
+              <td style="text-align: center;"><v-icon :color="getStatusColorIcon(item.DELIVERABLES)">{{ getStatusIcon(item.DELIVERABLES) }}</v-icon></td>
+              <td style="text-align: center;">{{ Math.round(item.PERCENTAGE*100) }}%</td>
+              <td style="text-align: center;"><v-chip size="small" variant="flat" :color="getStatusColorIcon(item.STATUS)">{{ item.STATUS }}</v-chip></td>
+            </tr>
+          </template>
     <!-- Slot pour afficher un loader quand la table est vide -->
     <template v-slot:loading>
       <div class="d-flex justify-center my-10">
@@ -31,9 +45,12 @@
 </template>
 
 <script setup>
-import { API_SERVER_URL } from "~/utils/constants";
+const props = defineProps({
+  companyFormationData: Array,
+});
 
 const loading = ref(true);
+const companyFormations = ref([]);
 
 const headers = ref([
   { align: "start", key: "NUM", title: "N° du dossier" },
@@ -43,81 +60,59 @@ const headers = ref([
     title: "Niveau d'avancement",
     children: [
       {
-        align: "start",
+        align: "center",
         key: "SUPPLY_OF_PARTS",
         title: "Fourniture des pièces",
       },
       {
-        align: "start",
+        align: "center",
         key: "WRITING_DEED_OF_SALE",
         title: "Rédaction des statuts",
       },
       {
-        align: "start",
+        align: "center",
         key: "SETTLEMENT_OF_FEES",
         title: "Règlement des frais",
       },
       {
-        align: "start",
+        align: "center",
         key: "SIGNATURE_OF_ACTS",
         title: "Signature des actes",
       },
       {
-        align: "start",
+        align: "center",
         key: "SIGNED_DOCUMENT_DEPOSITED",
         title: "Dépôt des actes signés",
       },
-      { align: "start", key: "DELIVERABLES", title: "Livrables" },
+      { align: "center", key: "DELIVERABLES", title: "Livrables" },
     ],
   },
-  { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
-  { align: "start", key: "STATUS", title: "Statut" },
+  { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
+  { align: "center", key: "STATUS", title: "Statut" },
 ]);
 
-const config = useRuntimeConfig();
-const route = useRoute();
-
-onMounted(async () => {
-  try {
-    const response = await fetch(
-      API_SERVER_URL + `/customers/${route.params.ID}`
-    );
-    const data = await response.json();
-
-    console.log(data);
-
-    console.log(data.folders);
-
-    const consSocDatas = data.folders.map((folder) => ({
-      num: folder.folderNum,
-      proced: folder.procedureType,
-      statut: folder.status,
-    }));
-
-    console.log(consSocDatas);
-    loading.value = false;
-  } catch (error) {
-    console.error("Erreur lors du chargement des données", error);
+watchEffect(() => {
+  console.log("props companyFormationData: ", props.companyFormationData);
+  if (props.companyFormationData) {
+    props.companyFormationData.forEach((procedure, index) => {
+      companyFormations.value.push({
+        // return {
+        NUM: procedure.folderNum,
+        CREATE_AT: procedure.createAt.toString(),
+        SUPPLY_OF_PARTS: procedure.step.steps[0]?.status,
+        WRITING_DEED_OF_SALE: procedure.step.steps[1].status,
+        SETTLEMENT_OF_FEES: procedure.step.steps[2].status,
+        SIGNATURE_OF_ACTS: procedure.step.steps[3].status,
+        SIGNED_DOCUMENT_DEPOSITED: procedure.step.steps[4].status,
+        DELIVERABLES: procedure.step.steps[5].status,
+        PERCENTAGE: parseFloat(procedure.progression),
+        STATUS: procedure.status,
+        // };
+      });
+    });
     loading.value = false;
   }
 });
-
-// const consSocDatas = data.folders.procedureType;
-
-// if (fetchedCustomers) {
-//       customers.value = fetchedCustomers.map((customer) => ({
-//         ID: customer.id,
-//         LAST_NAME: customer.lastName,
-//         FIRST_NAME: customer.firstName,
-//         EMAIL: customer.email,
-//         PHONE: customer.phone,
-//         CURRENT_FILES: 0,
-//         COMPLETED_FILES: 0,
-//         HANGING_FILES: 0,
-//         CLOSED_FILES: 0,
-//         FILES: customer.folders.length,
-//       }));
-//     }
 </script>
 
 <style>
