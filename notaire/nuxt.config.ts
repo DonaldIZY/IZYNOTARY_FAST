@@ -22,6 +22,7 @@ export default defineNuxtConfig({
   ],
   vite: {
     server: {
+      // @ts-expect-error
       port: 2610,
     },
     vue: {

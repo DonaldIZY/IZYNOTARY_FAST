@@ -14,6 +14,7 @@
               label="Nom"
               variant="outlined"
               density="compact"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -24,7 +25,7 @@
               label="Prénoms"
               variant="outlined"
               density="compact"
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -34,7 +35,7 @@
               color="primary"
               label="Email"
               variant="outlined"
-              :rules="[required, emailRule]"
+              :rules="validationRules.email"
               density="compact"
             ></v-text-field>
           </v-col>
@@ -42,11 +43,12 @@
           <v-col cols="12">
             <v-text-field
               v-model="phone"
+              type="number"
               color="primary"
               label="Téléphone"
               variant="outlined"
               density="compact"
-              :rules="[required]"
+              :rules="validationRules.phone"
             ></v-text-field>
           </v-col>
 
@@ -60,7 +62,7 @@
               item-value="ID"
               variant="outlined"
               density="compact"
-              :rules="[required]"
+              :rules="validationRules.required"
               hide-details
             ></v-select>
           </v-col>
@@ -101,6 +103,8 @@
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
+// import rules from
+import { validationRules } from '~/utils/validationRules';
 
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
@@ -174,17 +178,6 @@ const handleUser = async () => {
     //Réinitialisation des données du formulaire
     resetForm();
   }
-};
-
-const required = (v) => {
-  return !!v || "Le champ est obligatoire.";
-};
-
-const emailRule = (v) => {
-  return (
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ||
-    "Veuillez entrer une adresse email valide."
-  );
 };
 
 const { data: fetchedRoles, error } = useFetch(API_SERVER_URL + `/roles`);

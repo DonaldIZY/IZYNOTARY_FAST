@@ -105,7 +105,15 @@ export class FoldersService {
                     },
                     {
                         "stepNum": '2',
-                        "status": 'Non débuté',
+                        "status": 
+                            createFolderDto.requiredFiles.customerCNI && 
+                            createFolderDto.requiredFiles.partnerCNI && 
+                            createFolderDto.requiredFiles.certificateOfBirthOrMarriage && 
+                            createFolderDto.requiredFiles.CIEOrSODECIInvoice &&  
+                            createFolderDto.requiredFiles.taxStatusCertificate &&
+                            createFolderDto.requiredFiles.titleDeed &&
+                            createFolderDto.requiredFiles.landRegistry &&
+                            createFolderDto.requiredFiles.certificateOfLocation ? 'En cours' : 'Non débuté',
                         "action": 'Rédaction l\'acte de vente',
                         "documents": {
                             "deedOfSale": {
@@ -256,7 +264,13 @@ export class FoldersService {
                     },
                     {
                         "stepNum": '2',
-                        "status": 'Non débuté',
+                        "status": 
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.criminalRecord &&
+                            createFolderDto.requiredFiles.lease &&
+                            createFolderDto.requiredFiles.sketchOfGeoLocation &&
+                            createFolderDto.requiredFiles.formForCompanyFormation &&
+                            createFolderDto.requiredFiles.capitalToBeReleased ? 'En cours' : 'Non débuté',
                         "action": 'Rédaction des status',
                         "documents": {
                             "writingTheStatus": {
@@ -377,14 +391,18 @@ export class FoldersService {
                         "comment": '',
                         "startDate": new Date(),
                         "endDate":
-                        createFolderDto.requiredFiles.customerCNI &&
-                        createFolderDto.requiredFiles.RCCM &&
-                        createFolderDto.requiredFiles.Statut &&
-                        createFolderDto.requiredFiles.DNSV ? new Date() : null
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.RCCM &&
+                            createFolderDto.requiredFiles.Statut &&
+                            createFolderDto.requiredFiles.DNSV ? new Date() : null
                     },
                     {
                         "stepNum": '2',
-                        "status": 'Non débuté',
+                        "status": 
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.RCCM &&
+                            createFolderDto.requiredFiles.Statut &&
+                            createFolderDto.requiredFiles.DNSV ? 'En cours' : 'Non débuté',
                         "action": 'Rédaction des status',
                         "documents": {
                             "writingTheStatus": {
@@ -495,7 +513,9 @@ export class FoldersService {
                     },
                     {
                         "stepNum": '2',
-                        "status": 'Non débuté',
+                        "status": 
+                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.birthCertificate ? 'En cours' : 'Non débuté',
                         "action": 'Demande auprès de la banque',
                         "documents": {
                             "deedOfSale": {
@@ -614,7 +634,10 @@ export class FoldersService {
                     },
                     {
                         "stepNum": '2',
-                        "status": 'Non débuté',
+                        "status": 
+                            createFolderDto.requiredFiles.cniOfRightsHolders &&
+                            createFolderDto.requiredFiles.cniOfTheDonor &&
+                            createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders ? 'En cours' : 'Non débuté',
                         "action": 'Règlement des frais',
                         "documents": {
                             "paymentOfFees": {
@@ -711,6 +734,8 @@ export class FoldersService {
                 ]
             });
         }
+
+        console.log("STEP : ", step);
 
         const folder = new Folder({
             ...createFolderDto

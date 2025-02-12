@@ -1,7 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Response } from 'express';
 import { User } from 'src/users/entities/user.entity';
 import { Password } from 'src/utils/password.util';
 import { Repository } from 'typeorm';
@@ -14,35 +13,24 @@ export class AuthService {
         private readonly jwtService: JwtService,
     ) {}
 
-    async login(email: string, password: string, res: Response): Promise<{ accessToken: string }> {
-        const user = await this.userRepository.findOne({ 
-            where: { email },
-            relations: {
-                role: true, 
-                identifier: true
-            }
-        });
+    async validateUser(email: string, pass: string): Promise<any> {
 
-        if(!user || !(await Password.validatePassword(password, user.identifier.hashedValue))) {
-            throw new UnauthorizedException('Invalid credentials')
+		const user = await this.userRepository.findOne({
+			where: { email },
+            relations: { role: true, identifier: true},
+		});
+
+		if (user && (await Password.validatePassword(pass, user.identifier.hashedValue))) {
+            const { identifier, ...result } = user;
+            return result;
         }
+		return null;
+	}
 
-        const payload = { id: user.id, lastName: user.lastName, firstName: user.firstName, role: user.role.name };
-        const accessToken = this.jwtService.sign(payload);
-
-        res.cookie('access_token', accessToken, {
-          httpOnly: true,
-          secure: false, // Mettre à false en local si besoin
-          sameSite: 'strict',
-          maxAge: 3600000
-        });
-
-        return { accessToken };
+    async login(user: any) {
+        const payload = { username: user.lastName+" "+user.firstName, role: user.role.name, sub: user.id };
+        return {
+            accessToken: this.jwtService.sign(payload),
+        };
     }
-
-    async logout(res: Response) {
-        res.clearCookie('access_token');
-        return { message: 'Déconnexion réussie' };
-    }
-    
 }
