@@ -126,18 +126,11 @@
             ></v-select>
           </v-col>
           <v-col cols="12">
-            <v-file-input
-              v-model="imageOfIdentification"
-              color="primary"
-              density="compact"
+            <required-document
+              v-model:file="imageOfIdentification"
               label="Ajout d'une image de la pièce d'identité"
-              prepend-icon=""
-              prepend-inner-icon="mdi-id-card"
-              variant="outlined"
-              clearable
-              hide-details
-              :rules="validationRules.required"
-            ></v-file-input>
+              icon="mdi-id-card"
+            ></required-document>
           </v-col>
         </v-row>
       </v-card-text>
@@ -254,7 +247,6 @@ const handleCustomer = async () => {
   customerData.append("identificationNumber", identificationNumber.value);
   customerData.append("imageOfIdentification", imageOfIdentification.value);
 
-  console.log(customerData.get("imageOfIdentification"));
   try {
     const data = await $fetch(API_SERVER_URL + `/customers`, {
       method: "POST",

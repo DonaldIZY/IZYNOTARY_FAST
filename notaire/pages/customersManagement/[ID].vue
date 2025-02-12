@@ -123,6 +123,25 @@
               </v-col>
             </v-row>
           </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions class="justify-end">
+            <v-btn
+              text="Modifier"
+              color="secondary"
+              variant="tonal"
+              prepend-icon="mdi-pencil"
+              @click="closeModal"
+              class="text-none"
+            ></v-btn>
+            <v-btn
+              text="Supprimer"
+              color="primary"
+              variant="tonal"
+              prepend-icon="mdi-delete"
+              @click="closeModal"
+              class="text-none"
+            ></v-btn>
+          </v-card-actions>
         </v-card>
       </v-sheet>
     </v-col>
@@ -153,7 +172,10 @@
       <v-btn disabled value="credit" class="text-none"> Crédit </v-btn>
     </v-btn-toggle>
 
-    <selling-board v-if="text == 'selling'" :sellingData="sellingData"></selling-board>
+    <selling-board
+      v-if="text == 'selling'"
+      :sellingData="sellingData"
+    ></selling-board>
     <company-formation-board
       v-else-if="text == 'companyFormation'"
       :companyFormationData="companyFormationData"
@@ -188,17 +210,30 @@ const sellingData = ref(null);
 
 onMounted(async () => {
   try {
-    const customerFetch = await $fetch(API_SERVER_URL + `/customers/${route.params.ID}`);
+    const customerFetch = await $fetch(
+      API_SERVER_URL + `/customers/${route.params.ID}`
+    );
 
     customer.value = customerFetch;
 
-    console.log('datas : ',customer.value);
+    console.log("datas : ", customer.value);
 
-    companyFormationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Constitution de société");
-    companyModificationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Modification de société");
-    movablePropertyData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens mobiliers")
-    realEstateData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens immobiliers");
-    sellingData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Vente");
+    companyFormationData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Constitution de société"
+    );
+    companyModificationData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Modification de société"
+    );
+    movablePropertyData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Succession de biens mobiliers"
+    );
+    realEstateData.value = customerFetch.folders.filter(
+      (procedure) =>
+        procedure.procedureType == "Succession de biens immobiliers"
+    );
+    sellingData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Vente"
+    );
   } catch (err) {
     //error.value = err.message;
     console.error(err);
@@ -208,7 +243,7 @@ onMounted(async () => {
 
 <style>
 .infoBox {
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
 }
 </style>
