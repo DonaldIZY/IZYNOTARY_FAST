@@ -112,7 +112,7 @@ const newProcedureData = reactive({});
                             newProcedureData.comment &&
                             newProcedureData.comment.trim() != ''
                           ) {
-                            newProcedureData.status = 'Suspendue';
+                            newProcedureData.status = 'Suspendu';
                             $emit('submit', {
                               ...newProcedureData,
                               contact: procedureData.customer.phone,
@@ -143,7 +143,7 @@ const newProcedureData = reactive({});
                             newProcedureData.comment &&
                             newProcedureData.comment.trim() != ''
                           ) {
-                            newProcedureData.status = 'Arrêtée';
+                            newProcedureData.status = 'Arrêté';
                             $emit('submit', {
                               ...newProcedureData,
                               contact: procedureData.customer.phone,
@@ -206,7 +206,7 @@ const newProcedureData = reactive({});
           v-if="procedureData.STATUS == 'Arrêté'"
           :style="{ textAlign: 'center' }"
         >
-          Vous ne pouvez pas modifier une procédure arrêtée
+          Vous ne pouvez pas modifier une procédure ayant le statut arrêté.
         </h4>
         <v-textarea
           v-if="procedureData.STATUS == 'Suspendu'"
@@ -215,7 +215,7 @@ const newProcedureData = reactive({});
           density="compact"
           label="Commentaire pour reprendre la procédure"
           v-model="
-            procedureData.steps.find((elem) => elem.status == 'Suspendue')
+            procedureData.steps.find((elem) => elem.status == 'Suspendu')
               .comment
           "
           v-on:update:model-value="
