@@ -123,6 +123,7 @@ const newProcedureData = reactive({});
                               procedureType: procedureData.PROCEDURE_TYPE,
                               id: procedureData.stepId,
                             });
+                            newProcedureData = {};
                           } else {
                             console.log(
                               'Veuillez ajouter un commentaire pour suspendre la procédure'
@@ -154,6 +155,7 @@ const newProcedureData = reactive({});
                               procedureType: procedureData.PROCEDURE_TYPE,
                               id: procedureData.stepId,
                             });
+                            newProcedureData = {};
                           } else {
                             console.log(
                               'Veuillez ajouter un commentaire pour arrêter la procédure'
@@ -267,15 +269,16 @@ const newProcedureData = reactive({});
           color="primary"
           text="Enregistrer"
           variant="flat"
-          @click="
+          @click="() => {
             $emit('submit', {
               ...newProcedureData,
               contact: procedureData.customer.phone,
               folderNum: procedureData.folderNum,
               procedureType: procedureData.PROCEDURE_TYPE,
               id: procedureData.stepId,
-            })
-          "
+            });
+            newProcedureData = {};
+          }"
           class="text-none"
         ></v-btn>
         <v-btn
@@ -297,6 +300,7 @@ const newProcedureData = reactive({});
                   procedureType: procedureData.PROCEDURE_TYPE,
                   id: procedureData.stepId,
                 });
+                newProcedureData = {};
               } else {
                 console.log(
                   'Veuillez ajouter un commentaire pour continuer la procédure'
@@ -312,11 +316,11 @@ const newProcedureData = reactive({});
 </template>
 
 <style scoped>
-.titleModification {
+  .titleModification {
   font-weight: bolder;
-}
+  }
 
-.folderNumber {
+  .folderNumber {
   color: #ad1919;
-}
+  }
 </style>
