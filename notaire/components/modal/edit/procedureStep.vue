@@ -31,7 +31,7 @@ const newProcedureData = reactive({});
         }}</span></v-card-title
       >
       <v-tabs
-        v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)"
+        v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)"
         v-model="tab"
         color="#ad1919"
       >
