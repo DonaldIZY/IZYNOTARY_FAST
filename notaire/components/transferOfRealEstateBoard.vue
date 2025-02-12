@@ -8,6 +8,58 @@
     class="customTable2"
     :loading="loading"
   >
+  <template #item="{ item }">
+      <tr>
+        <td>{{ item.NUM }}</td>
+        <td>{{ formatDate(item.CREATE_AT) }}</td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SUPPLY_OF_PARTS)">{{
+            getStatusIcon(item.SUPPLY_OF_PARTS)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SETTLEMENT_OF_FEES)">{{
+            getStatusIcon(item.SETTLEMENT_OF_FEES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)">{{
+            getStatusIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.DECLARATION_OF_ESTATE)">{{
+            getStatusIcon(item.DECLARATION_OF_ESTATE)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)">{{
+            getStatusIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)">{{
+            getStatusIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.DELIVERABLES)">{{
+            getStatusIcon(item.DELIVERABLES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          {{ Math.round(item.PERCENTAGE * 100) }}%
+        </td>
+        <td style="text-align: center">
+          <v-chip
+            size="small"
+            variant="flat"
+            :color="getStatusColorIcon(item.STATUS)"
+            >{{ item.STATUS }}</v-chip
+          >
+        </td>
+      </tr>
+    </template>
     <!-- Slot pour afficher un loader quand la table est vide -->
     <template v-slot:loading>
       <div class="d-flex justify-center my-10">
@@ -39,47 +91,47 @@
 
 const loading = ref(true);
 const headers = ref([
-  { align: "start", key: "NUM", title: "N° du dossier" },
-  { align: "start", key: "CREATE_AT", title: "Date de création" },
+  { align: "center", key: "NUM", title: "N° du dossier" },
+  { align: "center", key: "CREATE_AT", title: "Date de création" },
   {
     align: "center",
     title: "Niveau d'avancement",
     children: [
       {
-        align: "start",
+        align: "center",
         key: "SUPPLY_OF_PARTS",
         title: "Fourniture des pièces",
       },
       {
-        align: "start",
+        align: "center",
         key: "SETTLEMENT_OF_FEES",
         title: "Règlement des frais",
       },
       {
-        align: "start",
+        align: "center",
         key: "VALUATION_OF_INDIVIDUAL_PROPERTIES",
         title: "Évaluation des différents biens immobiliers",
       },
       {
-        align: "start",
+        align: "center",
         key: "DECLARATION_OF_ESTATE",
         title: "Déclaration de la succession",
       },
       {
-        align: "start",
+        align: "center",
         key: "PREPARATION_OF_REAL_ESTATE_CERTIFICATE",
         title: "Établissement de l'attestation immobilière",
       },
       {
-        align: "start",
+        align: "center",
         key: "DEPOSIT_OF_REAL_ESTATE_CERTIFICATE",
         title: "Dépôt de l'attestation immobilière",
       },
-      { align: "start", key: "DELIVERABLES", title: "Livrables" },
+      { align: "center", key: "DELIVERABLES", title: "Livrables" },
     ],
   },
-  { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
-  { align: "start", key: "STATUS", title: "Statut" },
+  { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
+  { align: "center", key: "STATUS", title: "Statut" },
 ]);
 
 watchEffect(() => {

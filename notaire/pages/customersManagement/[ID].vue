@@ -153,7 +153,7 @@
       <v-btn disabled value="credit" class="text-none"> Crédit </v-btn>
     </v-btn-toggle>
 
-    <selling-board v-if="text == 'selling'"></selling-board>
+    <selling-board v-if="text == 'selling'" :sellingData="sellingData"></selling-board>
     <company-formation-board
       v-else-if="text == 'companyFormation'"
       :companyFormationData="companyFormationData"
@@ -184,6 +184,7 @@ const companyFormationData = ref(null);
 const companyModificationData = ref(null);
 const movablePropertyData = ref(null);
 const realEstateData = ref(null);
+const sellingData = ref(null);
 
 onMounted(async () => {
   try {
@@ -197,6 +198,7 @@ onMounted(async () => {
     companyModificationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Modification de société");
     movablePropertyData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens mobiliers")
     realEstateData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens immobiliers");
+    sellingData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Vente");
   } catch (err) {
     //error.value = err.message;
     console.error(err);
