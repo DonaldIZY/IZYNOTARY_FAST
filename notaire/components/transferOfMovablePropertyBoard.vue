@@ -31,6 +31,13 @@
 </template>
 
 <script setup>
+
+const transferOfMovableProperties = ref([]);
+
+const props = defineProps({
+  movablePropertyData: Array, 
+});
+
 const loading = ref(true);
 
 const headers = ref([
@@ -71,6 +78,27 @@ const headers = ref([
   { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "start", key: "STATUS", title: "Statut" },
 ]);
+
+watchEffect(() => {
+  console.log("props mobileProprietyData: ", props.movablePropertyData)
+  if (props.movablePropertyData) {
+    props.movablePropertyData.forEach((procedure, index) => {
+      transferOfMovableProperties.value.push({
+        NUM: index + 1,
+        CREATE_AT: procedure.createAt.toString(),
+        SUPPLY_OF_PARTS: procedure.step.steps[0].status,
+        REQUEST_TO_BANK: procedure.step.steps[1].status,
+        PREPARATION_OF_INCORPORATION_LETTER: procedure.step.steps[2].status,
+        DECLARATION_OF_ESTATE: procedure.step.steps[3].status,
+        BANK_DEPOSIT: procedure.step.steps[4].status,
+        DELIVERABLES: procedure.step.steps[5].status,
+        PERCENTAGE: procedure.progression,
+        STATUS: procedure.status,
+      });
+    });
+    loading.value = false;
+  }
+});
 </script>
 
 <style>

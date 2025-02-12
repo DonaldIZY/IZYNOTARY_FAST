@@ -31,6 +31,12 @@
 </template>
 
 <script setup>
+  const transferOfRealEstates = ref([]);
+
+  const props = defineProps({
+    realEstateData: Array, 
+});
+
 const loading = ref(true);
 const headers = ref([
   { align: "start", key: "NUM", title: "N° du dossier" },
@@ -75,6 +81,28 @@ const headers = ref([
   { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "start", key: "STATUS", title: "Statut" },
 ]);
+
+watchEffect(() => {
+  console.log("props realEstateData: ", props.realEstateData)
+  if (props.realEstateData) {
+    props.realEstateData.forEach((procedure, index) => {
+      transferOfRealEstates.value.push({
+        NUM: index + 1,
+        CREATE_AT: procedure.createAt.toString(),
+        SUPPLY_OF_PARTS: procedure.step.steps[0].status,
+        SETTLEMENT_OF_FEES: procedure.step.steps[1].status,
+        VALUATION_OF_INDIVIDUAL_PROPERTIES: procedure.step.steps[2].status,
+        DECLARATION_OF_ESTATE: procedure.step.steps[3].status,
+        PREPARATION_OF_REAL_ESTATE_CERTIFICATE: procedure.step.steps[4].status,
+        DEPOSIT_OF_REAL_ESTATE_CERTIFICATE: procedure.step.steps[5].status,
+        DELIVERABLES: procedure.step.steps[6].status,
+        PERCENTAGE: procedure.progression,
+        STATUS: procedure.status,
+      });
+    });
+    loading.value = false;
+  }
+});
 </script>
 
 <style>

@@ -25,10 +25,10 @@ const newProcedureData = reactive({});
   <v-dialog v-model="props.show" max-width="900" :persistent="true">
     <v-card >
       <v-card-title>{{ `Modification de la procédure N° ${procedureData.folderNum}` }}</v-card-title>
-      <v-tabs v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)" v-model="tab" color="#ad1919">
+      <v-tabs v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)" v-model="tab" color="#ad1919">
         <v-tab
           v-for="step in procedureData.steps.filter((elem) =>
-            ['terminée', 'en cours'].includes(elem.status.toLowerCase())
+            ['terminé', 'en cours'].includes(elem.status.toLowerCase())
           )"
           :value="step.action "
         >
@@ -37,10 +37,10 @@ const newProcedureData = reactive({});
       </v-tabs>
 
       <v-card-text>
-        <v-tabs-window v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)" v-model="tab">
+        <v-tabs-window v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)" v-model="tab">
           <v-tabs-window-item
             v-for="step in procedureData.steps.filter((elem) =>
-              ['terminée', 'en cours'].includes(elem.status.toLowerCase())
+              ['terminé', 'en cours'].includes(elem.status.toLowerCase())
             )"
             :value="step.action"
           >
@@ -98,7 +98,7 @@ const newProcedureData = reactive({});
           @click="
             () => {
               if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
-                newProcedureData.status = 'Suspendue';
+                newProcedureData.status = 'Suspendu';
                 $emit('submit', {
               ...newProcedureData,
               contact: procedureData.customer.phone,
@@ -121,7 +121,7 @@ const newProcedureData = reactive({});
           @click="
             () => {
               if(newProcedureData.comment && newProcedureData.comment.trim() != '') {
-                newProcedureData.status = 'Arrêtée';
+                newProcedureData.status = 'Arrêté';
                 $emit('submit', {
               ...newProcedureData,
               contact: procedureData.customer.phone,
@@ -142,21 +142,21 @@ const newProcedureData = reactive({});
           </v-tabs-window-item>
         </v-tabs-window>
 
-        <img v-if="procedureData.STATUS == 'Arrêtée'" :style="{width: '50%', maxWidth: '150px', display: 'block', margin: '0 auto'}" src="/public/sorry.png" />
-        <h4 v-if="procedureData.STATUS == 'Arrêtée'" :style="{textAlign: 'center'}">Vous ne pouvez pas modifier une procédure arrêtée</h4>
+        <img v-if="procedureData.STATUS == 'Arrêté'" :style="{width: '50%', maxWidth: '150px', display: 'block', margin: '0 auto'}" src="/public/sorry.png" />
+        <h4 v-if="procedureData.STATUS == 'Arrêté'" :style="{textAlign: 'center'}">Vous ne pouvez pas modifier une procédure ayant le statut arrêté</h4>
         <v-textarea 
-        v-if="procedureData.STATUS == 'Suspendue'"
+        v-if="procedureData.STATUS == 'Suspendu'"
         color="primary"
         variant="outlined"
         density="compact" 
         label="Commentaire pour reprendre la procédure"
-        v-model="procedureData.steps.find(elem => elem.status == 'Suspendue').comment" 
+        v-model="procedureData.steps.find(elem => elem.status == 'Suspendu').comment" 
         v-on:update:model-value="(val) => {
           // console.log('suspended step comment : ', val);
-          if (newProcedureData.action == procedureData.steps.find(elem => elem.status == 'Suspendue').action) {
+          if (newProcedureData.action == procedureData.steps.find(elem => elem.status == 'Suspendu').action) {
             newProcedureData.comment = val;
           } else {
-            newProcedureData = {action: procedureData.steps.find(elem => elem.status == 'Suspendue').action, comment: val};
+            newProcedureData = {action: procedureData.steps.find(elem => elem.status == 'Suspendu').action, comment: val};
           }
           // console.log('new procedure data:', newProcedureData);
         }"
@@ -183,7 +183,7 @@ const newProcedureData = reactive({});
         ></v-btn>
 
         <v-btn 
-          v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)"
+          v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)"
           color="primary"
           text="Enregistrer"
           variant="flat"
@@ -199,7 +199,7 @@ const newProcedureData = reactive({});
           class="text-none"
         ></v-btn> 
         <v-btn
-          v-if="procedureData.STATUS == 'Suspendue'"
+          v-if="procedureData.STATUS == 'Suspendu'"
           color="primary"
           text="Continuer la procédure"
           variant="flat"
