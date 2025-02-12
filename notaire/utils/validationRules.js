@@ -11,6 +11,6 @@ export const validationRules = {
     ],
     indicNumber: [
       v => !!v || "Ce champ est requis",
-      v => /^[A-Za-z0-9 ]{12}$/.test(v) || "Le numéro doit contenir 12 caractères",
+      v => /^[A-Za-z0-9 ]{1,15}$/.test(v) || "Le numéro doit contenir 12 caractères",
     ]
   };
