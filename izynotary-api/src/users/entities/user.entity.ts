@@ -32,7 +32,6 @@ export class User {
     @OneToMany(() => Folder, folder => folder.assignedTo)
     folders: Folder[];
 
-
     @ManyToOne(() => Role, role => role.users, { onUpdate: "CASCADE" })
     role: Role;
 
