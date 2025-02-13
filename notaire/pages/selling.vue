@@ -306,6 +306,11 @@ const sellers = ref([]);
 const sellerId = ref(null);
 const selectedSeller = ref(null);
 
+// Nouvelles ref pour le champ "assigné à"
+const users = ref([]);
+const userId = ref(null);
+const selectedUser = ref(null);
+
 const firstName = ref("");
 const lastName = ref("");
 const birthDate = ref("");
@@ -340,8 +345,6 @@ const toggleModal = () => {
 const toggleSellerModal = () => {
   openSellerModal.value = !openSellerModal.value;
 };
-
-const config = useRuntimeConfig();
 
 const loadCustomers = async () => {
   try {
@@ -381,13 +384,30 @@ const loadSellers = async () => {
   }
 };
 
+const loadUsers = async () => {
+  try {
+    const fetchUsers = await $fetch(API_SERVER_URL + `/users`);
+    if (fetchUsers) {
+      users.value = fetchUsers.map((user) => ({
+        ID: user.id,
+        LASTNAME: user.lastName,
+        FIRSTNAME: user.firstName,
+        EMAIL: user.email
+      }));
+    }
+  } catch (err) {
+    console.error("Erreur lors du chargement des utilisateurs :", err);
+  }
+};
+
 loadCustomers();
 loadSellers();
+loadUsers();
 
 watchEffect(() => {
   if (!open.value) {
     loadCustomers();
-  }
+  } 
 });
 
 watchEffect(() => {
@@ -424,6 +444,12 @@ watch(sellerId, (newSelectedSeller) => {
     sellerGender.value = selectedSeller.value.GENDER;
     sellerMaritalStatus.value = selectedSeller.value.MARITAL_STATUS;
   }
+});
+
+watch(userId, (newSelectedUser) => {
+  selectedUser.value = users.value.find(
+    (user) => user.ID === newSelectedUser.ID
+  );
 });
 
 const resetFields = () => {
@@ -476,6 +502,7 @@ const handleProcedure = async () => {
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
   procedureData.append("sellerId", selectedSeller.value.ID);
+  procedureData.append("assignedToId", selectedUser.value.ID);
 
   const requiredFiles = {
     sellerCNI: sellerCNI.value,

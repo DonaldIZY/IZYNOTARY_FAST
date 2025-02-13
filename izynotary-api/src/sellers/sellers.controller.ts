@@ -20,7 +20,7 @@ export class SellersController {
             callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
         },
     }),
-}))
+  }))
   async create(@UploadedFile() file: Express.Multer.File, @Body() createSellerDto: CreateSellerDto) {
     
     const imageUrl = `/uploads/sellers/${file.filename}`;

@@ -28,7 +28,7 @@ export class AuthService {
 	}
 
     async login(user: any) {
-        const payload = { username: user.lastName+" "+user.firstName, role: user.role.name, sub: user.id };
+        const payload = { sub: user.id, username: user.lastName+" "+user.firstName, role: user.role.name };
         return {
             accessToken: this.jwtService.sign(payload),
         };

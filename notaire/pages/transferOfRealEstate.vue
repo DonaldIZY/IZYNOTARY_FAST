@@ -179,10 +179,13 @@ const open = ref(false);
 const openConf = ref(false);
 
 const customers = ref([]);
-
 const customerId = ref(null);
-
 const selectedCustomer = ref(null);
+
+// Nouvelles ref pour le champ "assigné à"
+const users = ref([]);
+const userId = ref(null);
+const selectedUser = ref(null);
 
 const firstName = ref("");
 const lastName = ref("");
@@ -223,7 +226,24 @@ const loadCustomers = async () => {
   }
 };
 
+const loadUsers = async () => {
+  try {
+    const fetchUsers = await $fetch(API_SERVER_URL + `/users`);
+    if (fetchUsers) {
+      users.value = fetchUsers.map((user) => ({
+        ID: user.id,
+        LASTNAME: user.lastName,
+        FIRSTNAME: user.firstName,
+        EMAIL: user.email
+      }));
+    }
+  } catch (err) {
+    console.error("Erreur lors du chargement des utilisateurs :", err);
+  }
+};
+
 loadCustomers();
+loadUsers();
 
 watchEffect(() => {
   if (!open.value) {
@@ -245,6 +265,12 @@ watch(customerId, (newSelectedCustomer) => {
     gender.value = selectedCustomer.value.GENDER;
     identificationNumber.value = selectedCustomer.value.IDENTIFICATION_NUMBER;
   }
+});
+
+watch(userId, (newSelectedUser) => {
+  selectedUser.value = users.value.find(
+    (user) => user.ID === newSelectedUser.ID
+  );
 });
 
 const resetFields = () => {
@@ -287,6 +313,7 @@ const handleProcedure = async () => {
   procedureData.append("progression", 1 / 7);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
+  procedureData.append("assignedToId", selectedUser.value.ID);
 
   const requiredFiles = {
     cniOfRightsHolders: cniOfRightsHolders.value,

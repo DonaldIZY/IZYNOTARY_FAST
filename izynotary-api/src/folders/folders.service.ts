@@ -7,6 +7,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { Step } from 'src/steps/entities/step.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
 import { Seller } from 'src/sellers/entities/seller.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class FoldersService {
@@ -15,6 +16,7 @@ export class FoldersService {
         @InjectRepository(Folder) private readonly folderRepository: Repository<Folder>,
         @InjectRepository(Customer) private readonly customerRepository: Repository<Customer>,
         @InjectRepository(Seller) private readonly sellerRepository: Repository<Seller>,
+        @InjectRepository(User) private readonly userRepository: Repository<User>,
         private readonly entityManager: EntityManager
     ) {}
 
@@ -23,6 +25,8 @@ export class FoldersService {
         const customer = await this.customerRepository.findOneBy({ id: createFolderDto.customerId });
 
         const seller = createFolderDto.procedureType == 'Vente' ? await this.sellerRepository.findOneBy({ id: createFolderDto.sellerId }) : null;
+
+        const assignedTo = await this.userRepository.findOneBy({ id: createFolderDto.assignedToId });
 
         let step;
 
@@ -744,6 +748,7 @@ export class FoldersService {
         folder.step = step;
         folder.customer = customer;
         folder.seller = seller;
+        folder.assignedTo = assignedTo;
 
         await this.entityManager.save(folder);
     }
