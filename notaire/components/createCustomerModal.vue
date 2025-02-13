@@ -126,18 +126,11 @@
             ></v-select>
           </v-col>
           <v-col cols="12">
-            <v-file-input
-              v-model="imageOfIdentification"
-              color="primary"
-              density="compact"
+            <required-document
+              v-model:file="imageOfIdentification"
               label="Ajout d'une image de la pièce d'identité"
-              prepend-icon=""
-              prepend-inner-icon="mdi-id-card"
-              variant="outlined"
-              clearable
-              hide-details
-              :rules="validationRules.required"
-            ></v-file-input>
+              icon="mdi-id-card"
+            ></required-document>
           </v-col>
         </v-row>
       </v-card-text>
@@ -257,15 +250,16 @@ const handleCustomer = async () => {
       method: "POST",
       body: customerData,
     });
-    closeModal();
+
     showTextResultModal.value = "Client créé avec succès !";
     showTypeResultModal.value = "success";
+    closeModal();
     showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création du client :", error);
-    closeModal();
     showTextResultModal.value = "Erreur lors de la création du client";
     showTypeResultModal.value = "error";
+    closeModal();
     showResultModal.value = true;
   } finally {
     //Réinitialisation des données du formulaire

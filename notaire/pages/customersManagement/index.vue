@@ -51,11 +51,11 @@ X
               <td>{{ item.FIRST_NAME }}</td>
               <td>{{ item.EMAIL }}</td>
               <td>{{ item.PHONE }}</td>
-              <td>{{ item.CURRENT_FILES }}</td>
-              <td>{{ item.COMPLETED_FILES }}</td>
-              <td>{{ item.HANGING_FILES }}</td>
-              <td>{{ item.CLOSED_FILES }}</td>
-              <td>{{ item.FILES }}</td>
+              <td style="text-align: center">{{ item.CURRENT_FILES }}</td>
+              <td style="text-align: center">{{ item.COMPLETED_FILES }}</td>
+              <td style="text-align: center">{{ item.HANGING_FILES }}</td>
+              <td style="text-align: center">{{ item.CLOSED_FILES }}</td>
+              <td style="text-align: center">{{ item.FILES }}</td>
             </tr>
           </template>
           <!-- Slot pour afficher un loader quand la table est vide -->
@@ -96,11 +96,11 @@ const customersHeaders = ref([
   { align: "start", key: "FIRST_NAME", title: "Prénoms" },
   { align: "start", key: "EMAIL", title: "Email" },
   { align: "start", key: "PHONE", title: "Téléphone" },
-  { align: "start", key: "CURRENT_FILES", title: "Dossiers en cours" },
-  { align: "start", key: "COMPLETED_FILES", title: "Dossiers terminés" },
-  { align: "start", key: "HANGING_FILES", title: "Dossiers suspendus" },
-  { align: "start", key: "CLOSED_FILES", title: "Dossiers arrêtés" },
-  { align: "start", key: "FILES", title: "Total" },
+  { align: "center", key: "CURRENT_FILES", title: "Dossiers en cours" },
+  { align: "center", key: "COMPLETED_FILES", title: "Dossiers terminés" },
+  { align: "center", key: "HANGING_FILES", title: "Dossiers suspendus" },
+  { align: "center", key: "CLOSED_FILES", title: "Dossiers arrêtés" },
+  { align: "center", key: "FILES", title: "Total" },
 ]);
 
 const customers = ref([]);
@@ -130,10 +130,18 @@ const loadCustomer = async () => {
         FIRST_NAME: customer.firstName,
         EMAIL: customer.email,
         PHONE: customer.phone,
-        CURRENT_FILES: 0,
-        COMPLETED_FILES: 0,
-        HANGING_FILES: 0,
-        CLOSED_FILES: 0,
+        CURRENT_FILES: customer.folders.filter(
+          (folder) => folder.status === "En cours"
+        ).length,
+        COMPLETED_FILES: customer.folders.filter(
+          (folder) => folder.status === "Terminé"
+        ).length,
+        HANGING_FILES: customer.folders.filter(
+          (folder) => folder.status === "Suspendu"
+        ).length,
+        CLOSED_FILES: customer.folders.filter(
+          (folder) => folder.status === "Arrêté"
+        ).length,
         FILES: customer.folders.length,
       }));
     }
