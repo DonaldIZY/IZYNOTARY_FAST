@@ -17,8 +17,13 @@ const emit = defineEmits(["closeModal", "submit"]);
 const procedureData = toRef(props, "data");
 
 console.log("procedureData : ", procedureData);
+console.log("procedureData steps : ", procedureData.value.steps);
 
-const newProcedureData = reactive({});
+const newProcedureData = reactive({action: procedureData.value.steps[0].action, documents: {}});
+
+for(const docName of Object.keys(procedureData.value.steps[0].documents)) {
+  newProcedureData.documents[docName] = "";
+}
 
 console.log("newProcedureData after procedure has been selected: ", newProcedureData);
 </script>
@@ -78,8 +83,9 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
             </v-row>
             <v-row>
               <v-col cols="12" md="7">
-                <v-file-input
-                  v-for="doc in Object.keys(step.documents)"
+                <v-row :style="{gap: '1rem'}" v-for="doc in Object.keys(step.documents)">
+                  <v-file-input
+                  
                   :name="doc"
                   :label="step.documents[doc].name"
                   variant="outlined"
@@ -103,6 +109,19 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
                   "
                   :disabled="step.documents[doc].path != '' ? true : false"
                 />
+                <!-- <v-btn 
+                  color="green" 
+                  text="Aperçu" 
+                  @click="() => {
+                    console.log('media : ', step.documents[doc]);
+                  }"
+                /> -->
+                <required-document-customized 
+                  :label="step.documents[doc].name"
+                  :filePath="API_SERVER_URL + step.documents[doc].path"
+                />
+                </v-row>
+                
                 <!-- <required-document 
                 v-for="doc in Object.keys(step.documents)"
                 :label="step.documents[doc].name"
@@ -113,8 +132,34 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
 
               <v-col cols="12" md="5">
                 <v-row>
+                  <v-col cols="12" sm="8" md="12">
+                    <v-textarea
+                      color="primary"
+                      variant="outlined"
+                      density="compact"
+                      label="Commentaire"
+                      rows="3"
+                      :style="{ marginBottom: '1rem' }"
+                      v-model="step.comment"
+                      v-on:update:model-value="
+                        (val) => {
+                          // console.log('comment : ', val);
+                          if (newProcedureData.action == step.action) {
+                            newProcedureData.comment = val;
+                          } else {
+                            newProcedureData = {
+                              action: step.action,
+                              comment: val,
+                            };
+                          }
+                          // console.log('new procedure data:', newProcedureData);
+                        }
+                      "
+                    />
+                  </v-col>
                   <v-col cols="12" sm="4" md="12">
-                    <v-btn
+                    <v-row :style="{gap: '1rem'}" >
+                      <v-btn
                       v-if="
                         procedureData.steps.find((elem) => elem.action == tab)
                           .status == 'En cours'
@@ -178,32 +223,10 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
                       "
                       class="text-none"
                     ></v-btn>
+                    </v-row>
+                    
                   </v-col>
-                  <v-col cols="12" sm="8" md="12">
-                    <v-textarea
-                      color="primary"
-                      variant="outlined"
-                      density="compact"
-                      label="Commentaire"
-                      rows="3"
-                      :style="{ marginBottom: '1rem' }"
-                      v-model="step.comment"
-                      v-on:update:model-value="
-                        (val) => {
-                          // console.log('comment : ', val);
-                          if (newProcedureData.action == step.action) {
-                            newProcedureData.comment = val;
-                          } else {
-                            newProcedureData = {
-                              action: step.action,
-                              comment: val,
-                            };
-                          }
-                          // console.log('new procedure data:', newProcedureData);
-                        }
-                      "
-                    />
-                  </v-col>
+                  
                 </v-row>
               </v-col>
             </v-row>

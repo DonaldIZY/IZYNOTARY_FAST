@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex align-center ga-8">
     <!-- Input de fichier -->
-    <v-file-input
+    <!-- <v-file-input
       :label="label"
       variant="outlined"
       hide-details
@@ -9,14 +9,17 @@
       accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt"
       @change="onFileChange"
       density="compact"
-    ></v-file-input>
+    ></v-file-input> -->
 
     <!-- Bouton pour afficher le modal -->
     <v-btn
       color="primary"
-      @click="toggleModal"
+      @click="() => {
+        toggleModal();
+        generateFile();
+      }"
       class="text-none"
-      :disabled="!file"
+      :disabled="false/*!file*/"
     >
       Aperçu
     </v-btn>
@@ -34,27 +37,38 @@
         <v-card-text class="dialog-content">
           <!-- Prévisualisation pour différents types de fichiers -->
           <template v-if="fileType === 'image'">
+            <!-- If fileType is image, we can use filePath as it is to show image since it is the online path of an image -->
             <img
-              :src="previewContent"
+              :src="filePath/*testFilePath*/"
               alt="Prévisualisation"
-              style="max-width: 100%"
+              style="width: 150px"
             />
           </template>
           <template v-else-if="fileType === 'pdf'">
             <iframe
-              :src="previewContent"
+              :src="filePath"
               style="width: 100%; height: 400px"
               frameborder="0"
             ></iframe>
           </template>
-          <template v-else-if="fileType === 'text'">
-            <pre
+          <template v-else-if="fileType === 'txt'">
+            <!-- <pre
               style="white-space: pre-wrap; max-height: 400px; overflow: auto"
               >{{ previewContent }}</pre
-            >
+            > -->
+            <iframe
+              :src="filePath"
+              style="width: 100%; height: 400px"
+              frameborder="0"
+            ></iframe>
           </template>
           <template v-else-if="fileType === 'docx'">
-            <div v-html="previewContent"></div>
+            <!-- <div v-html="previewContent"></div> -->
+            <iframe
+              :src="filePath"
+              style="width: 100%; height: 400px"
+              frameborder="0"
+            ></iframe>
           </template>
           <template v-else-if="fileType === 'doc'">
             <p>
@@ -62,7 +76,7 @@
               télécharger ci-dessous :
             </p>
             <a
-              :href="previewContent"
+              :href="filePath/*previewContent*/"
               download
               class="v-btn v-btn--outlined primary text-none"
             >
@@ -96,6 +110,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  filePath: {
+    type: String,
+    required: true,
+  }
 });
 
 const emit = defineEmits(["update:file"]);
@@ -103,11 +121,53 @@ const emit = defineEmits(["update:file"]);
 const open = ref(false);
 const file = ref(null);
 const previewContent = ref(null);
+const fileExtension = props.filePath.split("/").pop().split(".")[1];
 const fileType = ref(null);
+const testFilePath = 'https://upload.wikimedia.org/wikipedia/commons/1/1a/24701-nature-natural-beauty.jpg';
+
 
 const toggleModal = () => {
   open.value = !open.value;
 };
+
+const generateFile = async () => {
+  console.log("filePath : ", props.filePath);
+  console.log("fileType : ", fileType.value);
+
+  if(["png", "webp", "jpeg", "jpg", "avi"].includes(fileExtension)) {
+    fileType.value = "image"
+  }else{
+    fileType.value = fileExtension;
+    // if(fileExtension == "pdf") {
+    
+
+    // }else if(["docx", "doc"].includes(fileExtension)) {
+    // // reader.onload = async (e) => {
+    // //   const arrayBuffer = e.target.result;
+    // //   const result = await mammoth.convertToHtml({ arrayBuffer });
+    // //   previewContent.value = result.value;
+    // // };
+    // }else if(fileExtension == "txt") {
+    //   let result = await fetch(props.filePath);
+    //   previewContent.value = await result.text();
+    // }
+  }
+
+  /*let result = await fetch(props.filePath);
+  let resultToBlob = await result.blob();
+
+  let fileName = props.filePath.split("/").pop().split(".")[0];
+  file.value = new File([resultToBlob], fileName, {type: resultToBlob.type});
+  const reader = new FileReader();*/
+  // fileType.value = resultToBlob.type.split("/")[0];
+  
+
+  // previewContent.value = new File([resultToBlob], fileName, {type: resultToBlob.type});
+  
+
+  // console.log("resultToBlob : ", resultToBlob);
+  // console.log("previewContent : ", previewContent.value);
+}
 
 const onFileChange = async () => {
   if (previewContent.value && fileType.value === "pdf") {
