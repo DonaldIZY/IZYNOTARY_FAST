@@ -65,7 +65,8 @@ export class UsersService {
 	}
 
 	async findAll() {
-		return await this.usersRepository.find({ 
+		return await this.usersRepository.find({
+			where: { superUser:false }, 
 			relations: { role:true },
 		});
 	}
