@@ -24,7 +24,7 @@
                 <v-text-field
                   v-model="customer.lastName"
                   color="primary"
-                  label="Nom du client"
+                  label="Nom"
                   variant="outlined"
                   density="compact"
                   hide-details
@@ -35,7 +35,7 @@
                 <v-text-field
                   v-model="customer.firstName"
                   color="primary"
-                  label="Prénoms du client"
+                  label="Prénoms"
                   variant="outlined"
                   density="compact"
                   hide-details
@@ -123,6 +123,25 @@
               </v-col>
             </v-row>
           </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions class="justify-end">
+            <v-btn
+              text="Modifier"
+              color="secondary"
+              variant="tonal"
+              prepend-icon="mdi-pencil"
+              @click="toggleEditModal(customer)"
+              class="text-none"
+            ></v-btn>
+            <v-btn
+              text="Supprimer"
+              color="primary"
+              variant="tonal"
+              prepend-icon="mdi-delete"
+              @click="toggleConfDeleteModal(customer)"
+              class="text-none"
+            ></v-btn>
+          </v-card-actions>
         </v-card>
       </v-sheet>
     </v-col>
@@ -132,8 +151,9 @@
       color="primary"
       divided
       mandatory
-      rounded="xl"
+      rounded="md"
       variant="outlined"
+      density="comfortable"
     >
       <v-btn value="selling" class="text-none"> Vente </v-btn>
 
@@ -153,7 +173,9 @@
       <v-btn disabled value="credit" class="text-none"> Crédit </v-btn>
     </v-btn-toggle>
 
-    <selling-board v-if="text == 'selling'" :sellingData="sellingData"
+    <selling-board
+      v-if="text == 'selling'"
+      :sellingData="sellingData"
     ></selling-board>
     <company-formation-board
       v-else-if="text == 'companyFormation'"
@@ -172,10 +194,64 @@
       :realEstateData="realEstateData"
     ></transfer-of-real-estate-board>
   </div>
+
+  <confirmation-with-password
+    :text="`Vous êtes sur le point de supprimer le client ${customer.lastName} ${customer.firstName}. Toutes les procédures liées à ce client seront automatiquement supprimées. Voulez-vous continuer ?`"
+    :open="openDeleteConf"
+    :submit="() => deleteCustomer(customer.id)"
+    @update:open="openDeleteConf = $event"
+  ></confirmation-with-password>
+  <result-modal-redirection
+    :text="showTextResultDeleteModal"
+    :open="showResultDeleteModal"
+    :type="showTypeResultDeleteModal"
+    destination="/customersManagement"
+    @update:open="showResultDeleteModal = $event"
+  />
+  <modal-edit-customer
+    :open="openEdit"
+    :customerData="customer"
+    @update:open="openEdit = $event"
+  />
 </template>
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
+
+const openDeleteConf = ref(false);
+const openEdit = ref(false);
+const selectedCustomer = ref(null);
+
+const showResultDeleteModal = ref(false);
+const showTextResultDeleteModal = ref("");
+const showTypeResultDeleteModal = ref("");
+
+const toggleConfDeleteModal = (item) => {
+  selectedCustomer.value = item;
+  openDeleteConf.value = !openDeleteConf.value;
+};
+
+const toggleEditModal = (item) => {
+  selectedCustomer.value = item;
+  openEdit.value = !openEdit.value;
+};
+
+const deleteCustomer = async (id) => {
+  try {
+    await $fetch(API_SERVER_URL + `/customers/${id}`, {
+      method: "DELETE",
+    });
+    showTextResultDeleteModal.value = "Client supprimé avec succès !";
+    showTypeResultDeleteModal.value = "success";
+    showResultDeleteModal.value = true;
+  } catch (err) {
+    console.error("Erreur lors de la suppression de l'utilisateur :", err);
+    showTextResultDeleteModal.value =
+      "Erreur lors de la suppression du client.";
+    showTypeResultDeleteModal.value = "error";
+    showResultDeleteModal.value = true;
+  }
+};
 
 const text = ref("selling");
 const customer = ref("");
@@ -189,17 +265,30 @@ const sellingData = ref(null);
 
 onMounted(async () => {
   try {
-    const customerFetch = await $fetch(API_SERVER_URL + `/customers/${route.params.ID}`);
+    const customerFetch = await $fetch(
+      API_SERVER_URL + `/customers/${route.params.ID}`
+    );
 
     customer.value = customerFetch;
 
-    console.log('datas : ',customer.value);
+    // console.log("datas : ", customer.value);
 
-    companyFormationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Constitution de société");
-    companyModificationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Modification de société");
-    movablePropertyData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens mobiliers")
-    realEstateData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens immobiliers");
-    sellingData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Vente");
+    companyFormationData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Constitution de société"
+    );
+    companyModificationData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Modification de société"
+    );
+    movablePropertyData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Succession de biens mobiliers"
+    );
+    realEstateData.value = customerFetch.folders.filter(
+      (procedure) =>
+        procedure.procedureType == "Succession de biens immobiliers"
+    );
+    sellingData.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Vente"
+    );
   } catch (err) {
     //error.value = err.message;
     console.error(err);
@@ -209,7 +298,7 @@ onMounted(async () => {
 
 <style>
 .infoBox {
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
 }
 </style>

@@ -90,8 +90,7 @@
   </div>
 </template>
 
-<script setup>
-</script>
+<script setup></script>
 
 <style scoped>
 .bg-img {
@@ -99,6 +98,7 @@
   background-image: url("~/assets/img/home_bg.png");
   background-size: cover;
   background-position: center;
+  height: calc(100vh -3.2rem);
 }
 
 .h-10 {

@@ -1,4 +1,7 @@
 <template>
+  <div class="ma-4">
+    <back-button title="Tableau de bord" goBackTo="/home" />
+  </div>
   <div class="dashboard">
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="3">

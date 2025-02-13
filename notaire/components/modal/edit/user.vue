@@ -48,7 +48,7 @@
               label="Téléphone"
               variant="outlined"
               density="compact"
-              :rules="validationRules.phone"
+              :rules="[validationRules.required, validationRules.phone]"
             ></v-text-field>
           </v-col>
 
@@ -104,7 +104,6 @@ const props = defineProps({
 
 const emit = defineEmits(["update:open"]);
 
-const config = useRuntimeConfig();
 const roles = ref([]);
 
 const user = reactive({
@@ -141,7 +140,6 @@ watchEffect(() => {
     console.error("Erreur lors du chargement des rôles :", error.value);
   }
 });
-
 
 // Fermeture du modal
 const closeModal = () => {
