@@ -82,7 +82,6 @@
               variant="outlined"
               density="compact"
               :rules="validationRules.phone"
-              hide-details
             ></v-text-field>
           </v-col>
         </v-row>
@@ -182,7 +181,7 @@ const handleCustomer = async () => {
     showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la modification de l'utilisateur :", error);
-    showTextResultModal.value = "Erreur lors de la modification du client";
+    showTextResultModal.value = "Erreur lors de la modification du client.";
     showTypeResultModal.value = "error";
     closeModal();
     showResultModal.value = true;

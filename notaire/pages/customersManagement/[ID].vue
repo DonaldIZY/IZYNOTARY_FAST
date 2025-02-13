@@ -138,7 +138,7 @@
               color="primary"
               variant="tonal"
               prepend-icon="mdi-delete"
-              @click="toggleConfModal"
+              @click="toggleConfDeleteModal(customer)"
               class="text-none"
             ></v-btn>
           </v-card-actions>
@@ -151,8 +151,9 @@
       color="primary"
       divided
       mandatory
-      rounded="xl"
+      rounded="md"
       variant="outlined"
+      density="comfortable"
     >
       <v-btn value="selling" class="text-none"> Vente </v-btn>
 
@@ -196,10 +197,17 @@
 
   <confirmation-with-password
     :text="`Vous êtes sur le point de supprimer le client ${customer.lastName} ${customer.firstName}. Toutes les procédures liées à ce client seront automatiquement supprimées. Voulez-vous continuer ?`"
-    :open="openConf"
-    :submit="deleteCustomer(customer.id)"
-    @update:open="openConf = $event"
+    :open="openDeleteConf"
+    :submit="() => deleteCustomer(customer.id)"
+    @update:open="openDeleteConf = $event"
   ></confirmation-with-password>
+  <result-modal-redirection
+    :text="showTextResultDeleteModal"
+    :open="showResultDeleteModal"
+    :type="showTypeResultDeleteModal"
+    destination="/customersManagement"
+    @update:open="showResultDeleteModal = $event"
+  />
   <modal-edit-customer
     :open="openEdit"
     :customerData="customer"
@@ -210,22 +218,39 @@
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
 
-const openConf = ref(false);
+const openDeleteConf = ref(false);
 const openEdit = ref(false);
 const selectedCustomer = ref(null);
 
-const toggleConfModal = (item) => {
-  selectedCustomer.value = item;
-  openConf.value = !openConf.value;
-};
+const showResultDeleteModal = ref(false);
+const showTextResultDeleteModal = ref("");
+const showTypeResultDeleteModal = ref("");
 
-const deleteCustomer = (item) => {
-  console.log(item);
+const toggleConfDeleteModal = (item) => {
+  selectedCustomer.value = item;
+  openDeleteConf.value = !openDeleteConf.value;
 };
 
 const toggleEditModal = (item) => {
   selectedCustomer.value = item;
   openEdit.value = !openEdit.value;
+};
+
+const deleteCustomer = async (id) => {
+  try {
+    await $fetch(API_SERVER_URL + `/customers/${id}`, {
+      method: "DELETE",
+    });
+    showTextResultDeleteModal.value = "Client supprimé avec succès !";
+    showTypeResultDeleteModal.value = "success";
+    showResultDeleteModal.value = true;
+  } catch (err) {
+    console.error("Erreur lors de la suppression de l'utilisateur :", err);
+    showTextResultDeleteModal.value =
+      "Erreur lors de la suppression du client.";
+    showTypeResultDeleteModal.value = "error";
+    showResultDeleteModal.value = true;
+  }
 };
 
 const text = ref("selling");

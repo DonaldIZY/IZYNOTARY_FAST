@@ -208,11 +208,12 @@
                 size="x-small"
                 density="comfortable"
                 icon="mdi-delete"
-                @click="() => {
-  
-                  toggleConfModal(item);
-                  console.log('selectedValue : ', selectedProcedure.value);
-                }"
+                @click="
+                  () => {
+                    toggleConfModal(item);
+                    console.log('selectedValue : ', selectedProcedure.value);
+                  }
+                "
               >
               </v-btn>
             </template>
@@ -252,7 +253,7 @@
     </v-row>
   </div>
 
-  <modal-edit-procedureStep 
+  <modal-edit-procedureStep
     v-if="Object.keys(selectedProcedure).length > 0"
     :show="dialog"
     @close-modal="closeModal"
@@ -261,11 +262,18 @@
   />
 
   <confirmation-with-password
-      :text="`Vous êtes sur le point de supprimer la procédure N° ${selectedProcedure.folderNum}.`"
-      :open="openConf"
-      :submit="toggleConfModal"
-      @update:open="openConf = $event"
-    ></confirmation-with-password>
+    :text="`Vous êtes sur le point de supprimer la procédure N° ${selectedProcedure.folderNum} ${selectedProcedure.id}.`"
+    :open="openConf"
+    :submit="() => deleteProcedure(selectedProcedure.id)"
+    @update:open="openConf = $event"
+  ></confirmation-with-password>
+  <result-modal-redirection
+    :text="showTextResultDeleteModal"
+    :open="showResultDeleteModal"
+    :type="showTypeResultDeleteModal"
+    destination="/customersManagement"
+    @update:open="showResultDeleteModal = $event"
+  />
 </template>
 
 <script setup>
@@ -273,7 +281,7 @@ import { API_SERVER_URL } from "~/utils/constants";
 
 const loading = ref(true);
 
-const selectedProcedureStore = useSelectedDataStore(); 
+const selectedProcedureStore = useSelectedDataStore();
 
 const openConf = ref(false);
 
@@ -295,7 +303,7 @@ const proceduresHeaders = ref([
   { align: "start", key: "CREATE_AT", title: "Date de création" },
   { align: "start", key: "PROGRESSION", title: "Progression" },
   { align: "center", key: "STATUS", title: "Statut" },
-  { align: "center", key: "ACTIONS", title: "Actions" },
+  { align: "center", key: "ACTIONS", title: "Actions", width: "150px" },
 ]);
 
 const procedures = ref([]);
@@ -354,8 +362,6 @@ const filteredProcedures = computed(() => {
     );
   });
 });
-
-console.log(searchStartDate.value);
 
 const clearFilters = () => {
   searchCNI.value = null;
@@ -498,6 +504,57 @@ const getProcedureTypeColor = (type) => {
       return "gray";
   }
 };
+
+const showResultDeleteModal = ref(false);
+const showTextResultDeleteModal = ref("");
+const showTypeResultDeleteModal = ref("");
+
+const deleteProcedure = async (id) => {
+  console.log(id);
+  try {
+    await $fetch(API_SERVER_URL + `/folders/${id}`, {
+      method: "DELETE",
+    });
+    showTextResultDeleteModal.value = "Procédure supprimée avec succès !";
+    showTypeResultDeleteModal.value = "success";
+    showResultDeleteModal.value = true;
+  } catch (err) {
+    console.error("Erreur lors de la suppression de la procédure :", err);
+    showTextResultDeleteModal.value =
+      "Erreur lors de la suppression de la procédure.";
+    showTypeResultDeleteModal.value = "error";
+    showResultDeleteModal.value = true;
+  }
+};
+
+//Envoi de données dépendant d'un premier envoi (à utiliser pour la suppression)
+// const sendFirstRequest = async (data) => {
+//   try {
+//     // Envoyer la première requête
+//     const response1 = await $fetch(API_SERVER_URL + "/route1", {
+//       method: "POST",
+//       body: data,
+//     });
+
+//     console.log("Réponse de la première requête :", response1);
+
+//     // Vérifier la réponse et exécuter la deuxième requête si nécessaire
+//     if (response1.success) {
+//       const secondData = { id: response1.id, extraInfo: "Autre donnée" };
+
+//       const response2 = await $fetch(API_SERVER_URL + "/route2", {
+//         method: "POST",
+//         body: secondData,
+//       });
+
+//       console.log("Réponse de la deuxième requête :", response2);
+//     } else {
+//       console.error("Erreur dans la première requête, pas d'envoi à la deuxième route");
+//     }
+//   } catch (error) {
+//     console.error("Erreur lors de l'envoi des requêtes :", error);
+//   }
+// };
 </script>
 
 <style scoped>

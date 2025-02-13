@@ -48,7 +48,7 @@
               label="Téléphone"
               variant="outlined"
               density="compact"
-              :rules="validationRules.phone"
+              :rules="[validationRules.required, validationRules.phone]"
             ></v-text-field>
           </v-col>
 
