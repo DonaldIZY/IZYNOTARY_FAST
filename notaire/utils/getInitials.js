@@ -1,6 +1,12 @@
-export const getInitials = (firstName, lastName) => {
-  const firstInitial = firstName ? firstName.charAt(0).toUpperCase() : "";
-  const lastInitial = lastName ? lastName.charAt(0).toUpperCase() : "";
+export const getInitials = (fullName) => {
+  if (!fullName) return "";
 
-  return firstInitial + lastInitial || firstInitial || lastInitial;
+  const words = fullName.trim().split(" ");
+
+  if (words.length < 2) return words[0].charAt(0).toUpperCase();
+
+  const initials =
+    words[0].charAt(0).toUpperCase() + words[1].charAt(0).toUpperCase();
+
+  return initials;
 };
