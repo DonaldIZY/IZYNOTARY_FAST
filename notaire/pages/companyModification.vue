@@ -149,7 +149,7 @@
               </h4>
               <v-form>
                 <v-combobox
-                  v-model="customerId"
+                  v-model="userId"
                   color="primary"
                   label="Selectionner un agent"
                   :items="users"
@@ -258,6 +258,7 @@ const loadUsers = async () => {
         ID: user.id,
         LASTNAME: user.lastName,
         FIRSTNAME: user.firstName,
+        NAME: user.firstName + " " + user.lastName,
         EMAIL: user.email,
       }));
     }
@@ -300,6 +301,7 @@ watch(userId, (newSelectedUser) => {
 const resetFields = () => {
   customerId.value = null;
   selectedCustomer.value = null;
+  selectedUser.value = null;
   firstName.value = "";
   lastName.value = "";
   birthDate.value = "";
@@ -312,7 +314,7 @@ const resetFields = () => {
 };
 
 const isFormValid = computed(() => {
-  return selectedCustomer.value;
+  return selectedCustomer.value && selectedUser.value;
 });
 
 const handleProcedure = async () => {
