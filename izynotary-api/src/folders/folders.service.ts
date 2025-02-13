@@ -754,7 +754,7 @@ export class FoldersService {
     }
 
     async findAll() {
-        return await this.folderRepository.find({relations: {customer: true, step: true}});
+        return await this.folderRepository.find({relations: [ 'folders', 'step', 'assignedTo' ]});
     }
 
     async findOne(id: number) {

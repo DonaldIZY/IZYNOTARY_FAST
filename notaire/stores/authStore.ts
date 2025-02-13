@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', {
         token: null as string | null,
         userId: null as number | null,
         userName: null as string | null,
+        userEmail: null as string | null,
         userRole: null as string | null
     }),
 
@@ -14,9 +15,10 @@ export const useAuthStore = defineStore('auth', {
 
         setToken(token: string) {
             this.token = token;
-            const decoded = jwtDecode(token) as { userId: number, userName: string, userRole: string };
+            const decoded = jwtDecode(token) as { userId: number, userName: string, userEmail: string, userRole: string };
             this.userId = decoded.userId;
             this.userName = decoded.userName;
+            this.userEmail = decoded.userEmail; // Assuming email is a field in the JWT payload. Replace with the actual field name.
             this.userRole = decoded.userRole;
             Cookie.set('auth_token', token, { expires: 1 }); // Stocker le token dans un cookie (valable 1 jour)
         },
@@ -25,6 +27,7 @@ export const useAuthStore = defineStore('auth', {
             this.token = null;
             this.userId = null;
             this.userName = null;
+            this.userEmail = null;  // Assuming email is a field in the JWT payload. Replace with the actual field name.
             this.userRole = null;
             Cookie.remove('auth_token'); // Supprimer le cookie
         },
@@ -32,10 +35,11 @@ export const useAuthStore = defineStore('auth', {
         initializeToken() {
             const token = Cookie.get('auth_token');
             if (token) {
-                const decoded = jwtDecode(token) as { userId: number, userName: string, userRole: string };
+                const decoded = jwtDecode(token) as { userId: number, userName: string, userEmail: string, userRole: string };
                 this.token = token;
                 this.userId = decoded.userId;
                 this.userName = decoded.userName;
+                this.userEmail = decoded.userEmail; // Assuming email is a field in the JWT payload. Replace with the actual field name.
                 this.userRole = decoded.userRole;
             }
         },
