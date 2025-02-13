@@ -28,7 +28,7 @@ export class Folder {
     @Column({ type: "decimal", precision: 5, scale: 2 })
     progression: number;
 
-    @Column({ type: "enum", enum: ["En cours", "Suspendue", "Arrêtée", "Terminée"] })
+    @Column({ type: "enum", enum: ["En cours", "Suspendu", "Arrêté", "Terminé"] })
     status: string;
 
     @Column({ nullable: true })

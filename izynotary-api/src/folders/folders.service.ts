@@ -43,7 +43,7 @@ export class FoldersService {
                             createFolderDto.requiredFiles.taxStatusCertificate &&
                             createFolderDto.requiredFiles.titleDeed &&
                             createFolderDto.requiredFiles.landRegistry &&
-                            createFolderDto.requiredFiles.certificateOfLocation ? 'Terminée' : 'En cours',
+                            createFolderDto.requiredFiles.certificateOfLocation ? 'Terminé' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
@@ -215,7 +215,7 @@ export class FoldersService {
                             createFolderDto.requiredFiles.lease &&
                             createFolderDto.requiredFiles.sketchOfGeoLocation &&
                             createFolderDto.requiredFiles.formForCompanyFormation &&
-                            createFolderDto.requiredFiles.capitalToBeReleased ? 'Terminée' : "En cours",
+                            createFolderDto.requiredFiles.capitalToBeReleased ? 'Terminé' : "En cours",
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
@@ -364,7 +364,7 @@ export class FoldersService {
                             createFolderDto.requiredFiles.customerCNI &&
                             createFolderDto.requiredFiles.RCCM &&
                             createFolderDto.requiredFiles.Statut &&
-                            createFolderDto.requiredFiles.DNSV ? 'Terminée' : 'En cours',
+                            createFolderDto.requiredFiles.DNSV ? 'Terminé' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
@@ -493,7 +493,7 @@ export class FoldersService {
                         "stepNum": '1',
                         "status": 
                             createFolderDto.requiredFiles.customerCNI &&
-                            createFolderDto.requiredFiles.birthCertificate ? 'Terminée' : 'En cours',
+                            createFolderDto.requiredFiles.birthCertificate ? 'Terminé' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "customerCNI": {
@@ -607,7 +607,7 @@ export class FoldersService {
                         "status": 
                             createFolderDto.requiredFiles.cniOfRightsHolders &&
                             createFolderDto.requiredFiles.cniOfTheDonor &&
-                            createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders ? 'Terminée' : 'En cours',
+                            createFolderDto.requiredFiles.birthCertificateOfTheRightsHolders ? 'Terminé' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
                             "cniOfRightsHolders": {

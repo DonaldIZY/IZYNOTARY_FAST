@@ -102,7 +102,7 @@
                   color="primary"
                   label="Statut"
                   prepend-inner-icon="mdi-state-machine"
-                  :items="['En cours', 'Suspendue', 'Arrêtée', 'Terminée']"
+                  :items="['En cours', 'Suspendu', 'Arrêté', 'Terminé']"
                   clearable
                   variant="outlined"
                   density="compact"
@@ -180,7 +180,7 @@
             </template>
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
-                v-if="item.STATUS != 'Arrêtée'"
+                v-if="item.STATUS != 'Arrêté'"
                 class="actionBtn"
                 title="Modifier la procédure"
                 color="gray"
@@ -201,15 +201,29 @@
                 :to="redirectRegardingProcedure(item)"
               >
               </v-btn>
+              <v-btn
+                class="actionBtn"
+                title="Supprimer la procédure"
+                color="#ad1919"
+                size="x-small"
+                density="comfortable"
+                icon="mdi-delete"
+                @click="() => {
+  
+                  toggleConfModal(item);
+                  console.log('selectedValue : ', selectedProcedure.value);
+                }"
+              >
+              </v-btn>
             </template>
             <template v-slot:item.STATUS="{ item }">
               <v-chip
                 :color="
-                  item.STATUS == 'Terminée'
+                  item.STATUS == 'Terminé'
                     ? '#63AD19'
                     : item.STATUS == 'En cours'
                     ? '#FFC300'
-                    : item.STATUS == 'Suspendue'
+                    : item.STATUS == 'Suspendu'
                     ? '#000000'
                     : '#AD1919'
                 "
@@ -238,12 +252,20 @@
     </v-row>
   </div>
 
-  <modal-edit-procedureStep
+  <modal-edit-procedureStep 
+    v-if="Object.keys(selectedProcedure).length > 0"
     :show="dialog"
     @close-modal="closeModal"
     @submit="updateProcedure"
     :data="selectedProcedure"
   />
+
+  <confirmation-with-password
+      :text="`Vous êtes sur le point de supprimer la procédure N° ${selectedProcedure.folderNum}.`"
+      :open="openConf"
+      :submit="toggleConfModal"
+      @update:open="openConf = $event"
+    ></confirmation-with-password>
 </template>
 
 <script setup>
@@ -251,7 +273,14 @@ import { API_SERVER_URL } from "~/utils/constants";
 
 const loading = ref(true);
 
-const selectedProcedureStore = useSelectedDataStore();
+const selectedProcedureStore = useSelectedDataStore(); 
+
+const openConf = ref(false);
+
+const toggleConfModal = (item) => {
+  openConf.value = !openConf.value;
+  selectedProcedure.value = item;
+};
 
 function selectProcedure(val) {
   selectedProcedureStore.defineProcedureId(val);

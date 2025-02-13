@@ -109,7 +109,7 @@
                   label="Numéro de la pièce d'identité"
                   variant="outlined"
                   clearable
-                  :rules="validationRules.required"
+                  :rules="validationRules.indicNumber"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -177,8 +177,6 @@
 <script setup>
 import { computed } from "vue";
 import { API_SERVER_URL } from "~/utils/constants";
-// import rules from
-import { validationRules } from "~/utils/validationRules";
 
 const props = defineProps({
   open: {

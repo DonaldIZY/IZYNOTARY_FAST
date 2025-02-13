@@ -1,13 +1,60 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="modificationCompanys"
-    :search="modificationCompanysSearch"
+    :items="modificationCompanies"
+    :search="modificationCompaniesSearch"
     no-data-text="Aucune procédure de modification de société."
     hover
     class="customTable2"
     :loading="loading"
   >
+    <template #item="{ item }">
+      <tr>
+        <td>{{ item.NUM }}</td>
+        <td>{{ formatDate(item.CREATE_AT) }}</td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SUPPLY_OF_PARTS)">{{
+            getStatusIcon(item.SUPPLY_OF_PARTS)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.DRAFTING_OF_STATUTES)">{{
+            getStatusIcon(item.DRAFTING_OF_STATUTES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SETTLEMENT_OF_FEES)">{{
+            getStatusIcon(item.SETTLEMENT_OF_FEES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SIGNATURE_OF_ACTS)">{{
+            getStatusIcon(item.SIGNATURE_OF_ACTS)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SIGNED_DOCUMENT_DEPOSITED)">{{
+            getStatusIcon(item.SIGNED_DOCUMENT_DEPOSITED)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.DELIVERABLES)">{{
+            getStatusIcon(item.DELIVERABLES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          {{ Math.round(item.PERCENTAGE * 100) }}%
+        </td>
+        <td style="text-align: center">
+          <v-chip
+            size="small"
+            variant="flat"
+            :color="getStatusColorIcon(item.STATUS)"
+            >{{ item.STATUS }}</v-chip
+          >
+        </td>
+      </tr>
+    </template>
     <!-- Slot pour afficher un loader quand la table est vide -->
     <template v-slot:loading>
       <div class="d-flex justify-center my-10">
@@ -31,46 +78,73 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  companyModificationData: Array,
+});
+
 const loading = ref(true);
 
+const modificationCompanies = ref([]);
+
 const headers = ref([
-  { align: "start", key: "NUM", title: "N° du dossier" },
-  { align: "start", key: "CREATE_AT", title: "Date de création" },
+  { align: "center", key: "NUM", title: "N° du dossier" },
+  { align: "center", key: "CREATE_AT", title: "Date de création" },
   {
     align: "center",
     title: "Niveau d'avancement",
     children: [
       {
-        align: "start",
+        align: "center",
         key: "SUPPLY_OF_PARTS",
         title: "Fourniture des pièces",
       },
       {
-        align: "start",
+        align: "center",
         key: "DRAFTING_OF_STATUTES",
         title: "Rédaction des statuts",
       },
       {
-        align: "start",
+        align: "center",
         key: "SETTLEMENT_OF_FEES",
         title: "Règlement des frais",
       },
       {
-        align: "start",
+        align: "center",
         key: "SIGNATURE_OF_ACTS",
         title: "Signature des actes",
       },
       {
-        align: "start",
+        align: "center",
         key: "SIGNED_DOCUMENT_DEPOSITED",
         title: "Dépôt des actes signés",
       },
-      { align: "start", key: "DELIVERABLES", title: "Livrables" },
+      { align: "center", key: "DELIVERABLES", title: "Livrables" },
     ],
   },
-  { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
-  { align: "start", key: "STATUS", title: "Statut" },
+  { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
+  { align: "center", key: "STATUS", title: "Statut" },
 ]);
+
+watchEffect(() => {
+  console.log("props companyModificationData: ", props.companyModificationData);
+  if (props.companyModificationData) {
+    props.companyModificationData.forEach((procedure) => {
+      modificationCompanies.value.push({
+        NUM: procedure.folderNum,
+        CREATE_AT: procedure.createAt.toString(),
+        SUPPLY_OF_PARTS: procedure.step.steps[0].status,
+        DRAFTING_OF_STATUTES: procedure.step.steps[1].status,
+        SETTLEMENT_OF_FEES: procedure.step.steps[2].status,
+        SIGNATURE_OF_ACTS: procedure.step.steps[3].status,
+        SIGNED_DOCUMENT_DEPOSITED: procedure.step.steps[4].status,
+        DELIVERABLES: procedure.step.steps[5].status,
+        PERCENTAGE: procedure.progression,
+        STATUS: procedure.status,
+      });
+    });
+    loading.value = false;
+  }
+});
 </script>
 
 <style>

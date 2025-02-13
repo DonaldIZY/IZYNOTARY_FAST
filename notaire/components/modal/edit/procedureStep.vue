@@ -6,7 +6,7 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    // required: true
+    required: true
   },
 });
 
@@ -19,6 +19,8 @@ const procedureData = toRef(props, "data");
 console.log("procedureData : ", procedureData);
 
 const newProcedureData = reactive({});
+
+console.log("newProcedureData after procedure has been selected: ", newProcedureData);
 </script>
 
 <template>
@@ -31,15 +33,23 @@ const newProcedureData = reactive({});
         }}</span></v-card-title
       >
       <v-tabs
-        v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)"
+        v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)"
         v-model="tab"
         color="#ad1919"
       >
         <v-tab
           v-for="step in procedureData.steps.filter((elem) =>
-            ['terminée', 'en cours'].includes(elem.status.toLowerCase())
+            ['terminé', 'en cours'].includes(elem.status.toLowerCase())
           )"
-          :value="step.action"
+          :value="step.action" 
+          @click="() => {
+              newProcedureData.action = step.action;
+              newProcedureData.documents = {};
+              for(const docName of Object.keys(step.documents)) {
+                newProcedureData.documents[docName] = '';
+              }
+              console.log('newProcedureData : ', newProcedureData);
+            }"
         >
           {{
             `Etape ${
@@ -52,16 +62,13 @@ const newProcedureData = reactive({});
       </v-tabs>
 
       <v-card-text>
-        <v-tabs-window
-          v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)"
-          v-model="tab"
-        >
+        <v-tabs-window v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)" v-model="tab">
           <v-tabs-window-item
             class="pa-4"
             v-for="step in procedureData.steps.filter((elem) =>
-              ['terminée', 'en cours'].includes(elem.status.toLowerCase())
+              ['terminé', 'en cours'].includes(elem.status.toLowerCase())
             )"
-            :value="step.action"
+            :value="step.action" 
           >
             <v-row>
               <v-chip
@@ -96,7 +103,13 @@ const newProcedureData = reactive({});
                   "
                   :disabled="step.documents[doc].path != '' ? true : false"
                 />
+                <!-- <required-document 
+                v-for="doc in Object.keys(step.documents)"
+                :label="step.documents[doc].name"
+                v-model:file="newProcedureData.documents[doc]"
+              ></required-document> -->
               </v-col>
+              
 
               <v-col cols="12" md="5">
                 <v-row>
@@ -115,7 +128,7 @@ const newProcedureData = reactive({});
                             newProcedureData.comment &&
                             newProcedureData.comment.trim() != ''
                           ) {
-                            newProcedureData.status = 'Suspendue';
+                            newProcedureData.status = 'Suspendu';
                             $emit('submit', {
                               ...newProcedureData,
                               contact: procedureData.customer.phone,
@@ -123,6 +136,7 @@ const newProcedureData = reactive({});
                               procedureType: procedureData.PROCEDURE_TYPE,
                               id: procedureData.stepId,
                             });
+                            newProcedureData = {};
                           } else {
                             console.log(
                               'Veuillez ajouter un commentaire pour suspendre la procédure'
@@ -146,7 +160,7 @@ const newProcedureData = reactive({});
                             newProcedureData.comment &&
                             newProcedureData.comment.trim() != ''
                           ) {
-                            newProcedureData.status = 'Arrêtée';
+                            newProcedureData.status = 'Arrêté';
                             $emit('submit', {
                               ...newProcedureData,
                               contact: procedureData.customer.phone,
@@ -154,6 +168,7 @@ const newProcedureData = reactive({});
                               procedureType: procedureData.PROCEDURE_TYPE,
                               id: procedureData.stepId,
                             });
+                            newProcedureData = {};
                           } else {
                             console.log(
                               'Veuillez ajouter un commentaire pour arrêter la procédure'
@@ -196,7 +211,7 @@ const newProcedureData = reactive({});
         </v-tabs-window>
 
         <img
-          v-if="procedureData.STATUS == 'Arrêtée'"
+          v-if="procedureData.STATUS == 'Arrêté'"
           :style="{
             width: '50%',
             maxWidth: '150px',
@@ -206,19 +221,19 @@ const newProcedureData = reactive({});
           src="/public/sorry.png"
         />
         <h4
-          v-if="procedureData.STATUS == 'Arrêtée'"
+          v-if="procedureData.STATUS == 'Arrêté'"
           :style="{ textAlign: 'center' }"
         >
-          Vous ne pouvez pas modifier une procédure arrêtée
+          Vous ne pouvez pas modifier une procédure ayant le statut arrêté.
         </h4>
         <v-textarea
-          v-if="procedureData.STATUS == 'Suspendue'"
+          v-if="procedureData.STATUS == 'Suspendu'"
           color="primary"
           variant="outlined"
           density="compact"
           label="Commentaire pour reprendre la procédure"
           v-model="
-            procedureData.steps.find((elem) => elem.status == 'Suspendue')
+            procedureData.steps.find((elem) => elem.status == 'Suspendu')
               .comment
           "
           v-on:update:model-value="
@@ -226,14 +241,14 @@ const newProcedureData = reactive({});
               // console.log('suspended step comment : ', val);
               if (
                 newProcedureData.action ==
-                procedureData.steps.find((elem) => elem.status == 'Suspendue')
+                procedureData.steps.find((elem) => elem.status == 'Suspendu')
                   .action
               ) {
                 newProcedureData.comment = val;
               } else {
                 newProcedureData = {
                   action: procedureData.steps.find(
-                    (elem) => elem.status == 'Suspendue'
+                    (elem) => elem.status == 'Suspendu'
                   ).action,
                   comment: val,
                 };
@@ -263,23 +278,24 @@ const newProcedureData = reactive({});
         ></v-btn>
 
         <v-btn
-          v-if="['En cours', 'Terminée'].includes(procedureData.STATUS)"
+          v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)"
           color="primary"
           text="Enregistrer"
           variant="flat"
-          @click="
+          @click="() => {
             $emit('submit', {
               ...newProcedureData,
               contact: procedureData.customer.phone,
               folderNum: procedureData.folderNum,
               procedureType: procedureData.PROCEDURE_TYPE,
               id: procedureData.stepId,
-            })
-          "
+            });
+            newProcedureData = {};
+          }"
           class="text-none"
         ></v-btn>
         <v-btn
-          v-if="procedureData.STATUS == 'Suspendue'"
+          v-if="procedureData.STATUS == 'Suspendu'"
           color="primary"
           text="Continuer la procédure"
           variant="flat"
@@ -297,6 +313,7 @@ const newProcedureData = reactive({});
                   procedureType: procedureData.PROCEDURE_TYPE,
                   id: procedureData.stepId,
                 });
+                newProcedureData = {};
               } else {
                 console.log(
                   'Veuillez ajouter un commentaire pour continuer la procédure'
@@ -312,11 +329,11 @@ const newProcedureData = reactive({});
 </template>
 
 <style scoped>
-.titleModification {
+  .titleModification {
   font-weight: bolder;
-}
+  }
 
-.folderNumber {
+  .folderNumber {
   color: #ad1919;
-}
+  }
 </style>
