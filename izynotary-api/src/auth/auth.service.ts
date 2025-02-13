@@ -22,13 +22,14 @@ export class AuthService {
 
 		if (user && (await Password.validatePassword(pass, user.identifier.hashedValue))) {
             const { identifier, ...result } = user;
+            console.log("result: " + result);
             return result;
         }
 		return null;
 	}
 
     async login(user: any) {
-        const payload = { sub: user.id, username: user.lastName+" "+user.firstName, role: user.role.name };
+        const payload = { sub: user.id, name: user.lastName+" "+user.firstName, role: user.role.name };
         return {
             accessToken: this.jwtService.sign(payload),
         };
