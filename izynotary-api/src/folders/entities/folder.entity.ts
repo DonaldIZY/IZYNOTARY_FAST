@@ -34,8 +34,7 @@ export class Folder {
     @Column({ nullable: true })
     comment: string;
 
-    @OneToOne(() => User)
-    @JoinColumn()
+    @ManyToOne(() => User, assignedTo => assignedTo.folders)
     assignedTo: User;
 
     @ManyToOne(() => Customer, customer => customer.folders)
