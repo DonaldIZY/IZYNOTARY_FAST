@@ -124,6 +124,7 @@ export class DatabaseSeeder {
     });
 
     user.identifier = identifier; // Associer le mot de passe haché
+    user.superUser =  true;
 
     console.log('Super-Admin créé :', user);
 
