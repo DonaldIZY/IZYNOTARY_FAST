@@ -128,16 +128,16 @@
     </v-col>
 
     <v-btn-toggle
-      v-model="activeTab"
+      v-model="text"
       color="primary"
       divided
       mandatory
       rounded="xl"
       variant="outlined"
     >
-      <!-- <v-btn value="selling" class="text-none" v-if="sellingData.length > 0"> Vente </v-btn>
+      <v-btn value="selling" class="text-none"> Vente </v-btn>
 
-      <v-btn value="companyFormation" class="text-none" v-if="companyFormationData.length > 0">
+      <v-btn value="companyFormation" class="text-none">
         Constitution de société
       </v-btn>
 
@@ -150,34 +150,25 @@
       <v-btn value="transferOfRealEstate" class="text-none">
         Succession de biens immobiliers
       </v-btn>
-      <v-btn disabled value="credit" class="text-none"> Crédit </v-btn> -->
-      <v-btn
-      v-for="key in Object.keys(tables).filter(k => tables[k].length > 0)" 
-        :key="key"
-        :value="key"
-      >
-        {{ tabNames[key] }}
-      </v-btn>
+      <v-btn disabled value="credit" class="text-none"> Crédit </v-btn>
     </v-btn-toggle>
 
-    <selling-board
-      v-if="activeTab === 'selling'"
-      :sellingData="sellingData"
+    <selling-board v-if="text == 'selling'" :sellingData="sellingData"
     ></selling-board>
     <company-formation-board
-      v-if="activeTab === 'companyFormation'"
+      v-else-if="text == 'companyFormation'"
       :companyFormationData="companyFormationData"
     ></company-formation-board>
     <modification-company-board
-      v-if="activeTab === 'modificationCompany'"
+      v-else-if="text == 'modificationCompany'"
       :companyModificationData="companyModificationData"
     ></modification-company-board>
     <transfer-of-movable-property-board
-      v-if="activeTab === 'transferOfMovableProperty'"
+      v-else-if="text == 'transferOfMovableProperty'"
       :movablePropertyData="movablePropertyData"
     ></transfer-of-movable-property-board>
     <transfer-of-real-estate-board
-      v-if="activeTab === 'transferOfRealEstate'"
+      v-else-if="text == 'transferOfRealEstate'"
       :realEstateData="realEstateData"
     ></transfer-of-real-estate-board>
   </div>
@@ -185,26 +176,8 @@
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
+
 const text = ref("selling");
-
-const activeTab = ref(null);
-const tables = ref({
-  selling: [],
-  companyFormation: [],
-  modificationCompany: [],
-  transferOfMovableProperty: [],
-  transferOfRealEstate: [],
-});
-
-// Associer chaque clé à un nom d'affichage
-const tabNames = {
-  selling: "Vente",
-  companyFormation: "Constitution de société",
-  modificationCompany: "Modification de société",
-  transferOfMovableProperty: "Succession de biens mobiliers",
-  transferOfRealEstate: "Succession de biens immobiliers",
-};
-
 const customer = ref("");
 const route = useRoute();
 
@@ -216,53 +189,17 @@ const sellingData = ref(null);
 
 onMounted(async () => {
   try {
-    const customerFetch = await $fetch(
-      API_SERVER_URL + `/customers/${route.params.ID}`
-    );
+    const customerFetch = await $fetch(API_SERVER_URL + `/customers/${route.params.ID}`);
 
     customer.value = customerFetch;
 
-    console.log("datas : ", customer.value);
+    console.log('datas : ',customer.value);
 
-    companyFormationData.value = customerFetch.folders.filter(
-      (procedure) => procedure.procedureType == "Constitution de société"
-    );
-    companyModificationData.value = customerFetch.folders.filter(
-      (procedure) => procedure.procedureType == "Modification de société"
-    );
-    movablePropertyData.value = customerFetch.folders.filter(
-      (procedure) => procedure.procedureType == "Succession de biens mobiliers"
-    );
-    realEstateData.value = customerFetch.folders.filter(
-      (procedure) =>
-        procedure.procedureType == "Succession de biens immobiliers"
-    );
-    sellingData.value = customerFetch.folders.filter(
-      (procedure) => procedure.procedureType == "Vente"
-    );
-    console.log("sellings datas : ", sellingData.value);
-
-    // Remplir les tableaux dynamiquement
-    tables.value.selling = sellingData.value || [];
-    tables.value.companyFormation = companyFormationData.value || [];
-    tables.value.modificationCompany = companyModificationData.value || [];
-    tables.value.transferOfMovableProperty = movablePropertyData.value || [];
-    tables.value.transferOfRealEstate = realEstateData.value || [];
-
-    // Stocker les onglets ayant des données
-    const availableTabs = Object.keys(tables.value).filter(
-      (key) => tables.value[key].length > 0
-    );
-
-    // Définir l'onglet actif avec le premier qui a des données
-    if (availableTabs.length > 0) {
-      activeTab.value = availableTabs[0];
-    }
-
-    console.log("Tables:", tables.value);
-    console.log("Tab Names:", tabNames);
-    console.log('Onglet actif:', activeTab.value);
-    console.log('Onglets disponibles:', availableTabs);
+    companyFormationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Constitution de société");
+    companyModificationData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Modification de société");
+    movablePropertyData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens mobiliers")
+    realEstateData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Succession de biens immobiliers");
+    sellingData.value = customerFetch.folders.filter((procedure) => procedure.procedureType == "Vente");
   } catch (err) {
     //error.value = err.message;
     console.error(err);
