@@ -1,6 +1,6 @@
 import { Identifier } from "src/identifier/entities/identifier.entity";
 import { Role } from "src/roles/entities/role.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -28,6 +28,10 @@ export class User {
 
     @UpdateDateColumn()
     updateAt: Date;
+
+    @OneToMany(() => Folder, folder => folder.assignedTo)
+    folders: Folder[];
+
 
     @ManyToOne(() => Role, role => role.users, { onUpdate: "CASCADE" })
     role: Role;
