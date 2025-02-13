@@ -299,7 +299,6 @@ const proceduresHeaders = ref([
   { align: "start", key: "FOLDERNUM", title: "N° Dossier" },
   { align: "start", key: "CUSTOMER", title: "Client" },
   { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
-  // { align: "start", key: "CREATE_BY", title: "Créée par" },
   { align: "start", key: "CREATE_AT", title: "Date de création" },
   { align: "start", key: "PROGRESSION", title: "Progression" },
   { align: "center", key: "STATUS", title: "Statut" },

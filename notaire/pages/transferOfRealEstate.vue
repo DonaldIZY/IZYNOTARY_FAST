@@ -136,6 +136,26 @@
               ></required-document>
             </v-col>
           </v-row>
+          <v-row>
+            <div class="d-flex flex-column justify-center pa-4">
+              <h4 class="my-3">
+                Choix du responsable de suivi de la procédure
+              </h4>
+              <v-form>
+                <v-combobox
+                  v-model="userId"
+                  color="primary"
+                  label="Selectionner un agent"
+                  :items="users"
+                  item-title="NAME"
+                  item-value="ID"
+                  variant="outlined"
+                  hide-details
+                  density="compact"
+                ></v-combobox>
+              </v-form>
+            </div>
+          </v-row>
         </v-sheet>
       </v-col>
     </v-row>
@@ -234,7 +254,8 @@ const loadUsers = async () => {
         ID: user.id,
         LASTNAME: user.lastName,
         FIRSTNAME: user.firstName,
-        EMAIL: user.email
+        NAME: user.firstName + " " + user.lastName,
+        EMAIL: user.email,
       }));
     }
   } catch (err) {
@@ -276,6 +297,7 @@ watch(userId, (newSelectedUser) => {
 const resetFields = () => {
   customerId.value = null;
   selectedCustomer.value = null;
+  selectedUser.value = null;
   firstName.value = "";
   lastName.value = "";
   birthDate.value = "";
@@ -287,7 +309,7 @@ const resetFields = () => {
 };
 
 const isFormValid = computed(() => {
-  return selectedCustomer.value;
+  return selectedCustomer.value && selectedUser.value;
 });
 
 const handleProcedure = async () => {
@@ -336,8 +358,6 @@ const handleProcedure = async () => {
         body: procedureData,
       }
     );
-    // alert("Procédure créée avec succès.");
-    //resetFields();
     showTextResultModal.value = "Procédure créée avec succès.";
     showTypeResultModal.value = "success";
     open.value = false;
