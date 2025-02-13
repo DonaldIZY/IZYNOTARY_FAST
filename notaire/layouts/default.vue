@@ -31,9 +31,7 @@
         class="text-none navBarBtnHome"
         @click="goToHome"
       ></v-btn>
-      <v-avatar class="mx-2" color="primary">
-        <span class="text-h5"></span>
-      </v-avatar>
+      <avatar-component></avatar-component>
     </v-app-bar>
     <v-main class="fill-height">
       <NuxtPage />
