@@ -30,6 +30,7 @@
             prepend-icon="mdi-logout"
             class="text-none"
             rounded="md"
+
             @click="disconnectUser"
           >
             Se déconnecter
@@ -40,11 +41,13 @@
   </v-menu>
 </template>
 
-<script>
+<script setup>
+const router = useRouter();
 const authStore = useAuthStore();
 
-const disconnectUser = () => {
+const disconnectUser = async () => {
   authStore.clearToken();
+  router.push("/login");
 };
 </script>
 
