@@ -50,9 +50,9 @@ const loadProcedures = async () => {
       progression: Math.round(procedureData.progression * 100),
       status: procedureData.status,
       assignedTo:
-        procedureData.assignedTo.firstName +
+        procedureData.assignedTo.lastName +
         " " +
-        procedureData.assignedTo.lastName,
+        procedureData.assignedTo.firstName,
     };
   } catch (err) {
     console.error("Erreur lors du chargement des procédures : ", err);

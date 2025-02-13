@@ -26,18 +26,6 @@
               <v-col cols="12" lg="12" sm="4">
                 <v-text-field
                   color="primary"
-                  v-model="searchNum"
-                  label="Recherche par N°"
-                  prepend-inner-icon="mdi-numeric"
-                  variant="outlined"
-                  density="compact"
-                  hide-details
-                ></v-text-field>
-              </v-col>
-
-              <v-col cols="12" lg="12" sm="4">
-                <v-text-field
-                  color="primary"
                   v-model="searchFolderNum"
                   label="Recherche par N° Dossier"
                   prepend-inner-icon="mdi-folder-open"
@@ -108,6 +96,18 @@
                   density="compact"
                   hide-details
                 ></v-select>
+              </v-col>
+
+              <v-col cols="12" lg="12" sm="4">
+                <v-text-field
+                  color="primary"
+                  v-model="searchAssignTo"
+                  label="Recherche par Responsable du suivi"
+                  prepend-inner-icon="mdi-account"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                ></v-text-field>
               </v-col>
 
               <v-col cols="12">
@@ -300,14 +300,15 @@ const proceduresHeaders = ref([
   { align: "start", key: "CUSTOMER", title: "Client" },
   { align: "start", key: "PROCEDURE_TYPE", title: "Type de procédure" },
   { align: "start", key: "CREATE_AT", title: "Date de création" },
-  { align: "start", key: "PROGRESSION", title: "Progression" },
+  { align: "start", key: "ASSIGNED_TO", title: "Responsable" },
+  { align: "center", key: "PROGRESSION", title: "Progression" },
   { align: "center", key: "STATUS", title: "Statut" },
   { align: "center", key: "ACTIONS", title: "Actions", width: "150px" },
 ]);
 
 const procedures = ref([]);
 
-const searchCNI = ref(null);
+const searchAssignTo = ref(null);
 const searchNum = ref(null);
 const searchFolderNum = ref(null);
 const searchCustomer = ref(null);
@@ -318,8 +319,9 @@ const form = ref(null);
 
 const filteredProcedures = computed(() => {
   return procedures.value.filter((item) => {
-    const matchesCNI =
-      !searchCNI.value || item.NUM.toString().includes(searchCNI.value);
+    const matchesAssignTo =
+      !searchAssignTo.value ||
+      item.ASSIGNED_TO.toString().includes(searchAssignTo.value);
     const matchesNum =
       !searchNum.value || item.NUM.toString().includes(searchNum.value);
     const matchesFolderNum =
@@ -351,7 +353,7 @@ const filteredProcedures = computed(() => {
       !searchStatus.value ||
       item.STATUS.toLowerCase().includes(searchStatus.value.toLowerCase());
     return (
-      matchesCNI &&
+      matchesAssignTo &&
       matchesNum &&
       matchesFolderNum &&
       matchesCustomer &&
@@ -363,7 +365,7 @@ const filteredProcedures = computed(() => {
 });
 
 const clearFilters = () => {
-  searchCNI.value = null;
+  searchAssignTo.value = null;
   searchNum.value = null;
   searchCustomer.value = null;
   searchStartDate.value = null;
@@ -393,7 +395,8 @@ const loadProcedures = async () => {
         id: procedure.id,
         stepId: procedure.step?.id,
         folderNum: procedure.folderNum,
-        assignedTo: procedure.assignedTo,
+        ASSIGNED_TO:
+          procedure.assignedTo.lastName + " " + procedure.assignedTo.firstName,
       }));
     }
     loading.value = false;

@@ -254,7 +254,7 @@ const loadUsers = async () => {
         ID: user.id,
         LASTNAME: user.lastName,
         FIRSTNAME: user.firstName,
-        NAME: user.firstName + " " + user.lastName,
+        NAME: user.lastName + " " + user.firstName,
         EMAIL: user.email,
       }));
     }
