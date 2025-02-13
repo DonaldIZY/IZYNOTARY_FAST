@@ -393,6 +393,7 @@ const loadProcedures = async () => {
         id: procedure.id,
         stepId: procedure.step?.id,
         folderNum: procedure.folderNum,
+        assignedTo: procedure.assignedTo,
       }));
     }
     loading.value = false;
@@ -409,14 +410,6 @@ const selectedProcedure = ref({});
 
 const openModal = (val) => {
   dialog.value = true;
-  /*if (val.PROCEDURE_TYPE.trim().toLowerCase() == "constitution de société") {
-          selectedProcedure.value = fakeCompanyIncorporation;
-      }else if (val.PROCEDURE_TYPE.trim().toLowerCase() == "vente") {
-          selectedProcedure.value = fakeSales;
-      }else{
-          selectedProcedure.value = {};
-          dialog.value = false;
-      }*/
   selectedProcedure.value = val;
   console.log("selectedValue : ", selectedProcedure.value);
 };
