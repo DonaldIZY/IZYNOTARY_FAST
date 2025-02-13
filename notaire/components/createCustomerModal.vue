@@ -231,8 +231,6 @@ const emailRule = (v) => {
 
 const emit = defineEmits(["update:open"]);
 
-const config = useRuntimeConfig();
-
 const today = new Date();
 const maxDate = new Date(
   today.getFullYear() - 18,
@@ -256,7 +254,6 @@ const handleCustomer = async () => {
   customerData.append("identificationNumber", identificationNumber.value);
   customerData.append("imageOfIdentification", imageOfIdentification.value);
 
-  console.log(customerData.get("imageOfIdentification"));
   try {
     const data = await $fetch(API_SERVER_URL + `/customers`, {
       method: "POST",

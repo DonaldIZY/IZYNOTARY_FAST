@@ -218,8 +218,6 @@ const emailRule = (v) => {
 
 const emit = defineEmits(["update:open"]);
 
-const config = useRuntimeConfig();
-
 const today = new Date();
 const maxDate = new Date(
   today.getFullYear() - 18,

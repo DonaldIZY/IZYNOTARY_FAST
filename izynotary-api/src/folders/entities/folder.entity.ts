@@ -1,6 +1,7 @@
 import { Customer } from "src/customers/entities/customer.entity";
 import { Seller } from "src/sellers/entities/seller.entity";
 import { Step } from "src/steps/entities/step.entity";
+import { User } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
@@ -32,6 +33,10 @@ export class Folder {
 
     @Column({ nullable: true })
     comment: string;
+
+    @OneToOne(() => User)
+    @JoinColumn()
+    assignedTo: User;
 
     @ManyToOne(() => Customer, customer => customer.folders)
     customer: Customer;

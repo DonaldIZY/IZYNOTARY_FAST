@@ -125,7 +125,6 @@ const roles = ref([]);
 const roleId = ref(null);
 
 const emit = defineEmits(["update:open"]);
-const config = useRuntimeConfig();
 
 const resetForm = () => {
   lastName.value = "";

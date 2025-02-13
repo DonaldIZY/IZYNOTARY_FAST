@@ -4,6 +4,7 @@ export class CreateFolderDto {
     requiredFiles: any;
     progression: number;
     status: string;
+    assignedToId: number;
     endDate: Date | null;
     customerId: number;
     sellerId: number;
