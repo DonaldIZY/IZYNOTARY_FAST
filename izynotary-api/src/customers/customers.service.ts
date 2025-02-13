@@ -26,7 +26,7 @@ export class CustomersService {
     async findOne(id: number) {
         return await this.customerRepository.findOne({
             where: { id },
-            relations: [ 'folders', 'folders.step' ],
+            relations: [ 'folders', 'folders.step', 'folders.assignedTo' ],
         });
     }
 
