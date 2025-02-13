@@ -31,7 +31,10 @@
         class="text-none navBarBtnHome"
         @click="goToHome"
       ></v-btn>
-      <avatar-component></avatar-component>
+      <avatar-component
+        :name="name"
+        :email="email"
+      ></avatar-component>
     </v-app-bar>
     <v-main class="fill-height">
       <NuxtPage />
@@ -42,9 +45,21 @@
 
 <script setup>
 const router = useRouter();
-
 const route = useRoute();
+const authStore = useAuthStore();
 
+const name = ref("");
+const email = ref("");
+
+onMounted(() => {
+  name.value = authStore.userName;
+  email.value = authStore.userEmail;
+});
+
+// watch(authStore, () => {
+//   name.value = authStore.userName;
+//   email.value = authStore.userEmail;
+// });
 const goToHome = () => {
   router.push("/home");
 };
