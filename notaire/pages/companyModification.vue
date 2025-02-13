@@ -142,6 +142,26 @@
               ></required-document>
             </v-col>
           </v-row>
+          <v-row>
+            <div class="d-flex flex-column justify-center pa-4">
+              <h4 class="my-3">
+                Choix du responsable de suivi de la procédure
+              </h4>
+              <v-form>
+                <v-combobox
+                  v-model="customerId"
+                  color="primary"
+                  label="Selectionner un agent"
+                  :items="users"
+                  item-title="NAME"
+                  item-value="ID"
+                  variant="outlined"
+                  hide-details
+                  density="compact"
+                ></v-combobox>
+              </v-form>
+            </div>
+          </v-row>
         </v-sheet>
       </v-col>
     </v-row>
@@ -238,7 +258,7 @@ const loadUsers = async () => {
         ID: user.id,
         LASTNAME: user.lastName,
         FIRSTNAME: user.firstName,
-        EMAIL: user.email
+        EMAIL: user.email,
       }));
     }
   } catch (err) {
