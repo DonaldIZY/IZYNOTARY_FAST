@@ -1,13 +1,16 @@
 <template>
-  <div class="d-flex align-center ga-8">
+  <div class="d-flex align-center ga-2">
     <!-- Input de fichier -->
     <v-file-input
       :label="label"
+      color="primary"
       variant="outlined"
       hide-details
       v-model="file"
       accept=".jpg,.jpeg,.png,.pdf,.doc,.docx,.txt"
       @change="onFileChange"
+      prepend-icon=""
+      :prepend-inner-icon="icon"
       density="compact"
     ></v-file-input>
 
@@ -16,6 +19,7 @@
       color="primary"
       @click="toggleModal"
       class="text-none"
+      variant="tonal"
       :disabled="!file"
     >
       Aperçu
@@ -95,6 +99,10 @@ const props = defineProps({
   label: {
     type: String,
     required: true,
+  },
+  icon: {
+    type: String,
+    default: "mdi-paperclip",
   },
 });
 
