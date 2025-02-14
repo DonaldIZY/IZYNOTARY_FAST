@@ -1,6 +1,6 @@
 <template>
-  <v-layout class="h-screen">
-    <v-app-bar prominent>
+  <v-layout>
+    <v-app-bar density="compact">
       <template v-slot:prepend>
         <v-tooltip text="Accueil" location="bottom">
           <template v-slot:activator="{ props }">
@@ -19,18 +19,8 @@
           </template>
         </v-tooltip>
       </template>
-
       <v-spacer></v-spacer>
-
       <p class="mx-2 text-overline"></p>
-      <!-- <v-btn
-        v-if="route.path !== '/home'"
-        text="Aller à l'accueil"
-        color="secondary"
-        variant="tonal"
-        class="text-none navBarBtnHome"
-        @click="goToHome"
-      ></v-btn> -->
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-btn
@@ -58,9 +48,8 @@
       </v-menu>
       <avatar-component :name="name" :email="email"></avatar-component>
     </v-app-bar>
-    <v-main class="fill-height">
+    <v-main>
       <NuxtPage />
-      <v-footer></v-footer>
     </v-main>
   </v-layout>
 </template>
@@ -112,16 +101,22 @@ const goToHome = () => {
 </script>
 
 <style>
+html {
+  overflow-y: auto;
+}
+
 .navBarLogo {
-  height: 3.2rem;
+  height: 2.5rem;
   padding: 0;
   margin: 0 0.5rem;
 }
+
 .navBarTitle {
   font-size: 1.5rem;
   padding: 0;
   margin: 0;
 }
+
 .navBarBtnHome {
   margin-right: 2rem;
 }
