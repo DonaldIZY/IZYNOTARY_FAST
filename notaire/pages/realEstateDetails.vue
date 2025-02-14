@@ -18,6 +18,7 @@ const procedureGeneralInfo = ref({
   createBy: "",
   progression: "",
   status: "",
+  assignedTo: "",
 });
 
 let procedureID = selectedProcedureStore.getProcedureId;
@@ -48,6 +49,10 @@ const loadProcedures = async () => {
       createBy: "",
       progression: Math.round(procedureData.progression * 100),
       status: procedureData.status,
+      assignedTo:
+        procedureData.assignedTo.lastName +
+        " " +
+        procedureData.assignedTo.firstName,
     };
   } catch (err) {
     console.error("Erreur lors du chargement des procédures : ", err);
@@ -212,6 +217,17 @@ const statusColor = computed(() => {
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" lg="3" sm="6">
+                <v-text-field
+                  v-model="procedureGeneralInfo.assignedTo"
+                  color="primary"
+                  label="Responsable du suivi"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  readonly
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4" lg="3" sm="6">
                 <span style="font-size: small">Progression</span>
                 <v-progress-linear
                   v-model="procedureGeneralInfo.progression"
@@ -264,8 +280,4 @@ const statusColor = computed(() => {
 .card-title {
   margin-bottom: 1rem;
 }
-
-/* .disabledInput {
-  color: gray;
-} */
 </style>

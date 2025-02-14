@@ -18,6 +18,7 @@ const procedureGeneralInfo = ref({
   createBy: "",
   progression: "",
   status: "",
+  assignedTo: "",
 });
 
 let procedureID = selectedProcedureStore.getProcedureId;
@@ -48,6 +49,10 @@ const loadProcedures = async () => {
       createBy: "",
       progression: Math.round(procedureData.progression * 100),
       status: procedureData.status,
+      assignedTo:
+        procedureData.assignedTo.firstName +
+        " " +
+        procedureData.assignedTo.lastName,
     };
   } catch (err) {
     console.error("Erreur lors du chargement des procédures : ", err);
@@ -204,6 +209,17 @@ const statusColor = computed(() => {
                   v-model="procedureGeneralInfo.updateAt"
                   color="primary"
                   label="Date de dernière modification"
+                  variant="outlined"
+                  density="compact"
+                  hide-details
+                  readonly
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" md="4" lg="3" sm="6">
+                <v-text-field
+                  v-model="procedureGeneralInfo.assignedTo"
+                  color="primary"
+                  label="Responsable du suivi"
                   variant="outlined"
                   density="compact"
                   hide-details
