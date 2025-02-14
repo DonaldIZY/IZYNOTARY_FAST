@@ -1,5 +1,5 @@
 <template>
-  <div class="h-100 bg-img">
+  <div class="bg-img">
     <div class="h-10 d-flex align-center">
       <h1 class="text-center w-100">Bienvenue sur IzyNotary</h1>
     </div>
@@ -94,11 +94,11 @@
 
 <style scoped>
 .bg-img {
-  /*background: linear-gradient(rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));*/
   background-image: url("~/assets/img/home_bg.png");
   background-size: cover;
   background-position: center;
-  height: calc(100vh -3.2rem);
+  height: calc(100vh - 3rem);
+  background-color: blue;
 }
 
 .h-10 {
