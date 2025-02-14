@@ -359,6 +359,7 @@ const handleProcedure = async () => {
   procedureData.append("progression", 1 / 6);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
+  console.log("assigne to :", selectedUser.value);
   procedureData.append("assignedToId", selectedUser.value.ID);
 
   const requiredFiles = {
