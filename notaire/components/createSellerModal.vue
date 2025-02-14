@@ -17,7 +17,7 @@
               label="Nom"
               variant="outlined"
               density="compact"
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -28,7 +28,7 @@
               label="Prénoms"
               variant="outlined"
               density="compact"
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -40,7 +40,7 @@
               :items="['Homme', 'Femme']"
               variant="outlined"
               density="compact"
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-select>
           </v-col>
 
@@ -54,7 +54,7 @@
               variant="outlined"
               :max="maxDate"
               :year="new Date(maxDate).getFullYear()"
-              :rules="[required]"
+              :rules="validationRules.required"
             >
             </v-date-input>
           </v-col>
@@ -67,7 +67,7 @@
               :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
               variant="outlined"
               density="compact"
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-select>
           </v-col>
 
@@ -78,18 +78,19 @@
               label="Email"
               density="compact"
               variant="outlined"
-              :rules="[emailRule]"
+              :rules="validationRules.email"
             ></v-text-field>
           </v-col>
 
           <v-col cols="6">
             <v-text-field
               v-model="phone"
+              type="number"
               color="primary"
               label="Téléphone"
               density="compact"
               variant="outlined"
-              :rules="[required]"
+              :rules="validationRules.phone"
             ></v-text-field>
           </v-col>
 
@@ -101,7 +102,7 @@
               density="compact"
               :items="['CNI', 'Passeport']"
               variant="outlined"
-              :rules="[required]"
+              :rules="validationRules.required"
             ></v-select>
           </v-col>
           <v-col cols="6">
@@ -113,23 +114,18 @@
                   density="compact"
                   label="Numéro de la pièce d'identité"
                   variant="outlined"
-                  :rules="[required]"
+                  :rules="validationRules.indicNumber"
                 ></v-text-field>
               </v-col>
             </v-row>
           </v-col>
           <v-col cols="12">
-            <v-file-input
-              v-model="imageOfIdentification"
-              color="primary"
-              density="compact"
+            <required-document
+              v-model:file="imageOfIdentification"
               label="Ajout d'une image de la pièce d'identité"
-              prepend-icon=""
-              prepend-inner-icon="mdi-id-card"
-              variant="outlined"
-              hide-details
-              :rules="[required]"
-            ></v-file-input>
+              icon="mdi-id-card"
+              :rules="validationRules.required"
+            ></required-document>
           </v-col>
         </v-row>
       </v-card-text>

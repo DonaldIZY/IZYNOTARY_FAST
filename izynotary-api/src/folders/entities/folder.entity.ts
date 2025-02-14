@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Customer } from "src/customers/entities/customer.entity";
 import { Seller } from "src/sellers/entities/seller.entity";
 import { Step } from "src/steps/entities/step.entity";
@@ -34,8 +35,7 @@ export class Folder {
     @Column({ nullable: true })
     comment: string;
 
-    @OneToOne(() => User)
-    @JoinColumn()
+    @ManyToOne(() => User, assignedTo => assignedTo.folders)
     assignedTo: User;
 
     @ManyToOne(() => Customer, customer => customer.folders)
