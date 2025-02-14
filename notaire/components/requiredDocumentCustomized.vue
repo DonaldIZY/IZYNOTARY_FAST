@@ -39,24 +39,33 @@
           <template v-if="fileType === 'image'">
             <!-- If fileType is image, we can use filePath as it is to show image since it is the online path of an image -->
             <img
-              :src="filePath/*testFilePath*/"
+              :src="previewContent ?? filePath/*testFilePath*/"
               alt="Prévisualisation"
               style="width: 150px"
             />
           </template>
           <template v-else-if="fileType === 'pdf'">
+            <!-- <embed 
+              :src="previewContent ?? filePath" 
+              type="application/pdf"
+              style="width: 100%; height: 400px; border: 3px solid red"
+            >
+            
+            </embed> -->
             <iframe
-              :src="filePath"
-              style="width: 100%; height: 400px"
+              :src="previewContent ?? filePath"
+              style="width: 100%; height: 400px; border: 3px solid red"
               frameborder="0"
             ></iframe>
           </template>
           <template v-else-if="fileType === 'txt'">
-            <!-- <pre
+            <pre
+              v-if="previewContent"
               style="white-space: pre-wrap; max-height: 400px; overflow: auto"
               >{{ previewContent }}</pre
-            > -->
-            <iframe
+            >
+            <iframe 
+              v-else
               :src="filePath"
               style="width: 100%; height: 400px"
               frameborder="0"
@@ -65,7 +74,7 @@
           <template v-else-if="fileType === 'docx'">
             <!-- <div v-html="previewContent"></div> -->
             <iframe
-              :src="filePath"
+              :src="previewContent ?? filePath"
               style="width: 100%; height: 400px"
               frameborder="0"
             ></iframe>
@@ -76,7 +85,7 @@
               télécharger ci-dessous :
             </p>
             <a
-              :href="filePath/*previewContent*/"
+              :href="previewContent ?? filePath/*previewContent*/"
               download
               class="v-btn v-btn--outlined primary text-none"
             >
@@ -146,13 +155,53 @@ const generateFile = async () => {
     fileExtension = props.filePath.split("/").pop().split(".")[1];
   }
   
- 
 
   if(["png", "webp", "jpeg", "jpg", "avi"].includes(fileExtension)) {
     fileType.value = "image"
   }else{
     fileType.value = fileExtension;
+  }
 
+
+  if(props.receivedFile instanceof File) {
+    try {
+      if (fileType.value == "image") {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewContent.value = e.target.result;
+        };
+        reader.readAsDataURL(props.receivedFile);
+      } else if (fileType.value === "pdf") {
+        previewContent.value = URL.createObjectURL(props.receivedFile);
+      } else if (fileType.value === "txt") {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          previewContent.value = e.target.result;
+        };
+        reader.readAsText(props.receivedFile);
+      } else if (fileType.value == "docx") {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const arrayBuffer = e.target.result;
+          const result = await mammoth.convertToHtml({ arrayBuffer });
+          previewContent.value = result.value;
+        };
+        reader.readAsArrayBuffer(props.receivedFile);
+      } else if (fileType.value == "doc") {
+        previewContent.value = URL.createObjectURL(props.receivedFile);
+      } else {
+        previewContent.value = "Type de fichier non supporté.";
+      }
+      console.log("previewContent : ", previewContent.value);
+      // emit("update:file", props.receivedFile);
+    } catch (error) {
+      console.error("Erreur lors de la prévisualisation du fichier :", error);
+      previewContent.value = "Erreur lors du traitement du fichier.";
+    }
+  }
+  
+
+  
     
     // if(fileExtension == "pdf") {
     
@@ -167,7 +216,6 @@ const generateFile = async () => {
     //   let result = await fetch(props.filePath);
     //   previewContent.value = await result.text();
     // }
-  }
 
   console.log("fileExtension : ", fileExtension);
   console.log("fileType : ", fileType.value);

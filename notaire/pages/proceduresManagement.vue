@@ -419,7 +419,7 @@ const openModal = (val) => {
 
 const closeModal = () => {
   dialog.value = false;
-  // selectedProcedure.value = {};
+  selectedProcedure.value = {};
 };
 
 const redirectRegardingProcedure = (procedure) => {

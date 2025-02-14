@@ -73,11 +73,7 @@ export class StepsService {
         step.steps[searchedStepIndex].documents[key].filled = true;
       }
 
-      if(step.steps.every(stepInDb => stepInDb.status == "Terminé")) {
-        folder.status = "Terminé";
-  
-        await this.entityManager.save(folder);
-      }
+      
 
     }
 
@@ -98,7 +94,17 @@ export class StepsService {
           }
         }else if(updateStepDto["status"] == "En cours") {
           if(["Suspendu", "Arrêté"].includes(step.steps[searchedStepIndex].status)) {
-            step.steps[searchedStepIndex].status = updateStepDto["status"];
+            let documentsList = Object.values(step.steps[searchedStepIndex].documents);
+            if(documentsList.every(elem => elem["filled"] == true)) {
+              step.steps[searchedStepIndex].status = "Terminé";
+              //WHEN A STEP HAS A STATUS OF DONE (Terminé), THE NEXT SHOULD HAVE A STATUS OF CURRENT (En cours)
+              if(searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminé") {
+                step.steps[searchedStepIndex + 1].status = "En cours";
+              }
+            }else{
+              step.steps[searchedStepIndex].status = updateStepDto["status"];
+            }
+            
           }else{
             return {
               status: false,
@@ -116,16 +122,22 @@ export class StepsService {
         };
       }
     }else{
-      //WE HAVE TO CHANGE THE STATUS OF A STEP WHEN ALL OF ITS SUBSTEPS ARE DONE AND WHE DON'T TRY TO CANCEL OR SUSPEND IT
       if(Object.values(step.steps[searchedStepIndex].documents).every(subStep => subStep["filled"] == true)) {
         step.steps[searchedStepIndex].status = "Terminé";
-        //WHEN A STEP HAS A STATUS OF DONE, THE NEXT SHOULD HAVE A STATUS OF CURRENT
+        //WHEN A STEP HAS A STATUS OF DONE (Terminé), THE NEXT SHOULD HAVE A STATUS OF CURRENT (En cours)
         if(searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminé") {
           step.steps[searchedStepIndex + 1].status = "En cours";
         }
       }
+
+      if(step.steps.every(stepInDb => stepInDb.status == "Terminé")) {
+        folder.status = "Terminé";
+  
+        await this.entityManager.save(folder);
+      }
     }
 
+    
     const result = await this.entityManager.save(step);
     
     let searchedStepAfterUpdate = result.steps.find(
