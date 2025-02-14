@@ -181,7 +181,7 @@
             </template>
             <template v-slot:item.ACTIONS="{ item }">
               <v-btn
-                v-if="item.STATUS != 'Arrêté'"
+                v-if="item.STATUS != 'Terminé'"
                 class="actionBtn"
                 title="Modifier la procédure"
                 color="gray"

@@ -242,7 +242,7 @@ console.log(
           </v-tabs-window-item>
         </v-tabs-window>
 
-        <img
+        <!-- <img
           v-if="procedureData.STATUS == 'Arrêté'"
           :style="{
             width: '50%',
@@ -257,15 +257,15 @@ console.log(
           :style="{ textAlign: 'center' }"
         >
           Vous ne pouvez pas modifier une procédure ayant le statut arrêté.
-        </h4>
+        </h4> -->
         <v-textarea
-          v-if="procedureData.STATUS == 'Suspendu'"
+          v-if="['Suspendu', 'Arrêté'].includes(procedureData.STATUS)"
           color="primary"
           variant="outlined"
           density="compact"
           label="Commentaire pour reprendre la procédure"
           v-model="
-            procedureData.steps.find((elem) => elem.status == 'Suspendu')
+            procedureData.steps.find((elem) => ['Suspendu', 'Arrêté'].includes(elem.status))
               .comment
           "
           v-on:update:model-value="
@@ -273,14 +273,14 @@ console.log(
               // console.log('suspended step comment : ', val);
               if (
                 newProcedureData.action ==
-                procedureData.steps.find((elem) => elem.status == 'Suspendu')
+                procedureData.steps.find((elem) => ['Suspendu', 'Arrêté'].includes(elem.status))
                   .action
               ) {
                 newProcedureData.comment = val;
               } else {
                 newProcedureData = {
                   action: procedureData.steps.find(
-                    (elem) => elem.status == 'Suspendu'
+                    (elem) => ['Suspendu', 'Arrêté'].includes(elem.status)
                   ).action,
                   comment: val,
                 };
@@ -331,7 +331,7 @@ console.log(
           class="text-none"
         ></v-btn>
         <v-btn
-          v-if="procedureData.STATUS == 'Suspendu'"
+          v-if="['Arrêté', 'Suspendu'].includes(procedureData.STATUS)"
           color="primary"
           text="Continuer la procédure"
           variant="flat"
