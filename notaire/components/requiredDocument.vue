@@ -31,7 +31,7 @@
         <v-card-title>
           <v-icon size="small">mdi-file-document-outline</v-icon>
           <span class="title"
-            >Apercu du document -
+            >Aperçu du document -
             <span class="nameDocument">{{ label }}</span></span
           >
         </v-card-title>

@@ -337,7 +337,6 @@ const handleProcedure = async () => {
     procedureNumGenerator("Modification de société", count)
   );
   procedureData.append("procedureType", "Modification de société");
-  procedureData.append("progression", 1 / 6);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
   procedureData.append("assignedToId", selectedUser.value.ID);

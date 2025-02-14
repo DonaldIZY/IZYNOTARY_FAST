@@ -356,10 +356,8 @@ const handleProcedure = async () => {
     procedureNumGenerator("Constitution de société", count)
   );
   procedureData.append("procedureType", "Constitution de société");
-  procedureData.append("progression", 1 / 6);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
-  console.log("assigne to :", selectedUser.value);
   procedureData.append("assignedToId", selectedUser.value.ID);
 
   const requiredFiles = {

@@ -332,7 +332,6 @@ const handleProcedure = async () => {
     procedureNumGenerator("Succession de biens immobiliers", count)
   );
   procedureData.append("procedureType", "Succession de biens immobiliers");
-  procedureData.append("progression", 1 / 7);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
   procedureData.append("assignedToId", selectedUser.value.ID);

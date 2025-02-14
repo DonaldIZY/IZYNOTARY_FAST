@@ -73,8 +73,25 @@ export class StepsService {
         step.steps[searchedStepIndex].documents[key].filled = true;
       }
 
-      
+      var count = 0;
+      var countDoc = 0;
 
+      for(const elem of step.steps) {
+        for(const docValue of Object.values(elem.documents)) {
+            if(docValue["filled"]) {
+                count++;
+            }
+            countDoc++;
+        }
+      }
+
+      folder.progression = count/countDoc
+
+      if(step.steps.every(stepInDb => stepInDb.status == "Terminé")) {
+        folder.status = "Terminé";
+      }
+      
+      await this.entityManager.save(folder);
     }
 
     if(Object.keys(updateStepDto).includes("comment")) {

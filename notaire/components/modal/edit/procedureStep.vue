@@ -6,7 +6,7 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    required: true
+    required: true,
   },
 });
 
@@ -25,7 +25,10 @@ for(const docName of Object.keys(procedureData.value.steps[0].documents)) {
   newProcedureData.documents[docName] = null;
 }
 
-console.log("newProcedureData after procedure has been selected: ", newProcedureData);
+console.log(
+  "newProcedureData after procedure has been selected: ",
+  newProcedureData
+);
 </script>
 
 <template>
@@ -46,15 +49,17 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
           v-for="step in procedureData.steps.filter((elem) =>
             ['terminé', 'en cours'].includes(elem.status.toLowerCase())
           )"
-          :value="step.action" 
-          @click="() => {
+          :value="step.action"
+          @click="
+            () => {
               newProcedureData.action = step.action;
               newProcedureData.documents = {};
-              for(const docName of Object.keys(step.documents)) {
+              for (const docName of Object.keys(step.documents)) {
                 newProcedureData.documents[docName] = '';
               }
               console.log('newProcedureData : ', newProcedureData);
-            }"
+            }
+          "
         >
           {{
             `Etape ${
@@ -67,13 +72,16 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
       </v-tabs>
 
       <v-card-text>
-        <v-tabs-window v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)" v-model="tab">
+        <v-tabs-window
+          v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)"
+          v-model="tab"
+        >
           <v-tabs-window-item
             class="pa-4"
             v-for="step in procedureData.steps.filter((elem) =>
               ['terminé', 'en cours'].includes(elem.status.toLowerCase())
             )"
-            :value="step.action" 
+            :value="step.action"
           >
             <v-row>
               <v-chip
@@ -130,7 +138,6 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
                 v-model:file="newProcedureData.documents[doc]"
               ></required-document> -->
               </v-col>
-              
 
               <v-col cols="12" md="5">
                 <v-row>
@@ -309,18 +316,18 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
           color="primary"
           text="Enregistrer"
           variant="flat"
-          @click="() => {
-            $emit('submit', {
-              ...newProcedureData,
-              contact: procedureData.customer.phone,
-              folderNum: procedureData.folderNum,
-              procedureType: procedureData.PROCEDURE_TYPE,
-              id: procedureData.stepId,
-            });
-            for(const docName of Object.keys(newProcedureData.documents)) {
-                newProcedureData.documents[docName] = null;
-              }
-          }"
+          @click="
+            () => {
+              $emit('submit', {
+                ...newProcedureData,
+                contact: procedureData.customer.phone,
+                folderNum: procedureData.folderNum,
+                procedureType: procedureData.PROCEDURE_TYPE,
+                id: procedureData.stepId,
+              });
+              newProcedureData = {};
+            }
+          "
           class="text-none"
         ></v-btn>
         <v-btn
@@ -358,11 +365,11 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
 </template>
 
 <style scoped>
-  .titleModification {
+.titleModification {
   font-weight: bolder;
-  }
+}
 
-  .folderNumber {
+.folderNumber {
   color: #ad1919;
-  }
+}
 </style>

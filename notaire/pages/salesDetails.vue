@@ -90,12 +90,13 @@ const statusColor = computed(() => {
 </script>
 
 <template>
-  <div class="ma-4">
+  <div class="ma-4 card-title-set">
     <back-button
       v-if="stepList.length > 0"
       :title="procedureNum"
       goBackTo="/proceduresManagement"
     />
+    <history-procedure text="Voir l'historique"></history-procedure>
   </div>
   <v-row>
     <v-col cols="12">
@@ -275,6 +276,11 @@ const statusColor = computed(() => {
 .card {
   height: 100%;
   margin-bottom: 0rem;
+}
+
+.card-title-set {
+  display: flex;
+  justify-content: space-between;
 }
 
 .card-title {

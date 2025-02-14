@@ -37,7 +37,7 @@ export class User {
     @ManyToOne(() => Role, role => role.users, { onUpdate: "CASCADE" })
     role: Role;
 
-    @Column({ type: "bool", default: false })
+    @Column({ type: "boolean", default: false })
     superUser: boolean;
 
     constructor(user: Partial<User>) {
