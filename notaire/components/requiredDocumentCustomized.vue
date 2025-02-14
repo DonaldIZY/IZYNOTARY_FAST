@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex align-center ga-8">
+  <div class=" ga-8">
     <!-- Input de fichier -->
     <!-- <v-file-input
       :label="label"
@@ -112,17 +112,21 @@ const props = defineProps({
   },
   filePath: {
     type: String,
-    required: true,
+    // required: true,
+  },
+  receivedFile: {
+    type: File 
   }
 });
 
 const emit = defineEmits(["update:file"]);
 
 const open = ref(false);
-const file = ref(null);
+// const file = ref(null);
 const previewContent = ref(null);
-const fileExtension = props.filePath.split("/").pop().split(".")[1];
+var fileExtension;
 const fileType = ref(null);
+
 const testFilePath = 'https://upload.wikimedia.org/wikipedia/commons/1/1a/24701-nature-natural-beauty.jpg';
 
 
@@ -132,12 +136,24 @@ const toggleModal = () => {
 
 const generateFile = async () => {
   console.log("filePath : ", props.filePath);
-  console.log("fileType : ", fileType.value);
+  
+  console.log("receivedFile : ", props.receivedFile);
+  
+
+  if(props.receivedFile instanceof File) {
+    fileExtension = props.receivedFile.name.split(".")[1];
+  }else{
+    fileExtension = props.filePath.split("/").pop().split(".")[1];
+  }
+  
+ 
 
   if(["png", "webp", "jpeg", "jpg", "avi"].includes(fileExtension)) {
     fileType.value = "image"
   }else{
     fileType.value = fileExtension;
+
+    
     // if(fileExtension == "pdf") {
     
 
@@ -152,6 +168,9 @@ const generateFile = async () => {
     //   previewContent.value = await result.text();
     // }
   }
+
+  console.log("fileExtension : ", fileExtension);
+  console.log("fileType : ", fileType.value);
 
   /*let result = await fetch(props.filePath);
   let resultToBlob = await result.blob();

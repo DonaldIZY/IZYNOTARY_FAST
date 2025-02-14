@@ -22,7 +22,7 @@ console.log("procedureData steps : ", procedureData.value.steps);
 const newProcedureData = reactive({action: procedureData.value.steps[0].action, documents: {}});
 
 for(const docName of Object.keys(procedureData.value.steps[0].documents)) {
-  newProcedureData.documents[docName] = "";
+  newProcedureData.documents[docName] = null;
 }
 
 console.log("newProcedureData after procedure has been selected: ", newProcedureData);
@@ -83,32 +83,32 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
             </v-row>
             <v-row>
               <v-col cols="12" md="7">
-                <v-row :style="{gap: '1rem'}" v-for="doc in Object.keys(step.documents)">
+                <v-row :style="{gap: '1rem', alignItems: 'top'}" v-for="doc in Object.keys(step.documents)">
                   <v-file-input
-                  
-                  :name="doc"
-                  :label="step.documents[doc].name"
-                  variant="outlined"
-                  density="compact"
-                  color="primary"
-                  prepend-inner-icon="mdi-file"
-                  v-on:update:model-value="
-                    (file) => {
+                    :name="doc"
+                    :label="step.documents[doc].name"
+                    variant="outlined"
+                    density="compact"
+                    color="primary"
+                    prepend-inner-icon="mdi-file"
+                    v-on:update:model-value="
+                      (file) => {
                       // newProcedureData[]
 
-                      if (newProcedureData.action == step.action) {
-                        newProcedureData.documents[doc] = file;
-                      } else {
-                        newProcedureData = {
-                          action: step.action,
-                          documents: { [doc]: file },
-                        };
-                      }
+                        if (newProcedureData.action == step.action) {
+                          newProcedureData.documents[doc] = file;
+                        } else {
+                          newProcedureData = {
+                            action: step.action,
+                            documents: { [doc]: file },
+                          };
+                        }
+                        console.log('newProcedureData : ', newProcedureData);
                       // console.log('FILE :', file);
-                    }
-                  "
-                  :disabled="step.documents[doc].path != '' ? true : false"
-                />
+                      }
+                    "
+                    :disabled="step.documents[doc].path != '' ? true : false"
+                  />
                 <!-- <v-btn 
                   color="green" 
                   text="Aperçu" 
@@ -117,8 +117,10 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
                   }"
                 /> -->
                 <required-document-customized 
+                  v-if="step.documents[doc].path != '' || newProcedureData.documents[doc]"
                   :label="step.documents[doc].name"
-                  :filePath="API_SERVER_URL + step.documents[doc].path"
+                  :filePath="API_SERVER_URL + step.documents[doc].path" 
+                  :receivedFile="newProcedureData.documents[doc]"
                 />
                 </v-row>
                 
@@ -294,7 +296,9 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
           @click="
             () => {
               $emit('closeModal');
-              newProcedureData = {};
+              for(const docName of Object.keys(newProcedureData.documents)) {
+                newProcedureData.documents[docName] = null;
+              }
             }
           "
           class="text-none"
@@ -313,7 +317,9 @@ console.log("newProcedureData after procedure has been selected: ", newProcedure
               procedureType: procedureData.PROCEDURE_TYPE,
               id: procedureData.stepId,
             });
-            newProcedureData = {};
+            for(const docName of Object.keys(newProcedureData.documents)) {
+                newProcedureData.documents[docName] = null;
+              }
           }"
           class="text-none"
         ></v-btn>
