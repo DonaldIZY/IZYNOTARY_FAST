@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Folder } from "src/folders/entities/folder.entity";
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -39,7 +40,7 @@ export class Customer {
 
     @CreateDateColumn()
     createAt: Date;
-    
+
     @UpdateDateColumn()
     updateAt: Date;
 
@@ -49,5 +50,5 @@ export class Customer {
     constructor(customer: Partial<Customer>) {
         Object.assign(this, customer);
     }
-     
+
 }

@@ -35,7 +35,7 @@
             v-model="password"
             :readonly="loading"
             :append-inner-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-            :rules="[required, passwordRule]"
+            :rules="[required]"
             :type="show ? 'text' : 'password'"
             color="primary"
             label="Mot de passe"

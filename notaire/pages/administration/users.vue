@@ -95,6 +95,12 @@
       :submit="() => deleteUser(selectedUser.ID)"
     />
   </div>
+  <result-modal-validation
+    :text="showTextResultDeleteModal"
+    :open="showResultDeleteModal"
+    :type="showTypeResultDeleteModal"
+    @update:open="showResultDeleteModal = $event"
+  />
 </template>
 
 <script setup>
@@ -162,17 +168,27 @@ watchEffect(() => {
   }
 });
 
+const showResultDeleteModal = ref(false);
+const showTextResultDeleteModal = ref("");
+const showTypeResultDeleteModal = ref("");
+
 const deleteUser = async (id) => {
   try {
     await $fetch(API_SERVER_URL + `/users/${id}`, {
       method: "DELETE",
     });
-    alert("Utilisateur supprimé avec succès!");
     const updatedUsers = users.value.filter((user) => user.ID !== id);
     users.value = updatedUsers;
     selectedUser.value = null;
+    showTextResultDeleteModal.value = "Utilisateur supprimé avec succès !";
+    showTypeResultDeleteModal.value = "success";
+    showResultDeleteModal.value = true;
   } catch (err) {
     console.error("Erreur lors de la suppression de l'utilisateur :", err);
+    showTextResultDeleteModal.value =
+      "Erreur lors de la suppression de l'utilisateur.";
+    showTypeResultDeleteModal.value = "error";
+    showResultDeleteModal.value = true;
   }
 };
 </script>

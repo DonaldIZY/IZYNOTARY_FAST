@@ -73,6 +73,7 @@
                   v-model="searchStartDate"
                   color="primary"
                   prepend-icon=""
+                  prepend-inner-icon="mdi-calendar"
                   label="Date de création"
                   variant="outlined"
                   density="compact"
@@ -101,8 +102,8 @@
               <v-col cols="12" lg="12" sm="4">
                 <v-text-field
                   color="primary"
-                  v-model="searchAssignTo"
-                  label="Recherche par Responsable du suivi"
+                  v-model="searchAssignedTo"
+                  label="Responsable"
                   prepend-inner-icon="mdi-account"
                   variant="outlined"
                   density="compact"
@@ -262,7 +263,7 @@
   />
 
   <confirmation-with-password
-    :text="`Vous êtes sur le point de supprimer la procédure N° ${selectedProcedure.folderNum} ${selectedProcedure.id}.`"
+    :text="`Vous êtes sur le point de supprimer la procédure N° ${selectedProcedure.folderNum}`"
     :open="openConf"
     :submit="() => deleteProcedure(selectedProcedure.id)"
     @update:open="openConf = $event"
@@ -271,7 +272,7 @@
     :text="showTextResultDeleteModal"
     :open="showResultDeleteModal"
     :type="showTypeResultDeleteModal"
-    destination="/customersManagement"
+    destination="/proceduresManagement"
     @update:open="showResultDeleteModal = $event"
   />
 </template>
@@ -308,7 +309,7 @@ const proceduresHeaders = ref([
 
 const procedures = ref([]);
 
-const searchAssignTo = ref(null);
+const searchAssignedTo = ref(null);
 const searchNum = ref(null);
 const searchFolderNum = ref(null);
 const searchCustomer = ref(null);
@@ -319,9 +320,11 @@ const form = ref(null);
 
 const filteredProcedures = computed(() => {
   return procedures.value.filter((item) => {
-    const matchesAssignTo =
-      !searchAssignTo.value ||
-      item.ASSIGNED_TO.toString().includes(searchAssignTo.value);
+    const matchesAssignedTo =
+      !searchAssignedTo.value ||
+      item.ASSIGNED_TO.toLowerCase().includes(
+        searchAssignedTo.value.toLowerCase()
+      );
     const matchesNum =
       !searchNum.value || item.NUM.toString().includes(searchNum.value);
     const matchesFolderNum =
@@ -353,7 +356,7 @@ const filteredProcedures = computed(() => {
       !searchStatus.value ||
       item.STATUS.toLowerCase().includes(searchStatus.value.toLowerCase());
     return (
-      matchesAssignTo &&
+      matchesAssignedTo &&
       matchesNum &&
       matchesFolderNum &&
       matchesCustomer &&
@@ -365,7 +368,7 @@ const filteredProcedures = computed(() => {
 });
 
 const clearFilters = () => {
-  searchAssignTo.value = null;
+  searchAssignedTo.value = null;
   searchNum.value = null;
   searchCustomer.value = null;
   searchStartDate.value = null;
@@ -510,6 +513,8 @@ const deleteProcedure = async (id) => {
     await $fetch(API_SERVER_URL + `/folders/${id}`, {
       method: "DELETE",
     });
+    procedures.value = [];
+    selectedProcedure.value = null;
     showTextResultDeleteModal.value = "Procédure supprimée avec succès !";
     showTypeResultDeleteModal.value = "success";
     showResultDeleteModal.value = true;
@@ -521,6 +526,12 @@ const deleteProcedure = async (id) => {
     showResultDeleteModal.value = true;
   }
 };
+
+watch(() => {
+  if (showResultDeleteModal.value) {
+    loadProcedures(); // Recharger les utilisateurs quand le modal est fermé
+  }
+});
 
 //Envoi de données dépendant d'un premier envoi (à utiliser pour la suppression)
 // const sendFirstRequest = async (data) => {
