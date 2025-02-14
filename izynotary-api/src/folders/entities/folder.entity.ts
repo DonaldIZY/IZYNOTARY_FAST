@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Customer } from "src/customers/entities/customer.entity";
 import { Seller } from "src/sellers/entities/seller.entity";
 import { Step } from "src/steps/entities/step.entity";
