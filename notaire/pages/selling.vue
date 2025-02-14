@@ -520,7 +520,6 @@ const handleProcedure = async () => {
 
   procedureData.append("folderNum", procedureNumGenerator("Vente", count));
   procedureData.append("procedureType", "Vente");
-  procedureData.append("progression", 1 / 6);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
   procedureData.append("sellerId", selectedSeller.value.ID);
