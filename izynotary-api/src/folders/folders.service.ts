@@ -750,6 +750,21 @@ export class FoldersService {
         folder.seller = seller;
         folder.assignedTo = assignedTo;
 
+        var count = 0;
+        var countDoc = 0;
+
+        for(const elem of step.steps) {
+            for(const docValue of Object.values(elem.documents)) {
+                if(docValue["filled"]) {
+                    count++;
+                }
+                countDoc++;
+            }
+        }
+
+
+        folder.progression = count/countDoc
+
         await this.entityManager.save(folder);
     }
 
