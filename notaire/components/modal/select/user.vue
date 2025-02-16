@@ -8,6 +8,7 @@
         variant="tonal"
         color="secondary"
         prepend-icon="mdi-cursor-default-click-outline"
+        block
       >
         Sélectionner un responsable de suivi
       </v-btn>

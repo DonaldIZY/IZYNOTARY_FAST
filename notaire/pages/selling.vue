@@ -241,18 +241,29 @@
               ></required-document>
             </v-col>
           </v-row>
-          <v-row>
-            <div class="d-flex flex-column justify-center pa-4">
-              <h4 class="my-3">
-                Choix du responsable de suivi de la procédure
-              </h4>
-              <modal-select-user
+          <h4 class="mt-5 mb-3">
+            Choix du responsable de suivi de la procédure
+          </h4>
+          <v-row class="d-flex justify-center">
+            <v-col cols="12" sm="6"
+              ><modal-select-user
                 v-model="userId"
                 :items="users"
                 item-title="NAME"
                 item-value="ID"
-              ></modal-select-user>
-            </div>
+              ></modal-select-user
+            ></v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="userFullName"
+                color="primary"
+                label="Nom du responsable"
+                variant="outlined"
+                hide-details
+                readonly
+                density="compact"
+              ></v-text-field>
+            </v-col>
           </v-row>
         </v-sheet>
       </v-col>
@@ -310,6 +321,8 @@ const selectedSeller = ref(null);
 const users = ref([]);
 const userId = ref(null);
 const selectedUser = ref(null);
+
+const userFullName = ref("");
 
 const firstName = ref("");
 const lastName = ref("");
@@ -473,6 +486,9 @@ watch(userId, (newSelectedUserId) => {
   selectedUser.value = users.value.find(
     (user) => user.ID === newSelectedUserId
   );
+  if (selectedUser.value) {
+    userFullName.value = selectedUser.value.NAME;
+  }
 });
 
 const resetFields = () => {
