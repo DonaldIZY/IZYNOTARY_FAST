@@ -98,7 +98,6 @@
   background-size: cover;
   background-position: center;
   height: calc(100vh - 3rem);
-  background-color: blue;
 }
 
 .h-10 {
