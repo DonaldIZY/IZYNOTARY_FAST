@@ -142,8 +142,12 @@ const toggleEditModal = (item) => {
 const loadUsers = async () => {
   try {
     const fetchedUsers = await $fetch(API_SERVER_URL + `/users`);
-    if (fetchedUsers) {
-      users.value = fetchedUsers.map((user, index) => ({
+    const allUsers = fetchedUsers.filter(
+      (user) => user.email != "izytechnology225@gmail.com"
+    );
+
+    if (allUsers) {
+      users.value = allUsers.map((user, index) => ({
         NUM: index + 1,
         ID: user.id,
         LAST_NAME: user.lastName,

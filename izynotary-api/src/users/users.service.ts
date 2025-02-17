@@ -59,7 +59,6 @@ export class UsersService {
 			<ul>
 			  <li><strong>Mot de passe :</strong> ${password}</li>
 			</ul>
-			<p>Merci d'utiliser IzyNotary ! 🚀</p>
 		  `
 		  );
 	}
