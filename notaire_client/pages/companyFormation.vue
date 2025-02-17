@@ -67,7 +67,8 @@
             size="x-small"
             density="comfortable"
             icon="mdi-text-box-outline"
-           
+            @click="selectProcedure(item.id)"
+            :to="redirectRegardingProcedure(item)"
           >
           </v-btn>
         </td>
@@ -96,35 +97,36 @@
 </template>
 
 <script setup>
+import { useSelectedDataStore } from '~/stores/selectedDataStore';
 const loading = ref(true);
 
 const route = useRoute();
 const receiveDatas = ref([]);
 const companyFormations = ref([]);
 
-// const selectedProcedureStore = useSelectedDataStore();
-// function selectProcedure(val) {
-//   selectedProcedureStore.defineProcedureId(val);
-// }
+const selectedProcedureStore = useSelectedDataStore();
+function selectProcedure(val) {
+  selectedProcedureStore.defineProcedureId(val);
+}
 
-// const redirectRegardingProcedure = (procedure) => {
-//   console.log("procedure details : ", procedure);
-//   //let type = procedure.PROCEDURE_TYPE;
+const redirectRegardingProcedure = (procedure) => {
+  console.log("procedure details : ", procedure);
+  //let type = procedure.PROCEDURE_TYPE;
 
-//   return "/companyIncorporationDetails";
+  return "/companyIncorporationDetails";
 
-//   // if (type.toLowerCase() == "constitution de société") {
-//   //   return "/companyIncorporationDetails";
-//   // } else if (type.toLowerCase() == "modification de société") {
-//   //   return "/companyModificationDetails";
-//   // } else if (type.toLowerCase() == "succession de biens immobiliers") {
-//   //   return "/realEstateDetails";
-//   // } else if (type.toLowerCase() == "succession de biens mobiliers") {
-//   //   return "/personalPropertyDetails";
-//   // } else if (type.toLowerCase() == "vente") {
-//   //   return "/salesDetails";
-//   // }
-// };
+  // if (type.toLowerCase() == "constitution de société") {
+  //   return "/companyIncorporationDetails";
+  // } else if (type.toLowerCase() == "modification de société") {
+  //   return "/companyModificationDetails";
+  // } else if (type.toLowerCase() == "succession de biens immobiliers") {
+  //   return "/realEstateDetails";
+  // } else if (type.toLowerCase() == "succession de biens mobiliers") {
+  //   return "/personalPropertyDetails";
+  // } else if (type.toLowerCase() == "vente") {
+  //   return "/salesDetails";
+  // }
+};
 
 onMounted(() => {
   try {
@@ -200,7 +202,7 @@ const headers = ref([
   },
   { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "center", key: "STATUS", title: "Statut" },
-  { align: "center", key: "ACTIONS", title: "Actions", width: "150px" },
+  { align: "center", key: "ACTIONS", title: "Actions", width: "100px" },
 ]);
 </script>
 

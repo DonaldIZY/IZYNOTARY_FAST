@@ -118,7 +118,7 @@ const router = useRouter();
 
 onMounted(async () => {
   try {
-    const customerFetch = await $fetch(API_SERVER_URL + `/customers/1`);
+    const customerFetch = await $fetch(API_SERVER_URL + `/customers/2`);
 
     console.log("datas : ", customerFetch);
 
