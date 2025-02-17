@@ -208,16 +208,8 @@ const isFormValid = computed(() => {
   );
 });
 
-// Rules
-const required = (v) => {
-  return !!v || "Le champ est obligatoire.";
-};
-
-const emailRule = (v) => {
-  return (
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ||
-    "Veuillez entrer une adresse email valide."
-  );
+const closeModal = () => {
+  emit("update:open", false);
 };
 
 const emit = defineEmits(["update:open"]);
@@ -250,9 +242,9 @@ const handleCustomer = async () => {
       method: "POST",
       body: customerData,
     });
-
     showTextResultModal.value = "Client créé avec succès !";
     showTypeResultModal.value = "success";
+
     closeModal();
     showResultModal.value = true;
   } catch (error) {
@@ -274,10 +266,6 @@ const handleCustomer = async () => {
     identificationNumber.value = "";
     imageOfIdentification.value = null;
   }
-};
-
-const closeModal = () => {
-  emit("update:open", false);
 };
 </script>
 

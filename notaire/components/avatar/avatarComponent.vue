@@ -2,8 +2,8 @@
   <v-menu min-width="200px">
     <template v-slot:activator="{ props }">
       <v-btn icon v-bind="props">
-        <v-avatar class="avatar" color="secondary" size="large">
-          <span class="text-h5">{{ getInitials(name) }}</span>
+        <v-avatar class="avatar" color="secondary">
+          <span class="text-h6">{{ getInitials(name) }}</span>
         </v-avatar>
       </v-btn>
     </template>
@@ -30,7 +30,6 @@
             prepend-icon="mdi-logout"
             class="text-none"
             rounded="md"
-
             @click="disconnectUser"
           >
             Se déconnecter

@@ -10,21 +10,18 @@
           <v-col cols="12">
             <v-sheet :elevation="4" rounded height="100%" class="pa-2">
               <h4 class="mb-3">Sélection du client</h4>
-              <div class="d-flex flex-column justify-center">
-                <v-form>
-                  <v-combobox
-                    v-model="customerId"
-                    color="primary"
-                    label="Selectionner un client"
-                    :items="customers"
-                    item-title="NAME"
-                    item-value="ID"
-                    variant="outlined"
-                    hide-details
-                    density="compact"
-                  ></v-combobox>
-                </v-form>
-                <v-divider class="my-5">ou</v-divider>
+              <span style="font-size: 0.8rem; font-style: italic; color: gray">
+                Veuillez sélectionner un client existant ou créer un nouveau
+                client puis sélectionnez-le dans la liste des clients existants.
+              </span>
+              <div class="my-3 d-flex justify-center align-center">
+                <modal-select-customer
+                  v-model="customerId"
+                  :items="customers"
+                  item-title="NAME"
+                  item-value="ID"
+                ></modal-select-customer>
+                <span class="mx-2">ou</span>
                 <v-btn
                   color="primary"
                   class="text-none align-self-center"
@@ -37,10 +34,6 @@
                   @update:open="open = $event"
                 />
               </div>
-            </v-sheet>
-          </v-col>
-          <v-col cols="12">
-            <v-sheet :elevation="4" rounded height="100%" class="pa-2">
               <h4 class="mb-3">Aperçu des informations du client</h4>
               <v-form>
                 <v-row>
@@ -108,21 +101,19 @@
           <v-col cols="12">
             <v-sheet :elevation="4" rounded height="100%" class="pa-2">
               <h4 class="mb-3">Sélection du vendeur</h4>
-              <div class="d-flex flex-column justify-center">
-                <v-form>
-                  <v-combobox
-                    v-model="sellerId"
-                    color="primary"
-                    label="Selectionner un vendeur"
-                    :items="sellers"
-                    item-title="NAME"
-                    item-value="ID"
-                    variant="outlined"
-                    hide-details=""
-                    density="compact"
-                  ></v-combobox>
-                </v-form>
-                <v-divider class="my-5">ou</v-divider>
+              <span style="font-size: 0.8rem; font-style: italic; color: gray">
+                Veuillez sélectionner un vendeur existant ou créer un nouveau
+                vendeur puis sélectionnez-le dans la liste des vendeurs
+                existants.
+              </span>
+              <div class="my-3 d-flex justify-center align-center">
+                <modal-select-seller
+                  v-model="sellerId"
+                  :items="sellers"
+                  item-title="NAME"
+                  item-value="ID"
+                ></modal-select-seller>
+                <span class="mx-2">ou</span>
                 <v-btn
                   color="#252c61"
                   class="text-none align-self-center"
@@ -135,10 +126,6 @@
                   @update:open="openSellerModal = $event"
                 />
               </div>
-            </v-sheet>
-          </v-col>
-          <v-col cols="12">
-            <v-sheet :elevation="4" rounded height="100%" class="pa-4">
               <h4 class="mb-3">Aperçu des informations du vendeur</h4>
               <v-row>
                 <v-col cols="12" sm="5">
@@ -254,25 +241,29 @@
               ></required-document>
             </v-col>
           </v-row>
-          <v-row>
-            <div class="d-flex flex-column justify-center pa-4">
-              <h4 class="my-3">
-                Choix du responsable de suivi de la procédure
-              </h4>
-              <v-form>
-                <v-combobox
-                  v-model="userId"
-                  color="primary"
-                  label="Selectionner un agent"
-                  :items="users"
-                  item-title="NAME"
-                  item-value="ID"
-                  variant="outlined"
-                  hide-details
-                  density="compact"
-                ></v-combobox>
-              </v-form>
-            </div>
+          <h4 class="mt-5 mb-3">
+            Choix du responsable de suivi de la procédure
+          </h4>
+          <v-row class="d-flex justify-center">
+            <v-col cols="12" sm="6"
+              ><modal-select-user
+                v-model="userId"
+                :items="users"
+                item-title="NAME"
+                item-value="ID"
+              ></modal-select-user
+            ></v-col>
+            <v-col cols="12" sm="6">
+              <v-text-field
+                v-model="userFullName"
+                color="primary"
+                label="Nom du responsable"
+                variant="outlined"
+                hide-details
+                readonly
+                density="compact"
+              ></v-text-field>
+            </v-col>
           </v-row>
         </v-sheet>
       </v-col>
@@ -330,6 +321,8 @@ const selectedSeller = ref(null);
 const users = ref([]);
 const userId = ref(null);
 const selectedUser = ref(null);
+
+const userFullName = ref("");
 
 const firstName = ref("");
 const lastName = ref("");
@@ -437,9 +430,9 @@ watchEffect(() => {
   }
 });
 
-watch(customerId, (newSelectedCustomer) => {
+watch(customerId, (newCustomerId) => {
   selectedCustomer.value = customers.value.find(
-    (customer) => customer.ID === newSelectedCustomer.ID
+    (customer) => customer.ID === newCustomerId
   );
 
   if (selectedCustomer.value) {
@@ -450,12 +443,19 @@ watch(customerId, (newSelectedCustomer) => {
     ).toLocaleDateString();
     gender.value = selectedCustomer.value.GENDER;
     identificationNumber.value = selectedCustomer.value.IDENTIFICATION_NUMBER;
+  } else {
+    // Réinitialiser si aucun client n'est sélectionné
+    lastName.value = "";
+    firstName.value = "";
+    birthDate.value = "";
+    gender.value = "";
+    identificationNumber.value = "";
   }
 });
 
-watch(sellerId, (newSelectedSeller) => {
+watch(sellerId, (newSelectedSellerId) => {
   selectedSeller.value = sellers.value.find(
-    (seller) => seller.ID === newSelectedSeller.ID
+    (seller) => seller.ID === newSelectedSellerId
   );
 
   if (selectedSeller.value) {
@@ -467,10 +467,13 @@ watch(sellerId, (newSelectedSeller) => {
   }
 });
 
-watch(userId, (newSelectedUser) => {
+watch(userId, (newSelectedUserId) => {
   selectedUser.value = users.value.find(
-    (user) => user.ID === newSelectedUser.ID
+    (user) => user.ID === newSelectedUserId
   );
+  if (selectedUser.value) {
+    userFullName.value = selectedUser.value.NAME;
+  }
 });
 
 const resetFields = () => {
@@ -520,7 +523,6 @@ const handleProcedure = async () => {
 
   procedureData.append("folderNum", procedureNumGenerator("Vente", count));
   procedureData.append("procedureType", "Vente");
-  procedureData.append("progression", 1 / 6);
   procedureData.append("status", "En cours");
   procedureData.append("customerId", selectedCustomer.value.ID);
   procedureData.append("sellerId", selectedSeller.value.ID);

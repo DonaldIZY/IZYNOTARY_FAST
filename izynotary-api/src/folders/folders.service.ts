@@ -1,13 +1,14 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateFolderDto } from './dto/create-folder.dto';
-import { UpdateFolderDto } from './dto/update-folder.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Folder } from './entities/folder.entity';
-import { EntityManager, Repository } from 'typeorm';
-import { Step } from 'src/steps/entities/step.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
 import { Seller } from 'src/sellers/entities/seller.entity';
+import { Step } from 'src/steps/entities/step.entity';
 import { User } from 'src/users/entities/user.entity';
+import { EntityManager, Repository } from 'typeorm';
+import { CreateFolderDto } from './dto/create-folder.dto';
+import { UpdateFolderDto } from './dto/update-folder.dto';
+import { Folder } from './entities/folder.entity';
 
 @Injectable()
 export class FoldersService {
@@ -36,7 +37,7 @@ export class FoldersService {
                     {
                         "stepNum": '1',
                         "status":
-                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.sellerCNI &&
                                 createFolderDto.requiredFiles.partnerCNI &&
                                 createFolderDto.requiredFiles.certificateOfBirthOrMarriage &&
                                 createFolderDto.requiredFiles.CIEOrSODECIInvoice &&
@@ -46,10 +47,10 @@ export class FoldersService {
                                 createFolderDto.requiredFiles.certificateOfLocation ? 'Terminé' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
-                            "customerCNI": {
-                                "name": "CNI du client",
-                                "path": createFolderDto.requiredFiles.customerCNI ? createFolderDto.requiredFiles.customerCNI : '',
-                                "filled": createFolderDto.requiredFiles.customerCNI ? true : false,
+                            "sellerCNI": {
+                                "name": "CNI du vendeur",
+                                "path": createFolderDto.requiredFiles.sellerCNI ? createFolderDto.requiredFiles.sellerCNI : '',
+                                "filled": createFolderDto.requiredFiles.sellerCNI ? true : false,
                                 "editBy": ''
                             },
                             "partnerCNI": {
@@ -98,7 +99,7 @@ export class FoldersService {
                         "comment": '',
                         "startDate": new Date(),
                         "endDate":
-                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.sellerCNI &&
                                 createFolderDto.requiredFiles.partnerCNI &&
                                 createFolderDto.requiredFiles.certificateOfBirthOrMarriage &&
                                 createFolderDto.requiredFiles.CIEOrSODECIInvoice &&
@@ -110,7 +111,7 @@ export class FoldersService {
                     {
                         "stepNum": '2',
                         "status":
-                            createFolderDto.requiredFiles.customerCNI &&
+                            createFolderDto.requiredFiles.sellerCNI &&
                                 createFolderDto.requiredFiles.partnerCNI &&
                                 createFolderDto.requiredFiles.certificateOfBirthOrMarriage &&
                                 createFolderDto.requiredFiles.CIEOrSODECIInvoice &&
@@ -749,6 +750,21 @@ export class FoldersService {
         folder.customer = customer;
         folder.seller = seller;
         folder.assignedTo = assignedTo;
+
+        let count = 0;
+        let countDoc = 0;
+
+        for (const elem of step.steps) {
+            for (const docValue of Object.values(elem.documents)) {
+                if (docValue["filled"]) {
+                    count++;
+                }
+                countDoc++;
+            }
+        }
+
+
+        folder.progression = count / countDoc
 
         await this.entityManager.save(folder);
     }
