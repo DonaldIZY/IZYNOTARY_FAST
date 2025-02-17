@@ -275,6 +275,12 @@
     destination="/proceduresManagement"
     @update:open="showResultDeleteModal = $event"
   />
+  <result-modal-validation
+    :text="showTextResultModifyModal"
+    :open="showResultModifyModal"
+    :type="showTypeResultModifyModal"
+    @update:open="showResultModifyModal = $event"
+  />
 </template>
 
 <script setup>
@@ -474,13 +480,26 @@ const updateProcedure = async (val) => {
     );
 
     if (resultOfProcedureUpdate.status) {
-      alert(
-        "La procédure a été modifiée.\n val_status : ",
-        val.status,
-        val.message
-      );
-
-      if (val.status == "") {
+      if (val.status) {
+        if(val.status == "Suspendu") {
+          showTextResultDeleteModal.value = "La procédure a été suspendue.";
+          showTypeResultDeleteModal.value = "info";
+          showResultDeleteModal.value = true;
+        }else if(val.status == "Arrêté") {
+          showTextResultDeleteModal.value = "La procédure a été arrêtée.";
+          showTypeResultDeleteModal.value = "info";
+          showResultDeleteModal.value = true;
+        }else if(val.status == "En cours") {
+          showTextResultDeleteModal.value = "La procédure est de nouveau en cours.";
+          showTypeResultDeleteModal.value = "info";
+          showResultDeleteModal.value = true;
+        }else{
+          console.log("erreur ");
+        }
+      }else{
+        showTextResultDeleteModal.value = "Procédure modifiée avec succès !";
+        showTypeResultDeleteModal.value = "success";
+        showResultDeleteModal.value = true;
       }
 
       loadProcedures();
@@ -514,6 +533,10 @@ const getProcedureTypeColor = (type) => {
 const showResultDeleteModal = ref(false);
 const showTextResultDeleteModal = ref("");
 const showTypeResultDeleteModal = ref("");
+
+const showResultModifyModal = ref(false);
+const showTextResultModifyModal = ref("");
+const showTypeResultModifyModal = ref("");
 
 const deleteProcedure = async (id) => {
   console.log(id);
