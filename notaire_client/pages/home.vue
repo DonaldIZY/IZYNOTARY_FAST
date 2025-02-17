@@ -22,9 +22,8 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
-            @click="
-              saveDataAndNavigate(companyFormationData, '/companyFormation')
-            "
+            :to="'/companyFormation'"
+          @click="setSelectedData(companyFormationData)"
           >
             <v-img
               src="~/assets/img/constSoc.png"
@@ -108,13 +107,19 @@
 </template>
 
 <script setup>
+import { useCardStore } from '~/stores/cardStore';
+
 const companyFormationData = ref([]);
 const companyModificationData = ref([]);
 const movablePropertyData = ref([]);
 const realEstateData = ref([]);
 const sellingData = ref([]);
 
-const router = useRouter();
+const store = useCardStore();
+
+const setSelectedData = (data) => {
+  store.setSelectedData(data);
+};
 
 onMounted(async () => {
   try {
@@ -149,11 +154,6 @@ onMounted(async () => {
     console.error(err);
   }
 });
-
-const saveDataAndNavigate = (data, path) => {
-  localStorage.setItem("companyFormationData", JSON.stringify(data)); // Stocke les données temporairement
-  router.push(path); // Redirige sans query params visibles
-};
 </script>
 
 <style scoped>

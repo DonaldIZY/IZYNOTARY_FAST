@@ -59,6 +59,10 @@ export class UsersService {
 			<ul>
 			  <li><strong>Mot de passe :</strong> ${password}</li>
 			</ul>
+			<br/>
+			Pour vous connecter, cliquez ici : 
+			<br/>
+			${process.env.FRONTEND}
 		  `
 		  );
 	}
