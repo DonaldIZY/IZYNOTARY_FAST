@@ -275,6 +275,12 @@
     destination="/proceduresManagement"
     @update:open="showResultDeleteModal = $event"
   />
+  <result-modal-validation
+    :text="showTextResultModifyModal"
+    :open="showResultModifyModal"
+    :type="showTypeResultModifyModal"
+    @update:open="showResultModifyModal = $event"
+  />
 </template>
 
 <script setup>
@@ -472,12 +478,33 @@ const updateProcedure = async (val) => {
         body: dataToSend,
       }
     );
+
     if (resultOfProcedureUpdate.status) {
-      alert("La procédure a été modifiée.");
+      if (val.status) {
+        if(val.status == "Suspendu") {
+          showTextResultDeleteModal.value = "La procédure a été suspendue.";
+          showTypeResultDeleteModal.value = "info";
+          showResultDeleteModal.value = true;
+        }else if(val.status == "Arrêté") {
+          showTextResultDeleteModal.value = "La procédure a été arrêtée.";
+          showTypeResultDeleteModal.value = "info";
+          showResultDeleteModal.value = true;
+        }else if(val.status == "En cours") {
+          showTextResultDeleteModal.value = "La procédure est de nouveau en cours.";
+          showTypeResultDeleteModal.value = "info";
+          showResultDeleteModal.value = true;
+        }else{
+          console.log("erreur ");
+        }
+      }else{
+        showTextResultDeleteModal.value = "Procédure modifiée avec succès !";
+        showTypeResultDeleteModal.value = "success";
+        showResultDeleteModal.value = true;
+      }
+
       loadProcedures();
       closeModal();
     }
-
     console.log("back response : ", resultOfProcedureUpdate);
   } catch (err) {
     console.error("Erreur lors de la mise à jour de la procédure : ", err);
@@ -506,6 +533,10 @@ const getProcedureTypeColor = (type) => {
 const showResultDeleteModal = ref(false);
 const showTextResultDeleteModal = ref("");
 const showTypeResultDeleteModal = ref("");
+
+const showResultModifyModal = ref(false);
+const showTextResultModifyModal = ref("");
+const showTypeResultModifyModal = ref("");
 
 const deleteProcedure = async (id) => {
   console.log(id);
