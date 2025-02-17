@@ -169,7 +169,6 @@ watchEffect(() => {
   if (props.companyFormationData) {
     props.companyFormationData.forEach((procedure) => {
       companyFormations.value.push({
-        // return {
         id: procedure.id,
         NUM: procedure.folderNum,
         CREATE_AT: procedure.createAt.toString(),
@@ -181,7 +180,6 @@ watchEffect(() => {
         DELIVERABLES: procedure.step.steps[5].status,
         PERCENTAGE: parseFloat(procedure.progression),
         STATUS: procedure.status,
-        // };
       });
     });
     loading.value = false;
