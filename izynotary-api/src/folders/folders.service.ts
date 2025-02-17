@@ -60,7 +60,7 @@ export class FoldersService {
                                 "editBy": ''
                             },
                             "certificateOfBirthOrMarriage": {
-                                "name": "Extrait d'acte de naissance ou de marriage",
+                                "name": "Extrait d'acte de naissance ou de mariage",
                                 "path": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? createFolderDto.requiredFiles.certificateOfBirthOrMarriage : '',
                                 "filled": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? true : false,
                                 "editBy": ''
