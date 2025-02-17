@@ -173,16 +173,17 @@ console.log(
                   placeholder="Écrivez votre commentaire ici..."
                   rows="3"
                   hide-details
-                  v-model="step.comment" 
-                  @update:model-value="(val) => {
-                    if(newProcedureData.action == step.action) {
-                      newProcedureData.comment = val;
-                    }else{
-                      newProcedureData.action = step.action;
-                      newProcedureData.comment = val;
+                  v-model="step.comment"
+                  @update:model-value="
+                    (val) => {
+                      if (newProcedureData.action == step.action) {
+                        newProcedureData.comment = val;
+                      } else {
+                        newProcedureData.action = step.action;
+                        newProcedureData.comment = val;
+                      }
                     }
-                    
-                  }"
+                  "
                 />
                 <v-btn
                   class="suspendedBtn text-none"
