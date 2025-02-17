@@ -53,6 +53,19 @@
             >{{ item.STATUS }}</v-chip
           >
         </td>
+        <td style="text-align: center">
+          <v-btn
+            class="actionBtn"
+            title="Voir les détails"
+            color="blue"
+            size="x-small"
+            density="comfortable"
+            icon="mdi-text-box-outline"
+            @click="selectProcedure(item.id)"
+            :to="redirectRegardingProcedure(item)"
+          >
+          </v-btn>
+        </td>
       </tr>
     </template>
     <!-- Slot pour afficher un loader quand la table est vide -->
@@ -84,6 +97,32 @@ const props = defineProps({
 
 const loading = ref(true);
 const companyFormations = ref([]);
+
+const selectedProcedureStore = useSelectedDataStore();
+function selectProcedure(val) {
+  selectedProcedureStore.defineProcedureId(val);
+  console.log("Selected : ", selectedProcedureStore.defineProcedureId(val));
+}
+
+const redirectRegardingProcedure = (procedure) => {
+  console.log("procedure details : ", procedure);
+
+  return "/companyIncorporationDetails";
+  // router.push(`/companyIncorporationDetails`);
+  // let type = procedure.PROCEDURE_TYPE;
+
+  // if (type.toLowerCase() == "constitution de société") {
+  //   return "/companyIncorporationDetails";
+  // } else if (type.toLowerCase() == "modification de société") {
+  //   return "/companyModificationDetails";
+  // } else if (type.toLowerCase() == "succession de biens immobiliers") {
+  //   return "/realEstateDetails";
+  // } else if (type.toLowerCase() == "succession de biens mobiliers") {
+  //   return "/personalPropertyDetails";
+  // } else if (type.toLowerCase() == "vente") {
+  //   return "/salesDetails";
+  // }
+};
 
 const headers = ref([
   { align: "start", key: "NUM", title: "N° du dossier" },
@@ -122,6 +161,7 @@ const headers = ref([
   },
   { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "center", key: "STATUS", title: "Statut" },
+  { align: "center", key: "ACTIONS", title: "Actions", width: "150px" },
 ]);
 
 watchEffect(() => {
@@ -130,6 +170,7 @@ watchEffect(() => {
     props.companyFormationData.forEach((procedure) => {
       companyFormations.value.push({
         // return {
+        id: procedure.id,
         NUM: procedure.folderNum,
         CREATE_AT: procedure.createAt.toString(),
         SUPPLY_OF_PARTS: procedure.step.steps[0]?.status,
