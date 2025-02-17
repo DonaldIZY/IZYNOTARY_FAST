@@ -472,12 +472,20 @@ const updateProcedure = async (val) => {
         body: dataToSend,
       }
     );
+
     if (resultOfProcedureUpdate.status) {
-      alert("La procédure a été modifiée.");
+      alert(
+        "La procédure a été modifiée.\n val_status : ",
+        val.status,
+        val.message
+      );
+
+      if (val.status == "") {
+      }
+
       loadProcedures();
       closeModal();
     }
-
     console.log("back response : ", resultOfProcedureUpdate);
   } catch (err) {
     console.error("Erreur lors de la mise à jour de la procédure : ", err);

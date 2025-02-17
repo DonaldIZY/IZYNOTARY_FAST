@@ -10,6 +10,10 @@ const props = defineProps({
   },
 });
 
+const showResultModal = ref(false);
+const showTextResultModal = ref("");
+const showTypeResultModal = ref("");
+
 const tab = defineModel();
 
 const emit = defineEmits(["closeModal", "submit"]);
@@ -77,26 +81,38 @@ console.log(
         </v-tab>
       </v-tabs>
 
-      <v-card-text class="scrollable-content">
+      <v-card-text class="py-1">
         <v-tabs-window
           v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)"
           v-model="tab"
         >
           <v-tabs-window-item
-            class="pa-4"
+            class="px-4"
             v-for="step in procedureData.steps.filter((elem) =>
               ['terminé', 'en cours'].includes(elem.status.toLowerCase())
             )"
             :value="step.action"
           >
-            <v-row>
-              <v-chip
-                :style="{ marginBottom: '1rem' }"
-                :text="step.action"
-              ></v-chip>
+            <v-row dense>
+              <v-sheet class="infoStep">
+                <v-col cols="9" class="px-0">
+                  <span class="infoStep-text">{{ step.action }}</span>
+                </v-col>
+                <v-col cols="3" class="infoStep-status px-0">
+                  <v-chip
+                    density="compact"
+                    rounded="md"
+                    :text="step.status"
+                    :color="getStatusColorIcon(step.status)"
+                    variant="flat"
+                  ></v-chip>
+                </v-col>
+              </v-sheet>
+              <v-divider></v-divider>
             </v-row>
-            <v-row>
+            <v-row class="scrollable-content">
               <v-col cols="12">
+                <p class="mb-5">Documents</p>
                 <v-row
                   dense
                   :style="{ gap: '1rem', alignItems: 'top' }"
@@ -125,7 +141,6 @@ console.log(
                     "
                     :disabled="step.documents[doc].path != '' ? true : false"
                   />
-
                   <required-document-customized
                     v-if="
                       step.documents[doc].path != '' ||
@@ -138,7 +153,7 @@ console.log(
                 </v-row>
               </v-col>
               <v-col cols="12">
-                <h4 class="mt-0 mb-3">Actions supplémentaires</h4>
+                <p class="mt-0 mb-3">Actions supplémentaires</p>
                 <span
                   style="font-size: 0.8rem; font-style: italic; color: gray"
                   v-if="
@@ -155,18 +170,20 @@ console.log(
                   variant="outlined"
                   density="compact"
                   label="Commentaire"
+                  placeholder="Écrivez votre commentaire ici..."
                   rows="3"
                   hide-details
-                  v-model="step.comment" 
-                  @update:model-value="(val) => {
-                    if(newProcedureData.action == step.action) {
-                      newProcedureData.comment = val;
-                    }else{
-                      newProcedureData.action = step.action;
-                      newProcedureData.comment = val;
+                  v-model="step.comment"
+                  @update:model-value="
+                    (val) => {
+                      if (newProcedureData.action == step.action) {
+                        newProcedureData.comment = val;
+                      } else {
+                        newProcedureData.action = step.action;
+                        newProcedureData.comment = val;
+                      }
                     }
-                    
-                  }"
+                  "
                 />
                 <v-btn
                   class="suspendedBtn text-none"
@@ -193,9 +210,10 @@ console.log(
                         });
                         newProcedureData = {};
                       } else {
-                        console.log(
-                          'Veuillez ajouter un commentaire pour suspendre la procédure'
-                        );
+                        showTextResultModal =
+                          'Veuillez ajouter un commentaire avant de suspendre la procédure.';
+                        showTypeResultModal = 'warning';
+                        showResultModal = true;
                       }
                     }
                   "
@@ -225,9 +243,9 @@ console.log(
                         });
                         newProcedureData = {};
                       } else {
-                        console.log(
-                          'Veuillez ajouter un commentaire pour arrêter la procédure'
-                        );
+                        showTextResultModal = `Veuillez ajouter un commentaire avant d'arrêter la procédure.`;
+                        showTypeResultModal = 'warning';
+                        showResultModal = true;
                       }
                     }
                   "
@@ -340,6 +358,12 @@ console.log(
         ></v-btn>
       </v-card-actions>
     </v-card>
+    <result-modal-validation
+      :text="showTextResultModal"
+      :open="showResultModal"
+      :type="showTypeResultModal"
+      @update:open="showResultModal = $event"
+    />
   </v-dialog>
 </template>
 
@@ -350,6 +374,25 @@ console.log(
 
 .folderNumber {
   color: #ad1919;
+}
+
+.infoStep {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+}
+
+.infoStep-text {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.infoStep-status {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  font-size: 0.9rem;
 }
 
 .scrollable-content {
