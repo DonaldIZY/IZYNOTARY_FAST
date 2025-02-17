@@ -98,6 +98,7 @@
 
 <script setup>
 import { useSelectedDataStore } from '~/stores/selectedDataStore';
+import { useCardStore } from '~/stores/cardStore';
 const loading = ref(true);
 
 const route = useRoute();
@@ -114,27 +115,19 @@ const redirectRegardingProcedure = (procedure) => {
   //let type = procedure.PROCEDURE_TYPE;
 
   return "/companyIncorporationDetails";
-
-  // if (type.toLowerCase() == "constitution de société") {
-  //   return "/companyIncorporationDetails";
-  // } else if (type.toLowerCase() == "modification de société") {
-  //   return "/companyModificationDetails";
-  // } else if (type.toLowerCase() == "succession de biens immobiliers") {
-  //   return "/realEstateDetails";
-  // } else if (type.toLowerCase() == "succession de biens mobiliers") {
-  //   return "/personalPropertyDetails";
-  // } else if (type.toLowerCase() == "vente") {
-  //   return "/salesDetails";
-  // }
 };
 
 onMounted(() => {
   try {
-    const storedData = localStorage.getItem("companyFormationData");
-    if (storedData) {
-      receiveDatas.value = JSON.parse(storedData);
-      localStorage.removeItem("shoppingData"); // Supprime après utilisation
-    }
+    // const storedData = localStorage.getItem("companyFormationData");
+    // if (storedData) {
+    //   receiveDatas.value = JSON.parse(storedData);
+    //   localStorage.removeItem("shoppingData"); // Supprime après utilisation
+    // }
+
+    const store = useCardStore();
+    receiveDatas.value = store.selectedData;
+    console.log("receiveDatas : ",receiveDatas);
 
     watchEffect(() => {
       if (receiveDatas.value) {

@@ -16,4 +16,4 @@ JWT_EXPIRATION=36000
 //superuser data connexion 
 SUPERUSERPASSWORD= '@#|i*j^$A-Eç4m'
 SUPERUSEREMAIL = 'izytechnology225@gmail.com'
-
+FRONTEND = 'http://izynotary.izydr.net'
