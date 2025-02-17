@@ -13,24 +13,34 @@
     no-data-text="Aucune procédure de succession de biens mobiliers."
     hover
     class="customTable2"
+    :loading="loading"
   >
-    <template v-slot:item.ACTIONS="{ item }">
-      <v-btn
-        class="actionBtn"
-        title="Voir les détails"
-        color="blue"
-        size="x-small"
-        density="comfortable"
-        icon="mdi-text-box-outline"
-        @click="selectProcedure(item.id)"
-        :to="redirectRegardingProcedure(item)"
-      >
-      </v-btn>
+    
+  <!-- Slot pour afficher un loader quand la table est vide -->
+  <template v-slot:loading>
+      <div class="d-flex justify-center my-10">
+        <v-progress-circular color="red" indeterminate></v-progress-circular>
+      </div>
     </template>
+    <!-- Slot personnalisé pour l'affichage quand il n'y a pas de données -->
+    <template #no-data>
+      <div class="no-data-container">
+        <v-img
+          src="~/assets/img/tableIcon_nodata.png"
+          height="80"
+          width="80"
+          class="mb-3"
+          alt="Aucune donnée"
+        ></v-img>
+        <p>Aucune donnée</p>
+      </div>
+    </template>
+
   </v-data-table>
 </template>
 
 <script setup>
+const loading = ref(true);
 const headers = ref([
   { align: "start", key: "NUM", title: "N° du dossier" },
   { align: "start", key: "CREATE_AT", title: "Date de création" },
