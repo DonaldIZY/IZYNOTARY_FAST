@@ -430,21 +430,6 @@ watchEffect(() => {
   }
 });
 
-// watch(customerId, (newSelectedCustomer) => {
-//   selectedCustomer.value = customers.value.find(
-//     (customer) => customer.ID === newSelectedCustomer.ID
-//   );
-
-//   if (selectedCustomer.value) {
-//     lastName.value = selectedCustomer.value.LASTNAME;
-//     firstName.value = selectedCustomer.value.FIRSTNAME;
-//     birthDate.value = new Date(
-//       selectedCustomer.value.BIRTHDATE
-//     ).toLocaleDateString();
-//     gender.value = selectedCustomer.value.GENDER;
-//     identificationNumber.value = selectedCustomer.value.IDENTIFICATION_NUMBER;
-//   }
-// });
 watch(customerId, (newCustomerId) => {
   selectedCustomer.value = customers.value.find(
     (customer) => customer.ID === newCustomerId
