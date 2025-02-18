@@ -110,7 +110,6 @@ function selectProcedure(val) {
 }
 
 const redirectRegardingProcedure = (procedure) => {
-
   return "/personalPropertyDetails";
 };
 

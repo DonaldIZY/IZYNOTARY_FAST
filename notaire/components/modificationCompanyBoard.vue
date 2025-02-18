@@ -105,7 +105,6 @@ function selectProcedure(val) {
 }
 
 const redirectRegardingProcedure = (procedure) => {
-
   return "/companyModificationDetails";
 };
 
@@ -147,7 +146,6 @@ const headers = ref([
   { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "center", key: "STATUS", title: "Statut" },
   { align: "center", key: "ACTIONS", title: "Actions", width: "100px" },
-
 ]);
 
 watchEffect(() => {

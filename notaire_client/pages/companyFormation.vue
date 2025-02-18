@@ -97,11 +97,10 @@
 </template>
 
 <script setup>
-import { useSelectedDataStore } from '~/stores/selectedDataStore';
-import { useCardStore } from '~/stores/cardStore';
+import { useSelectedDataStore } from "~/stores/selectedDataStore";
+import { useCardStore } from "~/stores/cardStore";
 const loading = ref(true);
 
-const route = useRoute();
 const receiveDatas = ref([]);
 const companyFormations = ref([]);
 
@@ -111,29 +110,19 @@ function selectProcedure(val) {
 }
 
 const redirectRegardingProcedure = (procedure) => {
-  console.log("procedure details : ", procedure);
-  //let type = procedure.PROCEDURE_TYPE;
-
   return "/companyIncorporationDetails";
 };
 
 onMounted(() => {
   try {
-    // const storedData = localStorage.getItem("companyFormationData");
-    // if (storedData) {
-    //   receiveDatas.value = JSON.parse(storedData);
-    //   localStorage.removeItem("shoppingData"); // Supprime après utilisation
-    // }
-
     const store = useCardStore();
     receiveDatas.value = store.selectedData;
-    console.log("receiveDatas : ",receiveDatas);
+    console.log("receiveDatas : ", receiveDatas);
 
     watchEffect(() => {
       if (receiveDatas.value) {
         receiveDatas.value.forEach((procedure) => {
           companyFormations.value.push({
-            // return {
             id: procedure.id,
             NUM: procedure.folderNum,
             CREATE_AT: procedure.createAt.toString(),
@@ -145,7 +134,6 @@ onMounted(() => {
             DELIVERABLES: procedure.step.steps[5].status,
             PERCENTAGE: parseFloat(procedure.progression),
             STATUS: procedure.status,
-            // };
           });
         });
         loading.value = false;
@@ -155,8 +143,6 @@ onMounted(() => {
     console.error("Erreur de parsing des données :", error);
   }
 });
-
-console.log("companyFormations : ", companyFormations);
 
 const headers = ref([
   { align: "center", key: "NUM", title: "N° du dossier" },

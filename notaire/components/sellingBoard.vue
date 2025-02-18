@@ -105,8 +105,6 @@ function selectProcedure(val) {
 }
 
 const redirectRegardingProcedure = (procedure) => {
-  console.log("procedure details : ", procedure);
-
   return "/salesDetails";
 };
 
@@ -155,7 +153,7 @@ watchEffect(() => {
   if (props.sellingData) {
     props.sellingData.forEach((procedure) => {
       sellings.value.push({
-          id: procedure.id,
+        id: procedure.id,
         NUM: procedure.folderNum,
         CREATE_AT: procedure.createAt.toString(),
         SUPPLY_OF_PARTS: procedure.step.steps[0]?.status,

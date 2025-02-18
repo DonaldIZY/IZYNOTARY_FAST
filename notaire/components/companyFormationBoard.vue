@@ -105,23 +105,7 @@ function selectProcedure(val) {
 }
 
 const redirectRegardingProcedure = (procedure) => {
-  console.log("procedure details : ", procedure);
-
   return "/companyIncorporationDetails";
-  // router.push(`/companyIncorporationDetails`);
-  // let type = procedure.PROCEDURE_TYPE;
-
-  // if (type.toLowerCase() == "constitution de société") {
-  //   return "/companyIncorporationDetails";
-  // } else if (type.toLowerCase() == "modification de société") {
-  //   return "/companyModificationDetails";
-  // } else if (type.toLowerCase() == "succession de biens immobiliers") {
-  //   return "/realEstateDetails";
-  // } else if (type.toLowerCase() == "succession de biens mobiliers") {
-  //   return "/personalPropertyDetails";
-  // } else if (type.toLowerCase() == "vente") {
-  //   return "/salesDetails";
-  // }
 };
 
 const headers = ref([
