@@ -94,7 +94,7 @@ const statusColor = computed(() => {
     <back-button
       v-if="stepList.length > 0"
       :title="procedureNum"
-      goBackTo="/proceduresManagement"
+      goBackTo="/transferOfRealEstate"
     />
     <history-procedure text="Voir l'historique"></history-procedure>
   </div>

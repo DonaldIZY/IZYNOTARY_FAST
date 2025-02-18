@@ -14,8 +14,68 @@
     class="customTable2"
     :loading="loading"
   >
-
-  <template v-slot:loading>
+    <template #item="{ item }">
+      <tr>
+        <td>{{ item.NUM }}</td>
+        <td>{{ formatDate(item.CREATE_AT) }}</td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SUPPLY_OF_PARTS)">{{
+            getStatusIcon(item.SUPPLY_OF_PARTS)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.DRAFTING_OF_STATUTES)">{{
+            getStatusIcon(item.DRAFTING_OF_STATUTES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SETTLEMENT_OF_FEES)">{{
+            getStatusIcon(item.SETTLEMENT_OF_FEES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SIGNATURE_OF_ACTS)">{{
+            getStatusIcon(item.SIGNATURE_OF_ACTS)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.SIGNED_DOCUMENT_DEPOSITED)">{{
+            getStatusIcon(item.SIGNED_DOCUMENT_DEPOSITED)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          <v-icon :color="getStatusColorIcon(item.DELIVERABLES)">{{
+            getStatusIcon(item.DELIVERABLES)
+          }}</v-icon>
+        </td>
+        <td style="text-align: center">
+          {{ Math.round(item.PERCENTAGE * 100) }}%
+        </td>
+        <td style="text-align: center">
+          <v-chip
+            size="small"
+            variant="flat"
+            :color="getStatusColorIcon(item.STATUS)"
+            >{{ item.STATUS }}</v-chip
+          >
+        </td>
+        <td style="text-align: center">
+          <v-btn
+            class="actionBtn"
+            title="Voir les détails"
+            color="blue"
+            size="x-small"
+            density="comfortable"
+            icon="mdi-text-box-outline"
+            @click="selectProcedure(item.id)"
+            :to="redirectRegardingProcedure(item)"
+          >
+          </v-btn>
+        </td>
+      </tr>
+    </template>
+    <!-- Slot pour afficher un loader quand la table est vide -->
+    <template v-slot:loading>
       <div class="d-flex justify-center my-10">
         <v-progress-circular color="red" indeterminate></v-progress-circular>
       </div>
@@ -33,12 +93,57 @@
         <p>Aucune donnée</p>
       </div>
     </template>
-
   </v-data-table>
 </template>
 
 <script setup>
+import { useSelectedDataStore } from "~/stores/selectedDataStore";
+import { useCardStore } from "~/stores/cardStore";
+
+const receiveDatas = ref([]);
+const modificationCompanys = ref([]);
 const loading = ref(true);
+
+const selectedProcedureStore = useSelectedDataStore();
+function selectProcedure(val) {
+  selectedProcedureStore.defineProcedureId(val);
+}
+
+const redirectRegardingProcedure = (procedure) => {
+  return "/companyModificationDetails";
+};
+
+onMounted(() => {
+  try {
+    const store = useCardStore();
+    receiveDatas.value = store.selectedData;
+    console.log("receiveDatas : ", receiveDatas);
+
+    watchEffect(() => {
+      if (receiveDatas.value) {
+        receiveDatas.value.forEach((procedure) => {
+          modificationCompanys.value.push({
+            id: procedure.id,
+            NUM: procedure.folderNum,
+            CREATE_AT: procedure.createAt.toString(),
+            SUPPLY_OF_PARTS: procedure.step.steps[0].status,
+            DRAFTING_OF_STATUTES: procedure.step.steps[1].status,
+            SETTLEMENT_OF_FEES: procedure.step.steps[2].status,
+            SIGNATURE_OF_ACTS: procedure.step.steps[3].status,
+            SIGNED_DOCUMENT_DEPOSITED: procedure.step.steps[4].status,
+            DELIVERABLES: procedure.step.steps[5].status,
+            PERCENTAGE: procedure.progression,
+            STATUS: procedure.status,
+          });
+        });
+        loading.value = false;
+      }
+    });
+  } catch (error) {
+    console.error("Erreur de parsing des données :", error);
+  }
+});
+
 const headers = ref([
   { align: "start", key: "NUM", title: "N° du dossier" },
   { align: "start", key: "CREATE_AT", title: "Date de création" },
@@ -76,6 +181,7 @@ const headers = ref([
   },
   { align: "start", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "start", key: "STATUS", title: "Statut" },
+  { align: "center", key: "ACTIONS", title: "Actions", width: "100px" },
 ]);
 </script>
 

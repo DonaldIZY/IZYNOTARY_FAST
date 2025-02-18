@@ -8,7 +8,7 @@
     class="customTable2"
     :loading="loading"
   >
-  <template #item="{ item }">
+    <template #item="{ item }">
       <tr>
         <td>{{ item.NUM }}</td>
         <td>{{ formatDate(item.CREATE_AT) }}</td>
@@ -23,9 +23,12 @@
           }}</v-icon>
         </td>
         <td style="text-align: center">
-          <v-icon :color="getStatusColorIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)">{{
-            getStatusIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)
-          }}</v-icon>
+          <v-icon
+            :color="getStatusColorIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)"
+            >{{
+              getStatusIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)
+            }}</v-icon
+          >
         </td>
         <td style="text-align: center">
           <v-icon :color="getStatusColorIcon(item.DECLARATION_OF_ESTATE)">{{
@@ -33,14 +36,22 @@
           }}</v-icon>
         </td>
         <td style="text-align: center">
-          <v-icon :color="getStatusColorIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)">{{
-            getStatusIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)
-          }}</v-icon>
+          <v-icon
+            :color="
+              getStatusColorIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)
+            "
+            >{{
+              getStatusIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)
+            }}</v-icon
+          >
         </td>
         <td style="text-align: center">
-          <v-icon :color="getStatusColorIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)">{{
-            getStatusIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)
-          }}</v-icon>
+          <v-icon
+            :color="getStatusColorIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)"
+            >{{
+              getStatusIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)
+            }}</v-icon
+          >
         </td>
         <td style="text-align: center">
           <v-icon :color="getStatusColorIcon(item.DELIVERABLES)">{{
@@ -96,10 +107,10 @@
 </template>
 
 <script setup>
-  const transferOfRealEstates = ref([]);
+const transferOfRealEstates = ref([]);
 
-  const props = defineProps({
-    realEstateData: Array, 
+const props = defineProps({
+  realEstateData: Array,
 });
 
 const selectedProcedureStore = useSelectedDataStore();
@@ -108,7 +119,6 @@ function selectProcedure(val) {
 }
 
 const redirectRegardingProcedure = (procedure) => {
-
   return "/realEstateDetails";
 };
 
@@ -156,11 +166,10 @@ const headers = ref([
   { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "center", key: "STATUS", title: "Statut" },
   { align: "center", key: "ACTIONS", title: "Actions", width: "100px" },
-
 ]);
 
 watchEffect(() => {
-  console.log("props realEstateData: ", props.realEstateData)
+  console.log("props realEstateData: ", props.realEstateData);
   if (props.realEstateData) {
     props.realEstateData.forEach((procedure, index) => {
       transferOfRealEstates.value.push({

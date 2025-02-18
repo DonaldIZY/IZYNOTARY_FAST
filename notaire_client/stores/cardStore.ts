@@ -1,12 +1,13 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const useCardStore = defineStore('cardStore', {
+export const useCardStore = defineStore("cardStore", {
   state: () => ({
     selectedData: null, // Stocke les données sélectionnées
   }),
   actions: {
-    setSelectedData(data : any) {
+    setSelectedData(data: any) {
       this.selectedData = data;
     },
   },
+  persist: true, // Permet de garder les données après un refresh
 });
