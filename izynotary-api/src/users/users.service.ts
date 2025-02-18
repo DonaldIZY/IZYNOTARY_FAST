@@ -84,6 +84,7 @@ export class UsersService {
 		user.lastName = updateUserDto.lastName;
 		user.firstName = updateUserDto.firstName;
 		user.email = updateUserDto.email;
+		user.phoneNumber = updateUserDto.phoneNumber;
 
 		if (updateUserDto.roleId) {
 			user.role = await this.rolesRepository.findOneBy({ id: updateUserDto.roleId });

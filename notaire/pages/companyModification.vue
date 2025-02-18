@@ -183,6 +183,7 @@
       :open="openConf"
       :submit="handleProcedure"
       @update:open="openConf = $event"
+      :loading="loading"
     ></confirmation-modal>
     <result-modal-redirection
       :text="showTextResultModal"
@@ -223,6 +224,8 @@ const customerCNI = ref(null);
 const RCCM = ref(null);
 const status = ref(null);
 const DNSV = ref(null);
+
+const loading = ref(false);
 
 const toggleConfModal = () => {
   openConf.value = !openConf.value;
@@ -331,6 +334,7 @@ const isFormValid = computed(() => {
 });
 
 const handleProcedure = async () => {
+  loading.value = true;
   const procedureData = new FormData();
 
   const folders = await $fetch(API_SERVER_URL + `/folders`);
@@ -372,12 +376,14 @@ const handleProcedure = async () => {
       method: "POST",
       body: procedureData,
     });
+    loading.value = false;
     showTextResultModal.value = "Procédure créée avec succès.";
     showTypeResultModal.value = "success";
     open.value = false;
     showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création de la procédure :", error);
+    loading.value = false;
     showTextResultModal.value =
       "Erreur lors de la création de cette procédure. Veuillez réessayer s'il vous plaît!";
     showTypeResultModal.value = "error";

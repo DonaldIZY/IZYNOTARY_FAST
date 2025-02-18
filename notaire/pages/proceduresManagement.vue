@@ -260,6 +260,7 @@
     @close-modal="closeModal"
     @submit="updateProcedure"
     :data="selectedProcedure"
+    :loading="modalLoading"
   />
 
   <confirmation-with-password
@@ -287,6 +288,7 @@
 import { API_SERVER_URL } from "~/utils/constants";
 
 const loading = ref(true);
+const modalLoading = ref(false);
 
 const selectedProcedureStore = useSelectedDataStore();
 
@@ -448,7 +450,13 @@ const redirectRegardingProcedure = (procedure) => {
   }
 };
 
+const showResultModifyModal = ref(false);
+const showTextResultModifyModal = ref("");
+const showTypeResultModifyModal = ref("");
+
 const updateProcedure = async (val) => {
+  modalLoading.value = true;
+  console.log('modalLoading : ', modalLoading.value);
   try {
     console.log("data to send before change to formadata : ", val);
 
@@ -481,26 +489,29 @@ const updateProcedure = async (val) => {
 
     if (resultOfProcedureUpdate.status) {
       if (val.status) {
+        modalLoading.value = false;
         if(val.status == "Suspendu") {
-          showTextResultDeleteModal.value = "La procédure a été suspendue.";
-          showTypeResultDeleteModal.value = "info";
-          showResultDeleteModal.value = true;
+          showTextResultModifyModal.value = "La procédure a été suspendue.";
+          showTypeResultModifyModal.value = "info";
+          showResultModifyModal.value = true;
         }else if(val.status == "Arrêté") {
-          showTextResultDeleteModal.value = "La procédure a été arrêtée.";
-          showTypeResultDeleteModal.value = "info";
-          showResultDeleteModal.value = true;
+          showTextResultModifyModal.value = "La procédure a été arrêtée.";
+          showTypeResultModifyModal.value = "info";
+          showResultModifyModal.value = true;
         }else if(val.status == "En cours") {
-          showTextResultDeleteModal.value = "La procédure est de nouveau en cours.";
-          showTypeResultDeleteModal.value = "info";
-          showResultDeleteModal.value = true;
+          showTextResultModifyModal.value = "La procédure est de nouveau en cours.";
+          showTypeResultModifyModal.value = "info";
+          showResultModifyModal.value = true;
         }else{
           console.log("erreur ");
         }
       }else{
-        showTextResultDeleteModal.value = "Procédure modifiée avec succès !";
-        showTypeResultDeleteModal.value = "success";
-        showResultDeleteModal.value = true;
+        modalLoading.value = false;
+        showTextResultModifyModal.value = "Procédure modifiée avec succès !";
+        showTypeResultModifyModal.value = "success";
+        showResultModifyModal.value = true;
       }
+      console.log('modalLoading : ', modalLoading.value);
 
       loadProcedures();
       closeModal();
@@ -533,10 +544,6 @@ const getProcedureTypeColor = (type) => {
 const showResultDeleteModal = ref(false);
 const showTextResultDeleteModal = ref("");
 const showTypeResultDeleteModal = ref("");
-
-const showResultModifyModal = ref(false);
-const showTextResultModifyModal = ref("");
-const showTypeResultModifyModal = ref("");
 
 const deleteProcedure = async (id) => {
   console.log(id);

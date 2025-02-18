@@ -1,13 +1,27 @@
 <template>
   <div class="d-flex justify-space-between ma-4">
     <back-button title="Liste des utilisateurs" goBackTo="/home" />
-    <v-btn
+    <div class="tableBtn">
+        <v-text-field 
+          class="searchField"
+          color="primary"
+          v-model="usersSearch"
+          label="Rechercher"
+          prepend-inner-icon="mdi-magnify"
+          variant="outlined"
+          density="compact"
+          hide-details
+          clearable
+        ></v-text-field>
+        <v-btn
       prependIcon="mdi-account-plus-outline"
       color="primary"
       class="text-none"
       @click="toggleModal"
       >Ajouter un utilisateur</v-btn
     >
+      </div>
+    
     <modal-add-user :open="open" @update:open="open = $event" />
   </div>
 
@@ -114,6 +128,7 @@ const usersHeaders = ref([
   { align: "start", key: "LAST_NAME", title: "Nom" },
   { align: "start", key: "FIRST_NAME", title: "Prénoms" },
   { align: "start", key: "EMAIL", title: "Email" },
+  { align: "start", key: "PHONENUMBER", title: "Téléphone" },
   { align: "start", key: "CREATE_AT", title: "Date de création" },
   { align: "start", key: "ROLE", title: "Rôle" },
   { align: "start", key: "actions", title: "Actions" },
@@ -155,6 +170,7 @@ const loadUsers = async () => {
         EMAIL: user.email,
         CREATE_AT: new Date(user.createAt).toLocaleDateString(),
         ROLE: user.role,
+        PHONENUMBER: user.phoneNumber,
       }));
     }
     loading.value = false;
@@ -199,6 +215,16 @@ const deleteUser = async (id) => {
 
 <style scoped>
 @import url("~/assets/css/table.css");
+
+.tableBtn {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.searchField {
+  width: 20rem;
+  min-width: 10rem;
+}
 
 .no-data-container {
   display: flex;

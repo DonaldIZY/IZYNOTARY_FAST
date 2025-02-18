@@ -101,6 +101,7 @@
         ></v-btn>
 
         <v-btn
+          :loading="loading"
           color="primary"
           text="Enregistrer"
           variant="flat"
@@ -125,6 +126,7 @@ import { API_SERVER_URL } from "~/utils/constants";
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
+const loading = ref(false);
 
 const props = defineProps({
   open: Boolean,
@@ -165,6 +167,7 @@ const closeModal = () => {
 
 // Enregistrement des modifications
 const handleCustomer = async () => {
+  loading.value = true;
   try {
     const response = await fetch(API_SERVER_URL + `/customers/${customer.id}`, {
       method: "PATCH",
@@ -173,13 +176,14 @@ const handleCustomer = async () => {
       },
       body: JSON.stringify(customer),
     });
-
+    loading.value = false;
     emit("userUpdated");
     showTextResultModal.value = "Client modifié avec succès !";
     showTypeResultModal.value = "success";
     closeModal();
     showResultModal.value = true;
   } catch (error) {
+    loading.value = false;
     console.error("Erreur lors de la modification de l'utilisateur :", error);
     showTextResultModal.value = "Erreur lors de la modification du client.";
     showTypeResultModal.value = "error";

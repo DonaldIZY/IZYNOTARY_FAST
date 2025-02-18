@@ -8,11 +8,19 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  loading: {
+    type: Boolean
+  }
 });
 
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
+const loading = toRef(props, "loading");
+const showSuspendedBtn = ref(true);
+const showStoppedBtn = ref(true);
+
+console.log('loading : ', loading.value);
 
 const tab = defineModel();
 
@@ -186,16 +194,18 @@ console.log(
                   "
                 />
                 <v-btn
+                  :loading="loading"
                   class="suspendedBtn text-none"
                   v-if="
                     procedureData.steps.find((elem) => elem.action == tab)
-                      .status == 'En cours'
+                      .status == 'En cours' && showSuspendedBtn
                   "
                   color="secondary"
                   text="Suspendre l'étape"
                   variant="tonal"
                   @click="
                     () => {
+                      showStoppedBtn = false;
                       if (
                         newProcedureData.comment &&
                         newProcedureData.comment.trim() != ''
@@ -219,16 +229,18 @@ console.log(
                   "
                 ></v-btn>
                 <v-btn
+                  :loading="loading"
                   class="stoppedBtn text-none"
                   v-if="
                     procedureData.steps.find((elem) => elem.action == tab)
-                      .status == 'En cours'
+                      .status == 'En cours' && showStoppedBtn
                   "
                   color="primary"
                   text="Arrêter l'étape"
                   variant="tonal"
                   @click="
                     () => {
+                      showSuspendedBtn = false;
                       if (
                         newProcedureData.comment &&
                         newProcedureData.comment.trim() != ''
@@ -309,12 +321,15 @@ console.log(
         ></v-btn>
 
         <v-btn
+          :loading="loading"
           v-if="['En cours', 'Terminé'].includes(procedureData.STATUS)"
           color="primary"
           text="Enregistrer"
           variant="flat"
           @click="
             () => {
+              showStoppedBtn = false;
+              showSuspendedBtn = false;
               $emit('submit', {
                 ...newProcedureData,
                 contact: procedureData.customer.phone,
@@ -323,11 +338,14 @@ console.log(
                 id: procedureData.stepId,
               });
               newProcedureData = {};
+              // console.log('loading : ', loading);
             }
           "
-          class="text-none"
+          class="text-none" 
+          :disabled="newProcedureData.status && (showStoppedBtn || showSuspendedBtn) ? true : false"
         ></v-btn>
         <v-btn
+          :loading="loading"
           v-if="['Arrêté', 'Suspendu'].includes(procedureData.STATUS)"
           color="primary"
           text="Continuer la procédure"
