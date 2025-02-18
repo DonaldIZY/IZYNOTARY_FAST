@@ -67,7 +67,8 @@
             size="x-small"
             density="comfortable"
             icon="mdi-text-box-outline"
-           
+            @click="selectProcedure(item.id)"
+            :to="redirectRegardingProcedure(item)"
           >
           </v-btn>
         </td>
@@ -96,49 +97,32 @@
 </template>
 
 <script setup>
+import { useSelectedDataStore } from "~/stores/selectedDataStore";
+import { useCardStore } from "~/stores/cardStore";
 const loading = ref(true);
 
-const route = useRoute();
 const receiveDatas = ref([]);
 const companyFormations = ref([]);
 
-// const selectedProcedureStore = useSelectedDataStore();
-// function selectProcedure(val) {
-//   selectedProcedureStore.defineProcedureId(val);
-// }
+const selectedProcedureStore = useSelectedDataStore();
+function selectProcedure(val) {
+  selectedProcedureStore.defineProcedureId(val);
+}
 
-// const redirectRegardingProcedure = (procedure) => {
-//   console.log("procedure details : ", procedure);
-//   //let type = procedure.PROCEDURE_TYPE;
-
-//   return "/companyIncorporationDetails";
-
-//   // if (type.toLowerCase() == "constitution de société") {
-//   //   return "/companyIncorporationDetails";
-//   // } else if (type.toLowerCase() == "modification de société") {
-//   //   return "/companyModificationDetails";
-//   // } else if (type.toLowerCase() == "succession de biens immobiliers") {
-//   //   return "/realEstateDetails";
-//   // } else if (type.toLowerCase() == "succession de biens mobiliers") {
-//   //   return "/personalPropertyDetails";
-//   // } else if (type.toLowerCase() == "vente") {
-//   //   return "/salesDetails";
-//   // }
-// };
+const redirectRegardingProcedure = (procedure) => {
+  return "/companyIncorporationDetails";
+};
 
 onMounted(() => {
   try {
-    const storedData = localStorage.getItem("companyFormationData");
-    if (storedData) {
-      receiveDatas.value = JSON.parse(storedData);
-      localStorage.removeItem("shoppingData"); // Supprime après utilisation
-    }
+    const store = useCardStore();
+    receiveDatas.value = store.selectedData;
+    console.log("receiveDatas : ", receiveDatas);
 
     watchEffect(() => {
       if (receiveDatas.value) {
         receiveDatas.value.forEach((procedure) => {
           companyFormations.value.push({
-            // return {
             id: procedure.id,
             NUM: procedure.folderNum,
             CREATE_AT: procedure.createAt.toString(),
@@ -150,7 +134,6 @@ onMounted(() => {
             DELIVERABLES: procedure.step.steps[5].status,
             PERCENTAGE: parseFloat(procedure.progression),
             STATUS: procedure.status,
-            // };
           });
         });
         loading.value = false;
@@ -160,8 +143,6 @@ onMounted(() => {
     console.error("Erreur de parsing des données :", error);
   }
 });
-
-console.log("companyFormations : ", companyFormations);
 
 const headers = ref([
   { align: "center", key: "NUM", title: "N° du dossier" },
@@ -200,7 +181,7 @@ const headers = ref([
   },
   { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "center", key: "STATUS", title: "Statut" },
-  { align: "center", key: "ACTIONS", title: "Actions", width: "150px" },
+  { align: "center", key: "ACTIONS", title: "Actions", width: "100px" },
 ]);
 </script>
 

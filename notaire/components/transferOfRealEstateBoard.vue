@@ -8,7 +8,7 @@
     class="customTable2"
     :loading="loading"
   >
-  <template #item="{ item }">
+    <template #item="{ item }">
       <tr>
         <td>{{ item.NUM }}</td>
         <td>{{ formatDate(item.CREATE_AT) }}</td>
@@ -23,9 +23,12 @@
           }}</v-icon>
         </td>
         <td style="text-align: center">
-          <v-icon :color="getStatusColorIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)">{{
-            getStatusIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)
-          }}</v-icon>
+          <v-icon
+            :color="getStatusColorIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)"
+            >{{
+              getStatusIcon(item.VALUATION_OF_INDIVIDUAL_PROPERTIES)
+            }}</v-icon
+          >
         </td>
         <td style="text-align: center">
           <v-icon :color="getStatusColorIcon(item.DECLARATION_OF_ESTATE)">{{
@@ -33,14 +36,22 @@
           }}</v-icon>
         </td>
         <td style="text-align: center">
-          <v-icon :color="getStatusColorIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)">{{
-            getStatusIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)
-          }}</v-icon>
+          <v-icon
+            :color="
+              getStatusColorIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)
+            "
+            >{{
+              getStatusIcon(item.PREPARATION_OF_REAL_ESTATE_CERTIFICATE)
+            }}</v-icon
+          >
         </td>
         <td style="text-align: center">
-          <v-icon :color="getStatusColorIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)">{{
-            getStatusIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)
-          }}</v-icon>
+          <v-icon
+            :color="getStatusColorIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)"
+            >{{
+              getStatusIcon(item.DEPOSIT_OF_REAL_ESTATE_CERTIFICATE)
+            }}</v-icon
+          >
         </td>
         <td style="text-align: center">
           <v-icon :color="getStatusColorIcon(item.DELIVERABLES)">{{
@@ -57,6 +68,19 @@
             :color="getStatusColorIcon(item.STATUS)"
             >{{ item.STATUS }}</v-chip
           >
+        </td>
+        <td style="text-align: center">
+          <v-btn
+            class="actionBtn"
+            title="Voir les détails"
+            color="blue"
+            size="x-small"
+            density="comfortable"
+            icon="mdi-text-box-outline"
+            @click="selectProcedure(item.id)"
+            :to="redirectRegardingProcedure(item)"
+          >
+          </v-btn>
         </td>
       </tr>
     </template>
@@ -83,11 +107,20 @@
 </template>
 
 <script setup>
-  const transferOfRealEstates = ref([]);
+const transferOfRealEstates = ref([]);
 
-  const props = defineProps({
-    realEstateData: Array, 
+const props = defineProps({
+  realEstateData: Array,
 });
+
+const selectedProcedureStore = useSelectedDataStore();
+function selectProcedure(val) {
+  selectedProcedureStore.defineProcedureId(val);
+}
+
+const redirectRegardingProcedure = (procedure) => {
+  return "/realEstateDetails";
+};
 
 const loading = ref(true);
 const headers = ref([
@@ -132,13 +165,15 @@ const headers = ref([
   },
   { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "center", key: "STATUS", title: "Statut" },
+  { align: "center", key: "ACTIONS", title: "Actions", width: "100px" },
 ]);
 
 watchEffect(() => {
-  console.log("props realEstateData: ", props.realEstateData)
+  console.log("props realEstateData: ", props.realEstateData);
   if (props.realEstateData) {
     props.realEstateData.forEach((procedure, index) => {
       transferOfRealEstates.value.push({
+        id: procedure.id,
         NUM: index + 1,
         CREATE_AT: procedure.createAt.toString(),
         SUPPLY_OF_PARTS: procedure.step.steps[0].status,

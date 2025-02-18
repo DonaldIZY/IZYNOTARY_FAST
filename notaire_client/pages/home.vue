@@ -6,7 +6,11 @@
     <div class="w-75 ma-2 center">
       <v-row>
         <v-col cols="12" sm="6" md="4">
-          <v-card class="mx-auto rounded-lg hover-card" to="/selling">
+          <v-card
+            class="mx-auto rounded-lg hover-card"
+            to="/selling"
+            @click="setSelectedData(sellingData)"
+          >
             <v-img
               src="~/assets/img/vente.png"
               class="mb-2 mt-2 mx-2 rounded-lg"
@@ -22,9 +26,8 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
-            @click="
-              saveDataAndNavigate(companyFormationData, '/companyFormation')
-            "
+            :to="'/companyFormation'"
+            @click="setSelectedData(companyFormationData)"
           >
             <v-img
               src="~/assets/img/constSoc.png"
@@ -41,6 +44,7 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
+            @click="setSelectedData(companyModificationData)"
             to="/modificationCompany"
           >
             <v-img
@@ -58,6 +62,7 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
+            @click="setSelectedData(movablePropertyData)"
             to="/transferOfMovableProperty"
           >
             <v-img
@@ -75,6 +80,7 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
+            @click="setSelectedData(realEstateData)"
             to="/transferOfRealEstate"
           >
             <v-img
@@ -108,17 +114,23 @@
 </template>
 
 <script setup>
+import { useCardStore } from "~/stores/cardStore";
+
 const companyFormationData = ref([]);
 const companyModificationData = ref([]);
 const movablePropertyData = ref([]);
 const realEstateData = ref([]);
 const sellingData = ref([]);
 
-const router = useRouter();
+const store = useCardStore();
+
+const setSelectedData = (data) => {
+  store.setSelectedData(data);
+};
 
 onMounted(async () => {
   try {
-    const customerFetch = await $fetch(API_SERVER_URL + `/customers/1`);
+    const customerFetch = await $fetch(API_SERVER_URL + `/customers/2`);
 
     console.log("datas : ", customerFetch);
 
@@ -149,11 +161,6 @@ onMounted(async () => {
     console.error(err);
   }
 });
-
-const saveDataAndNavigate = (data, path) => {
-  localStorage.setItem("companyFormationData", JSON.stringify(data)); // Stocke les données temporairement
-  router.push(path); // Redirige sans query params visibles
-};
 </script>
 
 <style scoped>

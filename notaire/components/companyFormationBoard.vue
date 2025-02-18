@@ -105,23 +105,7 @@ function selectProcedure(val) {
 }
 
 const redirectRegardingProcedure = (procedure) => {
-  console.log("procedure details : ", procedure);
-
   return "/companyIncorporationDetails";
-  // router.push(`/companyIncorporationDetails`);
-  // let type = procedure.PROCEDURE_TYPE;
-
-  // if (type.toLowerCase() == "constitution de société") {
-  //   return "/companyIncorporationDetails";
-  // } else if (type.toLowerCase() == "modification de société") {
-  //   return "/companyModificationDetails";
-  // } else if (type.toLowerCase() == "succession de biens immobiliers") {
-  //   return "/realEstateDetails";
-  // } else if (type.toLowerCase() == "succession de biens mobiliers") {
-  //   return "/personalPropertyDetails";
-  // } else if (type.toLowerCase() == "vente") {
-  //   return "/salesDetails";
-  // }
 };
 
 const headers = ref([
@@ -169,7 +153,6 @@ watchEffect(() => {
   if (props.companyFormationData) {
     props.companyFormationData.forEach((procedure) => {
       companyFormations.value.push({
-        // return {
         id: procedure.id,
         NUM: procedure.folderNum,
         CREATE_AT: procedure.createAt.toString(),
@@ -181,7 +164,6 @@ watchEffect(() => {
         DELIVERABLES: procedure.step.steps[5].status,
         PERCENTAGE: parseFloat(procedure.progression),
         STATUS: procedure.status,
-        // };
       });
     });
     loading.value = false;
