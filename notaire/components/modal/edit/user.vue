@@ -42,13 +42,13 @@
 
           <v-col cols="12">
             <v-text-field
-              v-model="user.phone"
+              v-model="user.phoneNumber"
               type="number"
               color="primary"
               label="Téléphone"
               variant="outlined"
               density="compact"
-              :rules="[validationRules.required, validationRules.phone]"
+              :rules="validationRules.required"
             ></v-text-field>
           </v-col>
 
@@ -83,6 +83,7 @@
         ></v-btn>
 
         <v-btn
+          :loading="loading"
           color="primary"
           text="Enregistrer"
           variant="flat"
@@ -92,6 +93,13 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <result-modal-validation
+    :text="showTextResultModifyModal"
+    :open="showResultModifyModal"
+    :type="showTypeResultModifyModal"
+    @update:open="showResultModifyModal = $event"
+  />
 </template>
 
 <script setup>
@@ -102,7 +110,13 @@ const props = defineProps({
   userData: Object, // Données de l'utilisateur à modifier
 });
 
+const loading = ref(false);
+
 const emit = defineEmits(["update:open"]);
+
+const showResultModifyModal = ref(false);
+const showTextResultModifyModal = ref("");
+const showTypeResultModifyModal = ref("");
 
 const roles = ref([]);
 
@@ -111,7 +125,7 @@ const user = reactive({
   lastName: "",
   firstName: "",
   email: "",
-  phone: "",
+  phoneNumber: "",
   roleId: null,
 });
 
@@ -122,7 +136,7 @@ watchEffect(() => {
     user.lastName = props.userData.LAST_NAME;
     user.firstName = props.userData.FIRST_NAME;
     user.email = props.userData.EMAIL;
-    user.phone = props.userData.PHONE;
+    user.phoneNumber = props.userData.PHONENUMBER;
     user.roleId = props.userData.ROLE?.id;
   }
 });
@@ -148,6 +162,8 @@ const closeModal = () => {
 
 // Enregistrement des modifications
 const handleUser = async () => {
+  loading.value = true;
+  console.log("user : ", user);
   try {
     const response = await fetch(API_SERVER_URL + `/users/${user.id}`, {
       method: "PATCH",
@@ -157,15 +173,31 @@ const handleUser = async () => {
       body: JSON.stringify(user),
     });
 
-    if (!response.ok) throw new Error("Erreur lors de la modification");
+    if (!response.ok) {
+      loading.value = false;
+      showTextResultModifyModal.value = "Erreur lors de la modification de l'utilisateur .";
+      showTypeResultModifyModal.value = "error";
+      showResultModifyModal.value = true;
+    }
+    
 
-    alert("Utilisateur modifié avec succès.");
+    // alert("Utilisateur modifié avec succès.");
+    loading.value = false;
+    showTextResultModifyModal.value = "Utilisateur modifié avec succès.";
+    showTypeResultModifyModal.value = "success";
+    showResultModifyModal.value = true;
+
     emit("userUpdated");
     closeModal();
   } catch (error) {
     console.error("Erreur lors de la modification de l'utilisateur :", error);
+
+    showTextResultModifyModal.value = "Erreur lors de la modification de l'utilisateur .";
+    showTypeResultModifyModal.value = "error";
+    showResultModifyModal.value = true;
   }
 };
+
 </script>
 <style>
 .title {

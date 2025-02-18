@@ -58,6 +58,19 @@
             >{{ item.STATUS }}</v-chip
           >
         </td>
+        <td style="text-align: center">
+          <v-btn
+            class="actionBtn"
+            title="Voir les détails"
+            color="blue"
+            size="x-small"
+            density="comfortable"
+            icon="mdi-text-box-outline"
+            @click="selectProcedure(item.id)"
+            :to="redirectRegardingProcedure(item)"
+          >
+          </v-btn>
+        </td>
       </tr>
     </template>
     <!-- Slot pour afficher un loader quand la table est vide -->
@@ -90,6 +103,15 @@ const props = defineProps({
 });
 
 const loading = ref(true);
+
+const selectedProcedureStore = useSelectedDataStore();
+function selectProcedure(val) {
+  selectedProcedureStore.defineProcedureId(val);
+}
+
+const redirectRegardingProcedure = (procedure) => {
+  return "/personalPropertyDetails";
+};
 
 const headers = ref([
   { align: "center", key: "NUM", title: "N° du dossier" },
@@ -128,6 +150,7 @@ const headers = ref([
   },
   { align: "center", key: "PERCENTAGE", title: "Pourcentage" },
   { align: "center", key: "STATUS", title: "Statut" },
+  { align: "center", key: "ACTIONS", title: "Actions", width: "100px" },
 ]);
 
 watchEffect(() => {
@@ -135,6 +158,7 @@ watchEffect(() => {
   if (props.movablePropertyData) {
     props.movablePropertyData.forEach((procedure, index) => {
       transferOfMovableProperties.value.push({
+        id: procedure.id,
         NUM: procedure.folderNum,
         CREATE_AT: procedure.createAt.toString(),
         SUPPLY_OF_PARTS: procedure.step.steps[0].status,

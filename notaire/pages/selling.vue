@@ -284,7 +284,8 @@
       text="Voulez-vous enregistrer cette procédure de vente ?"
       :open="openConf"
       :submit="handleProcedure"
-      @update:open="openConf = $event"
+      @update:open="openConf = $event" 
+      :loading="loading"
     ></confirmation-modal>
     <result-modal-redirection
       :text="showTextResultModal"
@@ -344,6 +345,8 @@ const taxStatusCertificate = ref(null);
 const titleDeed = ref(null);
 const landRegistry = ref(null);
 const certificateOfLocation = ref(null);
+
+const loading = ref(false);
 
 const router = useRouter();
 
@@ -430,21 +433,6 @@ watchEffect(() => {
   }
 });
 
-// watch(customerId, (newSelectedCustomer) => {
-//   selectedCustomer.value = customers.value.find(
-//     (customer) => customer.ID === newSelectedCustomer.ID
-//   );
-
-//   if (selectedCustomer.value) {
-//     lastName.value = selectedCustomer.value.LASTNAME;
-//     firstName.value = selectedCustomer.value.FIRSTNAME;
-//     birthDate.value = new Date(
-//       selectedCustomer.value.BIRTHDATE
-//     ).toLocaleDateString();
-//     gender.value = selectedCustomer.value.GENDER;
-//     identificationNumber.value = selectedCustomer.value.IDENTIFICATION_NUMBER;
-//   }
-// });
 watch(customerId, (newCustomerId) => {
   selectedCustomer.value = customers.value.find(
     (customer) => customer.ID === newCustomerId
@@ -522,6 +510,7 @@ const isFormValid = computed(() => {
 });
 
 const handleProcedure = async () => {
+  loading.value = true;
   const procedureData = new FormData();
 
   const folders = await $fetch(API_SERVER_URL + `/folders`);
@@ -566,6 +555,7 @@ const handleProcedure = async () => {
       body: procedureData,
     });
     // alert("Procédure créée avec succès.");
+    loading.value = false;
     showTextResultModal.value = "Procédure créée avec succès.";
     showTypeResultModal.value = "success";
     open.value = false;
@@ -573,6 +563,7 @@ const handleProcedure = async () => {
     //resetFields();
   } catch (error) {
     console.error("Erreur lors de la création de la procédure :", error);
+    loading.value = false;
     showTextResultModal.value =
       "Erreur lors de la création du procédure. Veuillez réessayer s'il vous plaît!";
     showTypeResultModal.value = "error";

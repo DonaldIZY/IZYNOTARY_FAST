@@ -260,6 +260,7 @@
     @close-modal="closeModal"
     @submit="updateProcedure"
     :data="selectedProcedure"
+    :loading="modalLoading"
   />
 
   <confirmation-with-password
@@ -275,12 +276,19 @@
     destination="/proceduresManagement"
     @update:open="showResultDeleteModal = $event"
   />
+  <result-modal-validation
+    :text="showTextResultModifyModal"
+    :open="showResultModifyModal"
+    :type="showTypeResultModifyModal"
+    @update:open="showResultModifyModal = $event"
+  />
 </template>
 
 <script setup>
 import { API_SERVER_URL } from "~/utils/constants";
 
 const loading = ref(true);
+const modalLoading = ref(false);
 
 const selectedProcedureStore = useSelectedDataStore();
 
@@ -442,7 +450,13 @@ const redirectRegardingProcedure = (procedure) => {
   }
 };
 
+const showResultModifyModal = ref(false);
+const showTextResultModifyModal = ref("");
+const showTypeResultModifyModal = ref("");
+
 const updateProcedure = async (val) => {
+  modalLoading.value = true;
+  console.log('modalLoading : ', modalLoading.value);
   try {
     console.log("data to send before change to formadata : ", val);
 
@@ -473,12 +487,36 @@ const updateProcedure = async (val) => {
         credentials: "include",
       }
     );
+
     if (resultOfProcedureUpdate.status) {
-      alert("La procédure a été modifiée.");
+      if (val.status) {
+        modalLoading.value = false;
+        if(val.status == "Suspendu") {
+          showTextResultModifyModal.value = "La procédure a été suspendue.";
+          showTypeResultModifyModal.value = "info";
+          showResultModifyModal.value = true;
+        }else if(val.status == "Arrêté") {
+          showTextResultModifyModal.value = "La procédure a été arrêtée.";
+          showTypeResultModifyModal.value = "info";
+          showResultModifyModal.value = true;
+        }else if(val.status == "En cours") {
+          showTextResultModifyModal.value = "La procédure est de nouveau en cours.";
+          showTypeResultModifyModal.value = "info";
+          showResultModifyModal.value = true;
+        }else{
+          console.log("erreur ");
+        }
+      }else{
+        modalLoading.value = false;
+        showTextResultModifyModal.value = "Procédure modifiée avec succès !";
+        showTypeResultModifyModal.value = "success";
+        showResultModifyModal.value = true;
+      }
+      console.log('modalLoading : ', modalLoading.value);
+
       loadProcedures();
       closeModal();
     }
-
     console.log("back response : ", resultOfProcedureUpdate);
   } catch (err) {
     console.error("Erreur lors de la mise à jour de la procédure : ", err);

@@ -1,5 +1,5 @@
 <template>
-  <div class=" ga-8">
+  <div class="ga-4">
     <!-- Input de fichier -->
     <!-- <v-file-input
       :label="label"
@@ -14,12 +14,15 @@
     <!-- Bouton pour afficher le modal -->
     <v-btn
       color="primary"
-      @click="() => {
-        toggleModal();
-        generateFile();
-      }"
+      @click="
+        () => {
+          toggleModal();
+          generateFile();
+        }
+      "
       class="text-none"
-      :disabled="false/*!file*/"
+      variant="tonal"
+      :disabled="false /*!file*/"
     >
       Aperçu
     </v-btn>
@@ -39,7 +42,7 @@
           <template v-if="fileType === 'image'">
             <!-- If fileType is image, we can use filePath as it is to show image since it is the online path of an image -->
             <img
-              :src="previewContent ?? filePath/*testFilePath*/"
+              :src="previewContent ?? filePath /*testFilePath*/"
               alt="Prévisualisation"
               style="width: 150px"
             />
@@ -64,7 +67,7 @@
               style="white-space: pre-wrap; max-height: 400px; overflow: auto"
               >{{ previewContent }}</pre
             >
-            <iframe 
+            <iframe
               v-else
               :src="filePath"
               style="width: 100%; height: 400px"
@@ -85,7 +88,7 @@
               télécharger ci-dessous :
             </p>
             <a
-              :href="previewContent ?? filePath/*previewContent*/"
+              :href="previewContent ?? filePath /*previewContent*/"
               download
               class="v-btn v-btn--outlined primary text-none"
             >
@@ -124,8 +127,8 @@ const props = defineProps({
     // required: true,
   },
   receivedFile: {
-    type: File 
-  }
+    type: File,
+  },
 });
 
 const emit = defineEmits(["update:file"]);
@@ -136,8 +139,8 @@ const previewContent = ref(null);
 var fileExtension;
 const fileType = ref(null);
 
-const testFilePath = 'https://upload.wikimedia.org/wikipedia/commons/1/1a/24701-nature-natural-beauty.jpg';
-
+const testFilePath =
+  "https://upload.wikimedia.org/wikipedia/commons/1/1a/24701-nature-natural-beauty.jpg";
 
 const toggleModal = () => {
   open.value = !open.value;
@@ -145,25 +148,22 @@ const toggleModal = () => {
 
 const generateFile = async () => {
   console.log("filePath : ", props.filePath);
-  
-  console.log("receivedFile : ", props.receivedFile);
-  
 
-  if(props.receivedFile instanceof File) {
+  console.log("receivedFile : ", props.receivedFile);
+
+  if (props.receivedFile instanceof File) {
     fileExtension = props.receivedFile.name.split(".")[1];
-  }else{
+  } else {
     fileExtension = props.filePath.split("/").pop().split(".")[1];
   }
-  
 
-  if(["png", "webp", "jpeg", "jpg", "avi"].includes(fileExtension)) {
-    fileType.value = "image"
-  }else{
+  if (["png", "webp", "jpeg", "jpg", "avi"].includes(fileExtension)) {
+    fileType.value = "image";
+  } else {
     fileType.value = fileExtension;
   }
 
-
-  if(props.receivedFile instanceof File) {
+  if (props.receivedFile instanceof File) {
     try {
       if (fileType.value == "image") {
         const reader = new FileReader();
@@ -199,23 +199,19 @@ const generateFile = async () => {
       previewContent.value = "Erreur lors du traitement du fichier.";
     }
   }
-  
 
-  
-    
-    // if(fileExtension == "pdf") {
-    
+  // if(fileExtension == "pdf") {
 
-    // }else if(["docx", "doc"].includes(fileExtension)) {
-    // // reader.onload = async (e) => {
-    // //   const arrayBuffer = e.target.result;
-    // //   const result = await mammoth.convertToHtml({ arrayBuffer });
-    // //   previewContent.value = result.value;
-    // // };
-    // }else if(fileExtension == "txt") {
-    //   let result = await fetch(props.filePath);
-    //   previewContent.value = await result.text();
-    // }
+  // }else if(["docx", "doc"].includes(fileExtension)) {
+  // // reader.onload = async (e) => {
+  // //   const arrayBuffer = e.target.result;
+  // //   const result = await mammoth.convertToHtml({ arrayBuffer });
+  // //   previewContent.value = result.value;
+  // // };
+  // }else if(fileExtension == "txt") {
+  //   let result = await fetch(props.filePath);
+  //   previewContent.value = await result.text();
+  // }
 
   console.log("fileExtension : ", fileExtension);
   console.log("fileType : ", fileType.value);
@@ -227,14 +223,12 @@ const generateFile = async () => {
   file.value = new File([resultToBlob], fileName, {type: resultToBlob.type});
   const reader = new FileReader();*/
   // fileType.value = resultToBlob.type.split("/")[0];
-  
 
   // previewContent.value = new File([resultToBlob], fileName, {type: resultToBlob.type});
-  
 
   // console.log("resultToBlob : ", resultToBlob);
   // console.log("previewContent : ", previewContent.value);
-}
+};
 
 const onFileChange = async () => {
   if (previewContent.value && fileType.value === "pdf") {

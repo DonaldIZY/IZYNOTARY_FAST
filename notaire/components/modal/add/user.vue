@@ -42,13 +42,13 @@
 
           <v-col cols="12">
             <v-text-field
-              v-model="phone"
+              v-model="phoneNumber"
               type="number"
               color="primary"
               label="Téléphone"
               variant="outlined"
               density="compact"
-              :rules="validationRules.phone"
+              :rules="validationRules.phoneNumber"
             ></v-text-field>
           </v-col>
 
@@ -83,6 +83,7 @@
         ></v-btn>
 
         <v-btn
+          :loading="loading"
           color="primary"
           text="Enregistrer"
           variant="flat"
@@ -118,9 +119,10 @@ const props = defineProps({
 const lastName = ref("");
 const firstName = ref("");
 const email = ref("");
-const phone = ref("");
+const phoneNumber = ref("");
 const roles = ref([]);
 const roleId = ref(null);
+const loading = ref(false);
 
 const emit = defineEmits(["update:open"]);
 
@@ -128,7 +130,7 @@ const resetForm = () => {
   lastName.value = "";
   firstName.value = "";
   email.value = "";
-  phone.value = "";
+  phoneNumber.value = "";
   roleId.value = null;
 };
 
@@ -137,7 +139,7 @@ const isFormValid = computed(() => {
     lastName.value &&
     firstName.value &&
     email.value &&
-    phone.value &&
+    phoneNumber.value &&
     roleId.value
   );
 });
@@ -148,10 +150,11 @@ const closeModal = () => {
 };
 
 const handleUser = async () => {
+  loading.value = true;
   const userData = {
     lastName: lastName.value,
     firstName: firstName.value,
-    phone: phone.value,
+    phoneNumber: phoneNumber.value,
     email: email.value,
     roleId: roleId.value,
   };
@@ -161,15 +164,18 @@ const handleUser = async () => {
       method: "POST",
       body: JSON.stringify(userData),
     });
-    closeModal();
+    loading.value = false;
+    
     showTextResultModal.value = "Utilisateur créé avec succès !";
     showTypeResultModal.value = "success";
+    closeModal();
     showResultModal.value = true;
   } catch (error) {
     console.error("Erreur lors de la création de l'utilisateur :", error);
-    closeModal();
+    loading.value = false;
     showTextResultModal.value = "Erreur lors de la création de l'utilisateur.";
     showTypeResultModal.value = "error";
+    closeModal();
     showResultModal.value = true;
   } finally {
     //Réinitialisation des données du formulaire

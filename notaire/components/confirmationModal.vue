@@ -19,6 +19,7 @@
           class="text-none"
         ></v-btn>
         <v-btn
+          :loading="loading"
           color="primary"
           text="Oui"
           variant="flat"
@@ -44,7 +45,12 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
+  loading: {
+    type: Boolean
+  }
 });
+
+const loading = toRef(props, "loading");
 
 const emit = defineEmits(["update:open"]);
 
@@ -54,8 +60,10 @@ const closeModal = () => {
 
 const submitModal = () => {
   props.submit();
-  emit("update:open", false);
+  // emit("update:open", false);
 };
+
+
 </script>
 
 <style>

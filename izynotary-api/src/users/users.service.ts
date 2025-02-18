@@ -59,7 +59,10 @@ export class UsersService {
 			<ul>
 			  <li><strong>Mot de passe :</strong> ${password}</li>
 			</ul>
-			<p>Merci d'utiliser IzyNotary ! 🚀</p>
+			<br/>
+			Pour vous connecter, cliquez ici : 
+			<br/>
+			${process.env.FRONTEND}
 		  `
 		);
 	}
@@ -85,6 +88,7 @@ export class UsersService {
 		user.lastName = updateUserDto.lastName;
 		user.firstName = updateUserDto.firstName;
 		user.email = updateUserDto.email;
+		user.phoneNumber = updateUserDto.phoneNumber;
 
 		if (updateUserDto.roleId) {
 			user.role = await this.rolesRepository.findOneBy({ id: updateUserDto.roleId });

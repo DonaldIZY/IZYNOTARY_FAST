@@ -1,13 +1,14 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateFolderDto } from './dto/create-folder.dto';
-import { UpdateFolderDto } from './dto/update-folder.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Folder } from './entities/folder.entity';
-import { EntityManager, Repository } from 'typeorm';
-import { Step } from 'src/steps/entities/step.entity';
 import { Customer } from 'src/customers/entities/customer.entity';
 import { Seller } from 'src/sellers/entities/seller.entity';
+import { Step } from 'src/steps/entities/step.entity';
 import { User } from 'src/users/entities/user.entity';
+import { EntityManager, Repository } from 'typeorm';
+import { CreateFolderDto } from './dto/create-folder.dto';
+import { UpdateFolderDto } from './dto/update-folder.dto';
+import { Folder } from './entities/folder.entity';
 
 @Injectable()
 export class FoldersService {
@@ -46,7 +47,7 @@ export class FoldersService {
                             createFolderDto.requiredFiles.certificateOfLocation ? 'Terminé' : 'En cours',
                         "action": 'Fourniture des pièces',
                         "documents": {
-                            "customerCNI": {
+                            "sellerCNI": {
                                 "name": "CNI du vendeur",
                                 "path": createFolderDto.requiredFiles.sellerCNI ? createFolderDto.requiredFiles.sellerCNI : '',
                                 "filled": createFolderDto.requiredFiles.sellerCNI ? true : false,
@@ -59,7 +60,7 @@ export class FoldersService {
                                 "editBy": ''
                             },
                             "certificateOfBirthOrMarriage": {
-                                "name": "Extrait d'acte de naissance ou de marriage",
+                                "name": "Extrait d'acte de naissance ou de mariage",
                                 "path": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? createFolderDto.requiredFiles.certificateOfBirthOrMarriage : '',
                                 "filled": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? true : false,
                                 "editBy": ''
@@ -118,6 +119,7 @@ export class FoldersService {
                             createFolderDto.requiredFiles.titleDeed &&
                             createFolderDto.requiredFiles.landRegistry &&
                             createFolderDto.requiredFiles.certificateOfLocation ? 'En cours' : 'Non débuté',
+
                         "action": 'Rédaction l\'acte de vente',
                         "documents": {
                             "deedOfSale": {
@@ -750,12 +752,12 @@ export class FoldersService {
         folder.seller = seller;
         folder.assignedTo = assignedTo;
 
-        var count = 0;
-        var countDoc = 0;
+        let count = 0;
+        let countDoc = 0;
 
-        for(const elem of step.steps) {
-            for(const docValue of Object.values(elem.documents)) {
-                if(docValue["filled"]) {
+        for (const elem of step.steps) {
+            for (const docValue of Object.values(elem.documents)) {
+                if (docValue["filled"]) {
                     count++;
                 }
                 countDoc++;
@@ -763,7 +765,7 @@ export class FoldersService {
         }
 
 
-        folder.progression = count/countDoc
+        folder.progression = count / countDoc
 
         await this.entityManager.save(folder);
     }
