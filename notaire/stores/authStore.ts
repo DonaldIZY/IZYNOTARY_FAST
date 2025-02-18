@@ -1,48 +1,68 @@
 import { defineStore } from 'pinia';
-import Cookie from 'js-cookie';
-import { jwtDecode } from 'jwt-decode';
+import { API_SERVER_URL } from "~/utils/constants";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        token: null as string | null,
         userId: null as number | null,
         userName: null as string | null,
         userEmail: null as string | null,
-        userRole: null as string | null
+        userRole: null as string | null,
+        isAuthenticated: false
     }),
 
     actions: {
 
-        setToken(token: string) {
-            this.token = token;
-            const decoded = jwtDecode(token) as { userId: number, userName: string, userEmail: string, userRole: string };
-            this.userId = decoded.userId;
-            this.userName = decoded.userName;
-            this.userEmail = decoded.userEmail; // Assuming email is a field in the JWT payload. Replace with the actual field name.
-            this.userRole = decoded.userRole;
-            Cookie.set('auth_token', token, { expires: 1 }); // Stocker le token dans un cookie (valable 1 jour)
-        },
+        async fetchUser() {
+            try {
+                const data = await $fetch<{userId: number, userName: string, userEmail: string, userRole: string}>(`${API_SERVER_URL}/auth/me`, { credentials: 'include' });
 
-        clearToken() {
-            this.token = null;
-            this.userId = null;
-            this.userName = null;
-            this.userEmail = null;  // Assuming email is a field in the JWT payload. Replace with the actual field name.
-            this.userRole = null;
-            Cookie.remove('auth_token'); // Supprimer le cookie
-        },
-
-        initializeToken() {
-            const token = Cookie.get('auth_token');
-            if (token) {
-                const decoded = jwtDecode(token) as { userId: number, userName: string, userEmail: string, userRole: string };
-                this.token = token;
-                this.userId = decoded.userId;
-                this.userName = decoded.userName;
-                this.userEmail = decoded.userEmail; // Assuming email is a field in the JWT payload. Replace with the actual field name.
-                this.userRole = decoded.userRole;
+                if (data) {
+                    this.userId = data.userId;
+                    this.userName = data.userName;
+                    this.userEmail = data.userEmail;
+                    this.userRole = data.userRole;
+                    this.isAuthenticated = true;
+                }
+            } catch (error) {
+                console.error('Erreur lors de la récupération des infos utilisateur', error);
+                this.clearUser();
             }
         },
+
+        async login(credentials: { email: string, password: string }) {
+            try {
+                const router = useRouter();
+                const data = await $fetch(`${API_SERVER_URL}/auth/login`, {
+                    method: 'POST',
+                    body: credentials,
+                    credentials: 'include', // Nécessaire pour envoyer/recevoir les cookies HTTP-Only
+                });
+
+                if (data) {
+                    await this.fetchUser(); // Récupère les infos utilisateur après connexion
+                    router.push("/home");
+                }
+            } catch (error) {
+                console.error('Erreur de connexion', error);
+            }
+        },
+
+        async logout() {
+            const router = useRouter();
+
+            await $fetch(`${API_SERVER_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+            this.clearUser();
+
+            router.push("/login");
+        },
+
+        clearUser() {
+            this.userId = null;
+            this.userName = null;
+            this.userEmail = null;
+            this.userRole = null;
+            this.isAuthenticated = false;
+        }
 
     },
 });

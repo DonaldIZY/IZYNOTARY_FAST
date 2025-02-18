@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Folder } from "src/folders/entities/folder.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Identifier } from "src/identifier/entities/identifier.entity";
+import { Column, CreateDateColumn, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Customer {
@@ -37,6 +38,9 @@ export class Customer {
 
     @Column()
     maritalStatus: string;
+
+    @OneToOne(() => Identifier, identifier => identifier.user, { cascade: true })
+    identifier: Identifier;
 
     @CreateDateColumn()
     createAt: Date;

@@ -104,8 +104,6 @@ const passwordRule = (v) => {
   );
 };
 
-const config = useRuntimeConfig();
-
 // Router
 const router = useRouter();
 
@@ -115,21 +113,10 @@ const onSubmit = async () => {
   loading.value = true;
 
   try {
-    const data = await $fetch(API_SERVER_URL + `/auth/login`, {
-      method: "POST",
-      body: JSON.stringify({
-        email: email.value,
-        password: password.value,
-      }),
-    });
-
-    if (data.accessToken) {
-      const authStore = useAuthStore();
-      authStore.setToken(data.accessToken);
-
-      // Rediriger vers une autre page
-      router.push("/home");
-    }
+    
+    const authStore = useAuthStore();
+    await authStore.login({email: email.value, password: password.value})
+    
   } catch (error) {
     console.error("Erreur de connexion :", error);
     // alert("Échec de la connexion. Veuillez vérifier vos informations.");

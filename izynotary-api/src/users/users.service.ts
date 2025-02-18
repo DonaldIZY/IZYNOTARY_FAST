@@ -61,7 +61,7 @@ export class UsersService {
 			</ul>
 			<p>Merci d'utiliser IzyNotary ! 🚀</p>
 		  `
-		  );
+		);
 	}
 
 	async findAll() {

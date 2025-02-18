@@ -1,4 +1,4 @@
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(async (nuxtApp) => {
   const authStore = useAuthStore();
-  authStore.initializeToken(); // Initialiser le token depuis les cookies
+  await authStore.fetchUser(); // Initialiser le token depuis les cookies
 });

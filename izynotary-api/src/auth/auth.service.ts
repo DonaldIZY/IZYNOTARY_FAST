@@ -25,12 +25,13 @@ export class AuthService {
             return result;
         }
 		return null;
+        
 	}
 
     async login(user: any) {
         const payload = { userId: user.id, userName: user.lastName+" "+user.firstName, userEmail: user.email, userRole: user.role.name };
         return {
-            accessToken: this.jwtService.sign(payload),
+            accessToken: this.jwtService.sign(payload, { expiresIn: '1h'}),
         };
     }
 }

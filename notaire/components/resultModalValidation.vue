@@ -32,13 +32,11 @@ const props = defineProps({
   },
   text: {
     type: String,
-    default: "",
   },
   type: {
-    type: String,
-    default: "info", // Valeur par défaut
+    type: String, // Valeur par défaut
     validator: (value) =>
-      ["success", "error", "info", "warning"].includes(value),
+      ["", "success", "error", "info", "warning"].includes(value),
   },
 });
 

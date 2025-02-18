@@ -41,7 +41,6 @@
 </template>
 
 <script setup>
-const router = useRouter();
 const authStore = useAuthStore();
 
 const props = defineProps({
@@ -50,8 +49,7 @@ const props = defineProps({
 });
 
 const disconnectUser = async () => {
-  authStore.clearToken();
-  router.push("/login");
+  authStore.logout();
 };
 </script>
 
