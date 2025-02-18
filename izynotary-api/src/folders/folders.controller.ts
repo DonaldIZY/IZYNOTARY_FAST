@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles, UseGuards } from '@nestjs/common';
 import { FoldersService } from './folders.service';
 import { CreateFolderDto } from './dto/create-folder.dto';
 import { UpdateFolderDto } from './dto/update-folder.dto';
@@ -6,6 +6,7 @@ import { AnyFilesInterceptor, FileFieldsInterceptor } from '@nestjs/platform-exp
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as fs from 'fs';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('folders')
 export class FoldersController {
@@ -232,6 +233,7 @@ export class FoldersController {
         return this.foldersService.create(createFolderDto);
     }
 
+    // @UseGuards(JwtAuthGuard)
     @Get()
     async findAll() {
         return this.foldersService.findAll();

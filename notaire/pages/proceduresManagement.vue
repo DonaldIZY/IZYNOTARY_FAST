@@ -386,7 +386,7 @@ const clearFilters = () => {
 
 const loadProcedures = async () => {
   try {
-    const fetchedProcedures = await $fetch(API_SERVER_URL + `/folders`);
+    const fetchedProcedures = await $fetch(API_SERVER_URL + `/folders`, {Credentials: 'include'});
 
     console.log("fetchedProcedures : ", fetchedProcedures);
 
@@ -484,6 +484,7 @@ const updateProcedure = async (val) => {
       {
         method: "PATCH",
         body: dataToSend,
+        credentials: "include",
       }
     );
 
@@ -550,6 +551,7 @@ const deleteProcedure = async (id) => {
   try {
     await $fetch(API_SERVER_URL + `/folders/${id}`, {
       method: "DELETE",
+      credentials: "include",
     });
     procedures.value = [];
     selectedProcedure.value = null;
@@ -565,7 +567,7 @@ const deleteProcedure = async (id) => {
   }
 };
 
-watch(() => {
+watchEffect(() => {
   if (showResultDeleteModal.value) {
     loadProcedures(); // Recharger les utilisateurs quand le modal est fermé
   }

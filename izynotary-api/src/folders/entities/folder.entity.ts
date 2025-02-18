@@ -35,6 +35,9 @@ export class Folder {
     @Column({ nullable: true })
     comment: string;
 
+    @Column({ type: "boolean", default: false })
+    archived: boolean;
+
     @ManyToOne(() => User, assignedTo => assignedTo.folders)
     assignedTo: User;
 

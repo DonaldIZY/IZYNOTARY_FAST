@@ -34,8 +34,7 @@ const props = defineProps({
     type: String,
   },
   type: {
-    type: String,
-    default: "info", // Valeur par défaut
+    type: String, // Valeur par défaut
     validator: (value) =>
       ["", "success", "error", "info", "warning"].includes(value),
   },
