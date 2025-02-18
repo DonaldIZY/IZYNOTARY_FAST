@@ -10,7 +10,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('folders')
 export class FoldersController {
-    constructor(private readonly foldersService: FoldersService) {}
+    constructor(private readonly foldersService: FoldersService) { }
 
     @Post('selling')
     @UseInterceptors(
@@ -39,7 +39,7 @@ export class FoldersController {
         @Body() createFolderDto: CreateFolderDto
     ) {
 
-        console.log('FILES : ',files)
+        console.log('FILES : ', files)
 
         // Construction de l'objet requiredFiles avec les chemins des fichiers
         const uploadedFiles = {};
@@ -84,7 +84,7 @@ export class FoldersController {
         @Body() createFolderDto: CreateFolderDto
     ) {
 
-        console.log('FILES : ',files)
+        console.log('FILES : ', files)
 
         // Construction de l'objet requiredFiles avec les chemins des fichiers
         const uploadedFiles = {};
@@ -128,7 +128,7 @@ export class FoldersController {
         @Body() createFolderDto: CreateFolderDto
     ) {
 
-        console.log('FILES : ',files)
+        console.log('FILES : ', files)
 
         // Construction de l'objet requiredFiles avec les chemins des fichiers
         const uploadedFiles = {};
@@ -172,7 +172,7 @@ export class FoldersController {
         @Body() createFolderDto: CreateFolderDto
     ) {
 
-        console.log('FILES : ',files)
+        console.log('FILES : ', files)
 
         // Construction de l'objet requiredFiles avec les chemins des fichiers
         const uploadedFiles = {};
@@ -216,7 +216,7 @@ export class FoldersController {
         @Body() createFolderDto: CreateFolderDto
     ) {
 
-        console.log('FILES : ',files)
+        console.log('FILES : ', files)
 
         // Construction de l'objet requiredFiles avec les chemins des fichiers
         const uploadedFiles = {};

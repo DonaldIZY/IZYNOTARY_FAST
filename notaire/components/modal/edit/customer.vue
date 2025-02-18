@@ -31,7 +31,7 @@
             <v-text-field
               v-model="customer.identificationNumber"
               color="primary"
-              label="NNI"
+              label="Numéro de la CNI"
               variant="outlined"
               density="compact"
               :rules="validationRules.required"

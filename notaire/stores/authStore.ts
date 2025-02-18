@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
 
         async fetchUser() {
             try {
-                const data = await $fetch<{userId: number, userName: string, userEmail: string, userRole: string}>(`${API_SERVER_URL}/auth/me`, { credentials: 'include' });
+                const data = await $fetch<{ userId: number, userName: string, userEmail: string, userRole: string }>(`${API_SERVER_URL}/auth/me`, { credentials: 'include' });
 
                 if (data) {
                     this.userId = data.userId;
@@ -41,9 +41,11 @@ export const useAuthStore = defineStore('auth', {
                 if (data) {
                     await this.fetchUser(); // Récupère les infos utilisateur après connexion
                     router.push("/home");
+                    return { success: true, message: "Connexion réussie" };
                 }
             } catch (error) {
                 console.error('Erreur de connexion', error);
+                return { success: false, message: error?.data?.message || "Une erreur est survenue lors de la connexion." };
             }
         },
 

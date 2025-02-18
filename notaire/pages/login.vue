@@ -113,10 +113,19 @@ const onSubmit = async () => {
   loading.value = true;
 
   try {
-    
     const authStore = useAuthStore();
-    await authStore.login({email: email.value, password: password.value})
-    
+    const response = await authStore.login({
+      email: email.value,
+      password: password.value,
+    });
+
+    if (!response.success) {
+      showTextResultModal.value = response.message;
+      showTypeResultModal.value = "error";
+      showResultModal.value = true;
+    }
+
+    console.log("response : ", response);
   } catch (error) {
     console.error("Erreur de connexion :", error);
     // alert("Échec de la connexion. Veuillez vérifier vos informations.");

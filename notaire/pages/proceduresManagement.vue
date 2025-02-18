@@ -312,7 +312,7 @@ const proceduresHeaders = ref([
   { align: "start", key: "ASSIGNED_TO", title: "Responsable" },
   { align: "center", key: "PROGRESSION", title: "Progression" },
   { align: "center", key: "STATUS", title: "Statut" },
-  { align: "center", key: "ACTIONS", title: "Actions", width: "150px" },
+  { align: "end", key: "ACTIONS", title: "Actions", width: "150px" },
 ]);
 
 const procedures = ref([]);
@@ -386,7 +386,9 @@ const clearFilters = () => {
 
 const loadProcedures = async () => {
   try {
-    const fetchedProcedures = await $fetch(API_SERVER_URL + `/folders`, {Credentials: 'include'});
+    const fetchedProcedures = await $fetch(API_SERVER_URL + `/folders`, {
+      Credentials: "include",
+    });
 
     console.log("fetchedProcedures : ", fetchedProcedures);
 
@@ -456,7 +458,7 @@ const showTypeResultModifyModal = ref("");
 
 const updateProcedure = async (val) => {
   modalLoading.value = true;
-  console.log('modalLoading : ', modalLoading.value);
+  console.log("modalLoading : ", modalLoading.value);
   try {
     console.log("data to send before change to formadata : ", val);
 
@@ -491,28 +493,29 @@ const updateProcedure = async (val) => {
     if (resultOfProcedureUpdate.status) {
       if (val.status) {
         modalLoading.value = false;
-        if(val.status == "Suspendu") {
+        if (val.status == "Suspendu") {
           showTextResultModifyModal.value = "La procédure a été suspendue.";
           showTypeResultModifyModal.value = "info";
           showResultModifyModal.value = true;
-        }else if(val.status == "Arrêté") {
+        } else if (val.status == "Arrêté") {
           showTextResultModifyModal.value = "La procédure a été arrêtée.";
           showTypeResultModifyModal.value = "info";
           showResultModifyModal.value = true;
-        }else if(val.status == "En cours") {
-          showTextResultModifyModal.value = "La procédure est de nouveau en cours.";
+        } else if (val.status == "En cours") {
+          showTextResultModifyModal.value =
+            "La procédure est de nouveau en cours.";
           showTypeResultModifyModal.value = "info";
           showResultModifyModal.value = true;
-        }else{
+        } else {
           console.log("erreur ");
         }
-      }else{
+      } else {
         modalLoading.value = false;
         showTextResultModifyModal.value = "Procédure modifiée avec succès !";
         showTypeResultModifyModal.value = "success";
         showResultModifyModal.value = true;
       }
-      console.log('modalLoading : ', modalLoading.value);
+      console.log("modalLoading : ", modalLoading.value);
 
       loadProcedures();
       closeModal();

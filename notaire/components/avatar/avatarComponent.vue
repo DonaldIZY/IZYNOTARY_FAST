@@ -21,8 +21,9 @@
             prepend-icon="mdi-account-outline"
             class="text-none"
             rounded="md"
+            to="/profile"
           >
-            Voir le profil
+            Voir mon profil
           </v-btn>
           <v-divider class="my-2"></v-divider>
           <v-btn
