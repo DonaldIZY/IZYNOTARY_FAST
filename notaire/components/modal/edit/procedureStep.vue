@@ -20,6 +20,7 @@ const loading = toRef(props, "loading");
 const showSuspendedBtn = ref(true);
 const showStoppedBtn = ref(true);
 const allowedFilesList = ref([]);
+const disallowedFilesList = ref([]);
 
 console.log('loading : ', loading.value);
 
@@ -128,7 +129,7 @@ console.log(
                   v-for="doc in Object.keys(step.documents)"
                 >
                   <v-file-input
-                    v-if="(step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && !step.documents[doc].filled) || (step.action == 'Fourniture des pièces' && step.documents[doc].allowed && step.documents[doc].filled) || step.action != 'Fourniture des pièces'"
+                    v-if="(step.action == 'Fourniture des pièces' && (!step.documents[doc].allowed && !step.documents[doc].disallowed) && !step.documents[doc].filled) || (step.action == 'Fourniture des pièces' && (step.documents[doc].allowed || step.documents[doc].disallowed) && step.documents[doc].filled) || step.action != 'Fourniture des pièces'"
                     :name="doc"
                     :label="step.documents[doc].name"
                     variant="outlined"
@@ -177,7 +178,7 @@ console.log(
                     :filePath="API_SERVER_URL + step.documents[doc].path"
                     :receivedFile="newProcedureData.documents[doc]"
                   />
-                  <v-switch 
+                  <!-- <v-switch 
                     v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled"
                     v-model="allowedFilesList"
                     color="primary"
@@ -188,7 +189,45 @@ console.log(
                     v-on:update:model-value="(val) => {
                       console.log('allowedFilesList : ', allowedFilesList);
                     }"
-                  />
+                  /> -->
+                  <v-btn 
+                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled && !disallowedFilesList.includes(doc)"
+                    color="green"
+                    :text="allowedFilesList.includes(doc) ? 'Validé!' : 'Valider ?'"
+                    variant="tonal" 
+                    @click="() => {
+                      if(!allowedFilesList.includes(doc)) {
+                        allowedFilesList.push(doc);
+                      }
+                      console.log('allowedFilesList : ', allowedFilesList);
+                    }"
+                    :disabled="allowedFilesList.includes(doc)"
+                  ></v-btn>
+                  <!-- <v-switch 
+                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].disallowed && step.documents[doc].filled"
+                    v-model="disallowedFilesList"
+                    color="primary"
+                    :label="allowedFilesList.includes(step.documents[doc].name) ? '✅' : ''"
+                    :value="doc"
+                    hide-details 
+                    inset 
+                    v-on:update:model-value="(val) => {
+                      console.log('allowedFilesList : ', allowedFilesList);
+                    }"
+                  /> -->
+                  <v-btn 
+                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].disallowed && step.documents[doc].filled && !allowedFilesList.includes(doc)"
+                    color="red"
+                    :text="disallowedFilesList.includes(doc) ? 'Refusé!' : 'Refuser ?'"
+                    variant="tonal" 
+                    @click="() => {
+                      if(!disallowedFilesList.includes(doc)) {
+                        disallowedFilesList.push(doc);
+                      }
+                      console.log('disallowedFilesList : ', disallowedFilesList);
+                    }"
+                    :disabled="disallowedFilesList.includes(doc)"
+                  ></v-btn>
                 </v-row>
               </v-col>
               <v-col cols="12">
@@ -385,6 +424,7 @@ console.log(
               $emit('submit', {
                 ...newProcedureData,
                 allowedFilesList: allowedFilesList,
+                disallowedFilesList: disallowedFilesList,
                 contact: procedureData.customer.phone,
                 folderNum: procedureData.folderNum,
                 procedureType: procedureData.PROCEDURE_TYPE,

@@ -474,9 +474,15 @@ const updateProcedure = async (val) => {
     dataToSend.append("procedureType", val.procedureType);
     dataToSend.append("contact", val.contact);
 
-    if(val.allowedFilesList) {
+    if(val.allowedFilesList && val.allowedFilesList.length > 0) {
       for (const fileKey of Object.keys(val.allowedFilesList)) {
         dataToSend.append("allowedFilesList", val.allowedFilesList[fileKey]);
+      }
+    }
+
+    if(val.disallowedFilesList && val.disallowedFilesList.length > 0) {
+      for (const fileKey of Object.keys(val.disallowedFilesList)) {
+        dataToSend.append("disallowedFilesList", val.disallowedFilesList[fileKey]);
       }
     }
 

@@ -52,56 +52,64 @@ export class FoldersService {
                                 "path": createFolderDto.requiredFiles.sellerCNI ? createFolderDto.requiredFiles.sellerCNI : '',
                                 "filled": createFolderDto.requiredFiles.sellerCNI ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "partnerCNI": {
                                 "name": "CNI du conjoint",
                                 "path": createFolderDto.requiredFiles.partnerCNI ? createFolderDto.requiredFiles.partnerCNI : '',
                                 "filled": createFolderDto.requiredFiles.partnerCNI ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "certificateOfBirthOrMarriage": {
                                 "name": "Extrait d'acte de naissance ou de mariage",
                                 "path": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? createFolderDto.requiredFiles.certificateOfBirthOrMarriage : '',
                                 "filled": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "CIEOrSODECIInvoice": {
                                 "name": "Facture de CIE ou SODECI",
                                 "path": createFolderDto.requiredFiles.CIEOrSODECIInvoice ? createFolderDto.requiredFiles.CIEOrSODECIInvoice : '',
                                 "filled": createFolderDto.requiredFiles.CIEOrSODECIInvoice ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "taxStatusCertificate": {
                                 "name": "Attestation de situation fiscale",
                                 "path": createFolderDto.requiredFiles.taxStatusCertificate ? createFolderDto.requiredFiles.taxStatusCertificate : '',
                                 "filled": createFolderDto.requiredFiles.taxStatusCertificate ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "titleDeed": {
                                 "name": "Titre de propriété",
                                 "path": createFolderDto.requiredFiles.titleDeed ? createFolderDto.requiredFiles.titleDeed : '',
                                 "filled": createFolderDto.requiredFiles.titleDeed ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "landRegistry": {
                                 "name": "État foncier",
                                 "path": createFolderDto.requiredFiles.landRegistry ? createFolderDto.requiredFiles.landRegistry : '',
                                 "filled": createFolderDto.requiredFiles.landRegistry ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "certificateOfLocation": {
                                 "name": "Certificat de localisation",
                                 "path": createFolderDto.requiredFiles.certificateOfLocation ? createFolderDto.requiredFiles.certificateOfLocation : '',
                                 "filled": createFolderDto.requiredFiles.certificateOfLocation ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             }
                         },
                         "comment": '',
