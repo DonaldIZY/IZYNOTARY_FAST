@@ -94,7 +94,7 @@ const statusColor = computed(() => {
     <back-button
       v-if="stepList.length > 0"
       :title="procedureNum"
-      goBackTo="/proceduresManagement"
+      goBackTo="/selling"
     />
     <history-procedure text="Voir l'historique"></history-procedure>
   </div>
@@ -104,7 +104,7 @@ const statusColor = computed(() => {
         <v-card class="card">
           <v-card-title class="card-title">Informations générales</v-card-title>
           <v-card-text>
-            <v-row>
+            <!-- <v-row>
               <v-col cols="12" md="4" lg="3" sm="6">
                 <v-text-field
                   v-model="procedureGeneralInfo.numClient"
@@ -171,7 +171,7 @@ const statusColor = computed(() => {
                   readonly
                 ></v-text-field>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row>
               <v-col cols="12" md="4" lg="3" sm="6">
                 <v-text-field

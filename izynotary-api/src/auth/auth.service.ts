@@ -1,4 +1,6 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from 'src/customers/entities/customer.entity';
@@ -10,52 +12,52 @@ import { Repository } from 'typeorm';
 export class AuthService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @InjectRepository(Customer) private readonly customerRepository: Repository<Customer>, 
+        @InjectRepository(Customer) private readonly customerRepository: Repository<Customer>,
         private readonly jwtService: JwtService,
-    ) {}
+    ) { }
 
     async validateUser(email: string, pass: string): Promise<any> {
 
-		const user = await this.userRepository.findOne({
-			where: { email },
-            relations: { role: true, identifier: true},
-		});
+        const user = await this.userRepository.findOne({
+            where: { email },
+            relations: { role: true, identifier: true },
+        });
 
-		if (user && (await Password.validatePassword(pass, user.identifier.hashedValue))) {
+        if (user && (await Password.validatePassword(pass, user.identifier.hashedValue))) {
             const { identifier, ...result } = user;
             return result;
         }
 
-		return null;
-        
-	}
+        return null;
+
+    }
 
     async validateCustomer(email: string, pass: string): Promise<any> {
 
-		const customer = await this.customerRepository.findOne({
-			where: { email },
+        const customer = await this.customerRepository.findOne({
+            where: { email },
             relations: { identifier: true },
-		});
+        });
 
-		if (customer && (await Password.validatePassword(pass, customer.identifier.hashedValue))) {
+        if (customer && (await Password.validatePassword(pass, customer.identifier.hashedValue))) {
             const { identifier, ...result } = customer;
             return result;
         }
-		return null;
-        
-	}
+        return null;
+
+    }
 
     async loginUser(user: any) {
-        const payload = { userId: user.id, userName: user.lastName+" "+user.firstName, userEmail: user.email, userRole: user.role.name };
+        const payload = { userId: user.id, userName: user.lastName + " " + user.firstName, userEmail: user.email, userRole: user.role.name };
         return {
-            accessToken: this.jwtService.sign(payload, { expiresIn: '1h'}),
+            accessToken: this.jwtService.sign(payload, { expiresIn: '1h' }),
         };
     }
 
-    async loginCustomer(user: any) {
-        const payload = { userId: user.id, userName: user.lastName+" "+user.firstName, userEmail: user.email };
+    async loginCustomer(customer: any) {
+        const payloadCustomer = { customerId: customer.id, customerName: customer.lastName + " " + customer.firstName, customerEmail: customer.email };
         return {
-            accessToken: this.jwtService.sign(payload, { expiresIn: '1h'}),
+            accessToken: this.jwtService.sign(payloadCustomer, { expiresIn: '1h' }),
         };
     }
 }

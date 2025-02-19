@@ -1,9 +1,9 @@
 /* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
-import { Response } from 'express'
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
-import { JwtAuthGuard } from './jwt-auth.guard';
+import { JwtAuthGuard, JwtAuthGuard_customer } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -37,6 +37,8 @@ export class AuthController {
 
         const token = await this.authService.loginCustomer(customer);
 
+        console.log('Custmer login : ', customer);
+
         res.cookie('auth_token_customer', token.accessToken, {
             httpOnly: true,
             secure: false,
@@ -44,7 +46,7 @@ export class AuthController {
             maxAge: 3600000
         });
 
-        return res.send({ message: 'Connexion réussite' })
+        return res.send({ message: 'Connexion réussie' })
     }
 
     @Post('logout/user')

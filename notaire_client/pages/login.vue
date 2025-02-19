@@ -72,7 +72,6 @@
 </template>
 
 <script setup>
-
 const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
@@ -103,29 +102,25 @@ const passwordRule = (v) => {
   );
 };
 
-const config = useRuntimeConfig();
-
 const onSubmit = async () => {
   // if (!form.value) return
 
   loading.value = true;
 
   try {
-    const data = await $fetch(`${config.public.baseUrl}/auth/login`, {
-      method: "POST",
-      body: JSON.stringify({
-        email: email.value,
-        password: password.value,
-      }),
+    const authStore = useAuthStore();
+    const response = await authStore.login({
+      email: email.value,
+      password: password.value,
     });
 
-    if (data?.accessToken) {
-      // Stocker le token, par exemple dans localStorage ou Vuex/Pinia
-    //   authStore.setToken(data.accessToken);
-
-      // Rediriger vers une autre page
-      router.push("/home");
+    if (!response.success) {
+      showTextResultModal.value = response.message;
+      showTypeResultModal.value = "error";
+      showResultModal.value = true;
     }
+
+    console.log("response : ", response);
   } catch (error) {
     console.error("Erreur de connexion :", error);
     // alert("Échec de la connexion. Veuillez vérifier vos informations.");
@@ -137,7 +132,6 @@ const onSubmit = async () => {
     loading.value = false;
   }
 };
-
 
 definePageMeta({
   layout: "",
