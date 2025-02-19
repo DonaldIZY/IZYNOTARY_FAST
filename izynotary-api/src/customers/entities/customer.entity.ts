@@ -21,16 +21,16 @@ export class Customer {
     @Column()
     birthDate: Date;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
 
-    @Column()
+    @Column({ unique: true })
     phone: string;
 
     @Column()
     identification: string;
 
-    @Column()
+    @Column({ unique: true })
     identificationNumber: string;
 
     @Column()
@@ -39,7 +39,10 @@ export class Customer {
     @Column()
     maritalStatus: string;
 
-    @OneToOne(() => Identifier, identifier => identifier.user, { cascade: true })
+    @Column({ type: "boolean"})
+    platformAccess: boolean;
+
+    @OneToOne(() => Identifier, identifier => identifier.customer, { cascade: true })
     identifier: Identifier;
 
     @CreateDateColumn()

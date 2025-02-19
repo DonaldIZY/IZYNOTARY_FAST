@@ -2,26 +2,26 @@
   <div class="d-flex justify-space-between ma-4">
     <back-button title="Liste des utilisateurs" goBackTo="/home" />
     <div class="tableBtn">
-        <v-text-field 
-          class="searchField"
-          color="primary"
-          v-model="usersSearch"
-          label="Rechercher"
-          prepend-inner-icon="mdi-magnify"
-          variant="outlined"
-          density="compact"
-          hide-details
-          clearable
-        ></v-text-field>
-        <v-btn
-      prependIcon="mdi-account-plus-outline"
-      color="primary"
-      class="text-none"
-      @click="toggleModal"
-      >Ajouter un utilisateur</v-btn
-    >
-      </div>
-    
+      <v-text-field
+        class="searchField"
+        color="primary"
+        v-model="usersSearch"
+        label="Rechercher"
+        prepend-inner-icon="mdi-magnify"
+        variant="outlined"
+        density="compact"
+        hide-details
+        clearable
+      ></v-text-field>
+      <v-btn
+        prependIcon="mdi-account-plus-outline"
+        color="primary"
+        class="text-none"
+        @click="toggleModal"
+        >Ajouter un utilisateur</v-btn
+      >
+    </div>
+
     <modal-add-user :open="open" @update:open="open = $event" />
   </div>
 

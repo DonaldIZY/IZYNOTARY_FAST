@@ -61,7 +61,6 @@
               :rules="validationRules.required"
             ></v-select>
           </v-col>
-
           <v-col cols="12">
             <v-text-field
               v-model="customer.email"
@@ -72,7 +71,6 @@
               density="compact"
             ></v-text-field>
           </v-col>
-
           <v-col cols="12">
             <v-text-field
               v-model="customer.phone"
@@ -83,6 +81,15 @@
               density="compact"
               :rules="validationRules.phone"
             ></v-text-field>
+          </v-col>
+          <v-col cols="12">
+            <v-checkbox
+              label="Octroyer un espace client"
+              color="primary"
+              v-model="customer.platformAccess"
+              hide-details
+              density="compact"
+            ></v-checkbox>
           </v-col>
         </v-row>
       </v-card-text>
@@ -157,6 +164,7 @@ watchEffect(() => {
     customer.maritalStatus = props.customerData.maritalStatus;
     customer.birthDate = props.customerData.birthDate;
     customer.identificationNumber = props.customerData.identificationNumber;
+    customer.platformAccess = props.customerData.platformAccess;
   }
 });
 

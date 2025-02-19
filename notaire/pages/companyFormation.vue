@@ -359,9 +359,21 @@ const handleProcedure = async () => {
 
   const folders = await $fetch(API_SERVER_URL + `/folders`);
 
-  const count = folders.length;
-  if (isNaN(count)) {
-    console.error("Erreur : count est NaN");
+  var lastId;
+
+  if (folders.length === 0) {
+    lastId = 0;
+  } else {
+    const folderWithMaxId = folders.reduce((maxFolder, currentFolder) => {
+      return currentFolder.id > maxFolder.id ? currentFolder : maxFolder;
+    });
+
+    lastId = folderWithMaxId.id;
+  }
+
+  //const count = folders.length;
+  if (isNaN(lastId)) {
+    console.error("Erreur : lastId est NaN");
     showTextResultModal.value =
       "Impossible de se connecter à la base de données. Veuillez réessayer s'il vous plaît!";
     showTypeResultModal.value = "error";
@@ -371,7 +383,7 @@ const handleProcedure = async () => {
 
   procedureData.append(
     "folderNum",
-    procedureNumGenerator("Constitution de société", count)
+    procedureNumGenerator("Constitution de société", lastId)
   );
   procedureData.append("procedureType", "Constitution de société");
   procedureData.append("status", "En cours");

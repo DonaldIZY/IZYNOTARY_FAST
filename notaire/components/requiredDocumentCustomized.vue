@@ -48,25 +48,27 @@
             />
           </template>
           <template v-else-if="fileType === 'pdf'">
-            <!-- <embed 
-              :src="previewContent ?? filePath" 
-              type="application/pdf"
-              style="width: 100%; height: 400px; border: 3px solid red"
-            >
-            
-            </embed> -->
-            <iframe
+
+            <!-- <iframe
               :src="previewContent ?? filePath"
               style="width: 100%; height: 400px; border: 3px solid red"
               frameborder="0"
-            ></iframe>
+            ></iframe> -->
+            <v-btn variant="tonal" >
+              <a
+              :href="previewContent ?? filePath /*previewContent*/"
+              download target="_blank"
+              class="v-btn v-btn--outlined primary text-none"
+            >
+              Cliquer pour voir le fichier
+            </a>
+            </v-btn>
           </template>
           <template v-else-if="fileType === 'txt'">
             <pre
               v-if="previewContent"
               style="white-space: pre-wrap; max-height: 400px; overflow: auto"
-              >{{ previewContent }}</pre
-            >
+            >{{ previewContent }}</pre>
             <iframe
               v-else
               :src="filePath"
@@ -138,9 +140,6 @@ const open = ref(false);
 const previewContent = ref(null);
 var fileExtension;
 const fileType = ref(null);
-
-const testFilePath =
-  "https://upload.wikimedia.org/wikipedia/commons/1/1a/24701-nature-natural-beauty.jpg";
 
 const toggleModal = () => {
   open.value = !open.value;

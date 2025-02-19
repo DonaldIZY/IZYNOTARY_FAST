@@ -40,9 +40,9 @@ export class StepsService {
       where: {id}
     });
 
-    if(!step) {
-      console.log("step is null");
-    }
+    // if(!step) {
+    //   console.log("step is null");
+    // }
     // console.log("updateStepDTO", updateStepDto);
 
     const folder = await this.folderRepository.findOne({
@@ -57,6 +57,14 @@ export class StepsService {
     // console.log('FOUND folder : ', folder);
     // console.log('Id of step : ', id);
     // console.log('FOUND STEP : ', step);
+
+    if(updateStepDto['action'] == 'Fourniture des pièces') {
+      if(updateStepDto.allowedFilesList && updateStepDto.allowedFilesList.length > 0) {
+        for(const docName of updateStepDto.allowedFilesList) {
+          step.steps[searchedStepIndex].documents[docName].allowed = true;
+        }
+      }
+    }
 
     if(Object.keys(updateStepDto.uploadedFiles).length > 0) {
 
@@ -98,18 +106,19 @@ export class StepsService {
       step.steps[searchedStepIndex].comment = updateStepDto["comment"]; 
     }
 
-    if(updateStepDto["status"]) {
-      if(["Suspendu", "Arrêté", "En cours"].includes(updateStepDto["status"])) {
-        if(["Suspendu", "Arrêté"].includes(updateStepDto["status"])) {
+    if(updateStepDto["subStepStatus"]) {
+
+      if(["Suspendu", "Arrêté", "En cours"].includes(updateStepDto["subStepStatus"])) {
+        if(["Suspendu", "Arrêté"].includes(updateStepDto["subStepStatus"])) {
           if(step.steps[searchedStepIndex].status == "En cours") {
-            step.steps[searchedStepIndex].status = updateStepDto["status"];
+            step.steps[searchedStepIndex].status = updateStepDto["subStepStatus"];
           }else{
             return {
               status: false,
-              message: `You can't update a substep with status ${step.steps[searchedStepIndex].status} to status ${updateStepDto["status"]}`,
+              message: `You can't update a substep with status ${step.steps[searchedStepIndex].status} to status ${updateStepDto["subStepStatus"]}`,
             };
           }
-        }else if(updateStepDto["status"] == "En cours") {
+        }else if(updateStepDto["subStepStatus"] == "En cours") {
           if(["Suspendu", "Arrêté"].includes(step.steps[searchedStepIndex].status)) {
             let documentsList = Object.values(step.steps[searchedStepIndex].documents);
             if(documentsList.every(elem => elem["filled"] == true)) {
@@ -119,25 +128,26 @@ export class StepsService {
                 step.steps[searchedStepIndex + 1].status = "En cours";
               }
             }else{
-              step.steps[searchedStepIndex].status = updateStepDto["status"];
+              step.steps[searchedStepIndex].status = updateStepDto["subStepStatus"];
             }
             
           }else{
             return {
               status: false,
-              message: `You can't update a substep with status ${step.steps[searchedStepIndex].status} to status ${updateStepDto["status"]}`,
+              message: `You can't update a substep with status ${step.steps[searchedStepIndex].status} to status ${updateStepDto["subStepStatus"]}`,
             };
           }
         }
 
-        folder.status = updateStepDto["status"];
+        folder.status = updateStepDto["subStepStatus"];
         await this.entityManager.save(folder);
       }else{
         return {
           status: false,
-          message: `You aren't allowed to change status to ${updateStepDto["status"]}`
+          message: `You aren't allowed to change status to ${updateStepDto["subStepStatus"]}`
         };
       }
+
     }else{
       if(Object.values(step.steps[searchedStepIndex].documents).every(subStep => subStep["filled"] == true)) {
         step.steps[searchedStepIndex].status = "Terminé";
@@ -177,18 +187,18 @@ export class StepsService {
     }`;
     var message: string;
 
-    if(updateStepDto["status"]) {
+    if(updateStepDto["subStepStatus"]) {
       if(Object.keys(updateStepDto.uploadedFiles).length > 0) {
         message = 
 `Acte notarié de ${updateStepDto.procedureType}
 Numéro : ${updateStepDto.folderNum}.
 ${updateStepDto.documents.length > 1 ? 'vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).
-La procédure est désormais ${updateStepDto["status"]}`;
+La procédure est désormais ${updateStepDto["subStepStatus"]}`;
       }else{
         message = 
 `Acte notarié de ${updateStepDto.procedureType}
 Numéro : ${updateStepDto.folderNum}.
-La procédure est désormais ${updateStepDto["status"]}`;
+La procédure est désormais ${updateStepDto["subStepStatus"]}`;
       }
     }else{
       message = 

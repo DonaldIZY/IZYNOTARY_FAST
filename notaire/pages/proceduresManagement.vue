@@ -259,6 +259,7 @@
     :show="dialog"
     @close-modal="closeModal"
     @submit="updateProcedure"
+    @alert="fireAlert"
     :data="selectedProcedure"
     :loading="modalLoading"
   />
@@ -293,6 +294,10 @@ const modalLoading = ref(false);
 const selectedProcedureStore = useSelectedDataStore();
 
 const openConf = ref(false);
+
+const fireAlert = (val) => {
+  alert(val);
+}
 
 const toggleConfModal = (item) => {
   openConf.value = !openConf.value;
@@ -468,19 +473,28 @@ const updateProcedure = async (val) => {
     dataToSend.append("folderNum", val.folderNum);
     dataToSend.append("procedureType", val.procedureType);
     dataToSend.append("contact", val.contact);
-    Object.keys(val).includes("comment")
-      ? dataToSend.append("comment", val.comment)
-      : null;
-    Object.keys(val).includes("status")
-      ? dataToSend.append("status", val.status)
-      : null;
 
-    if (val.documents) {
+    if(val.allowedFilesList) {
+      for (const fileKey of Object.keys(val.allowedFilesList)) {
+        dataToSend.append("allowedFilesList", val.allowedFilesList[fileKey]);
+      }
+    }
+
+    if(Object.keys(val).includes("comment")) {
+      dataToSend.append("comment", val.comment);
+    }
+
+    if(Object.keys(val).includes("subStepStatus")) {
+      dataToSend.append("subStepStatus", val.subStepStatus);
+    }
+  
+    if(val.documents) {
       for (const fileKey of Object.keys(val.documents)) {
         dataToSend.append(fileKey, val.documents[fileKey]);
       }
     }
 
+    console.log("dataToSend keys status : ", dataToSend.get("status"));
     const resultOfProcedureUpdate = await $fetch(
       API_SERVER_URL + `/steps/update/${val.id}`,
       {

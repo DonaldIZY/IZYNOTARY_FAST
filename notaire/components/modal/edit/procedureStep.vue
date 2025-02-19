@@ -19,12 +19,13 @@ const showTypeResultModal = ref("");
 const loading = toRef(props, "loading");
 const showSuspendedBtn = ref(true);
 const showStoppedBtn = ref(true);
+const allowedFilesList = ref([]);
 
 console.log('loading : ', loading.value);
 
 const tab = defineModel();
 
-const emit = defineEmits(["closeModal", "submit"]);
+const emit = defineEmits(["closeModal", "submit", "alert"]);
 
 const procedureData = toRef(props, "data");
 
@@ -123,32 +124,50 @@ console.log(
                 <p class="mb-5">Documents</p>
                 <v-row
                   dense
-                  :style="{ gap: '1rem', alignItems: 'top' }"
+                  :style="{ gap: '1rem', alignItems: 'center'}"
                   v-for="doc in Object.keys(step.documents)"
                 >
                   <v-file-input
+                    v-if="(step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && !step.documents[doc].filled) || (step.action == 'Fourniture des pièces' && step.documents[doc].allowed && step.documents[doc].filled) || step.action != 'Fourniture des pièces'"
                     :name="doc"
                     :label="step.documents[doc].name"
                     variant="outlined"
                     density="compact"
                     color="primary"
                     prepend-icon=""
+                    v-model="newProcedureData.documents[doc]"
                     prepend-inner-icon="mdi-paperclip"
                     v-on:update:model-value="
                       (file) => {
-                        if (newProcedureData.action == step.action) {
-                          newProcedureData.documents[doc] = file;
-                        } else {
-                          newProcedureData = {
-                            action: step.action,
-                            documents: { [doc]: file },
-                          };
-                        }
-                        console.log('newProcedureData : ', newProcedureData);
+                        // console.log('FILE: ', file);
+                        // const regex = /\.[a-z]{2,}$/;
+                        // const extension = file.name.match(regex)[0];
+                        // const extensionIndex = file.name.match(regex)['index'];
+                        // console.log('extension : ', extension);
+                        // console.log('extensionIndex : ', extensionIndex);
+
+                        if(file.name.length > 45) {
+                          // $emit('alert', `le nom du fichier uploadé est long (${file.name.length} caractères), veuillez utiliser un nom de moins de 45 caractères`);
+                          showTextResultModal = `le nom du fichier uploadé est long (${file.name.length} caractères), veuillez utiliser un nom de moins de 45 caractères`;
+                          showTypeResultModal = 'warning';
+                          showResultModal = true;
+                          newProcedureData.documents[doc] = null;
+                        }else{
+                          if (newProcedureData.action == step.action) {
+                            newProcedureData.documents[doc] = file;
+                          } else {
+                            newProcedureData = {
+                              action: step.action,
+                              documents: { [doc]: file },
+                            };
+                          }
+                          console.log('newProcedureData : ', newProcedureData);
+                        } 
                       }
                     "
-                    :disabled="step.documents[doc].path != '' ? true : false"
+                    :disabled="step.action == 'Fourniture des pièces' && step.documents[doc].allowed"
                   />
+                  <v-chip v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled">{{ step.documents[doc].name }}</v-chip>
                   <required-document-customized
                     v-if="
                       step.documents[doc].path != '' ||
@@ -157,6 +176,18 @@ console.log(
                     :label="step.documents[doc].name"
                     :filePath="API_SERVER_URL + step.documents[doc].path"
                     :receivedFile="newProcedureData.documents[doc]"
+                  />
+                  <v-switch 
+                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled"
+                    v-model="allowedFilesList"
+                    color="primary"
+                    :label="allowedFilesList.includes(step.documents[doc].name) ? '✅' : ''"
+                    :value="doc"
+                    hide-details 
+                    inset 
+                    v-on:update:model-value="(val) => {
+                      console.log('allowedFilesList : ', allowedFilesList);
+                    }"
                   />
                 </v-row>
               </v-col>
@@ -210,7 +241,14 @@ console.log(
                         newProcedureData.comment &&
                         newProcedureData.comment.trim() != ''
                       ) {
-                        newProcedureData.status = 'Suspendu';
+                        newProcedureData.subStepStatus = 'Suspendu';
+
+                        for(const key of Object.keys(newProcedureData.documents)) {
+                          if(!newProcedureData.documents[key]) {
+                            delete newProcedureData.documents[key];
+                          }
+                        }
+
                         $emit('submit', {
                           ...newProcedureData,
                           contact: procedureData.customer.phone,
@@ -245,7 +283,14 @@ console.log(
                         newProcedureData.comment &&
                         newProcedureData.comment.trim() != ''
                       ) {
-                        newProcedureData.status = 'Arrêté';
+                        newProcedureData.subStepStatus = 'Arrêté';
+
+                        for(const key of Object.keys(newProcedureData.documents)) {
+                          if(!newProcedureData.documents[key]) {
+                            delete newProcedureData.documents[key];
+                          }
+                        }
+
                         $emit('submit', {
                           ...newProcedureData,
                           contact: procedureData.customer.phone,
@@ -330,8 +375,16 @@ console.log(
             () => {
               showStoppedBtn = false;
               showSuspendedBtn = false;
+
+              for(const key of Object.keys(newProcedureData.documents)) {
+                if(!newProcedureData.documents[key]) {
+                  delete newProcedureData.documents[key];
+                }
+              }
+
               $emit('submit', {
                 ...newProcedureData,
+                allowedFilesList: allowedFilesList,
                 contact: procedureData.customer.phone,
                 folderNum: procedureData.folderNum,
                 procedureType: procedureData.PROCEDURE_TYPE,
@@ -356,7 +409,7 @@ console.log(
                 newProcedureData.comment &&
                 newProcedureData.comment.trim() != ''
               ) {
-                newProcedureData.status = 'En cours';
+                newProcedureData.subStepStatus = 'En cours';
                 $emit('submit', {
                   ...newProcedureData,
                   contact: procedureData.customer.phone,

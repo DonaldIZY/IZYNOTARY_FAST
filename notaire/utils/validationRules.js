@@ -2,7 +2,7 @@ export const validationRules = {
     required: [v => !!v || "Ce champ est requis"],
     email: [
       v => !!v || "Ce champ est requis",
-      v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) || "Email invalide"
+      v => /^(?!.*\.\.)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(v) || "Email invalide"
     ],
     phone: [
       v => !!v || "Ce champ est requis",
@@ -12,5 +12,6 @@ export const validationRules = {
     indicNumber: [
       v => !!v || "Ce champ est requis",
       v => /^[A-Za-z0-9 ]{1,15}$/.test(v) || "Le numéro doit contenir 15 caractères au maximum",
-    ]
+    ],
+    requiredFile: (v) => (!!v && v.length > 0) || "Un fichier est requis",
   };

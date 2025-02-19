@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', {
 
         async fetchUser() {
             try {
-                const data = await $fetch<{ userId: number, userName: string, userEmail: string, userRole: string }>(`${API_SERVER_URL}/auth/me`, { credentials: 'include' });
+                const data = await $fetch<{ userId: number, userName: string, userEmail: string, userRole: string }>(`${API_SERVER_URL}/auth/me/user`, { credentials: 'include' });
 
                 if (data) {
                     this.userId = data.userId;
@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
         async login(credentials: { email: string, password: string }) {
             try {
                 const router = useRouter();
-                const data = await $fetch(`${API_SERVER_URL}/auth/login`, {
+                const data = await $fetch(`${API_SERVER_URL}/auth/login/user`, {
                     method: 'POST',
                     body: credentials,
                     credentials: 'include', // Nécessaire pour envoyer/recevoir les cookies HTTP-Only
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', {
         async logout() {
             const router = useRouter();
 
-            await $fetch(`${API_SERVER_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+            await $fetch(`${API_SERVER_URL}/auth/logout/user`, { method: 'POST', credentials: 'include' });
             this.clearUser();
 
             router.push("/login");

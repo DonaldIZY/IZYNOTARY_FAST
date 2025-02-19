@@ -42,7 +42,7 @@
             to="/companyModification"
           >
             <v-img
-              src="~/assets/img/modifSoc.png"
+              src="~/assets/img/ModifSoc.png"
               class="mb-2 mt-2 mx-2 rounded-lg"
               cover
               alt="Procédure de modification de société"
@@ -73,13 +73,13 @@
         <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
-            to="transferOfRealEstate"
+            to="/transferOfMovableProperty"
           >
             <v-img
               src="~/assets/img/succBienImmob.png"
               class="mb-2 mt-2 mx-2 rounded-lg"
               cover
-              alt="Procédures de succession de biens immobiliers"
+              alt="Procédure de succession de biens immobiliers"
             ></v-img>
             <v-card-title class="my-1 text-center titleCardText">
               Succession de biens immobiliers
@@ -88,7 +88,7 @@
         </v-col>
 
         <v-col cols="12" sm="6" md="4">
-          <v-card class="mx-auto rounded-lg hover-card" to="" disabled>
+          <v-card class="mx-auto rounded-lg hover-card" to="/Credit" disabled>
             <v-img
               src="~/assets/img/credit.png"
               class="mb-2 mt-2 mx-2 rounded-lg"
@@ -96,7 +96,7 @@
               alt="Procédure de crédit"
             ></v-img>
             <v-card-title class="my-1 text-center titleCardText">
-              Crédit
+              crédit
             </v-card-title>
           </v-card>
         </v-col>

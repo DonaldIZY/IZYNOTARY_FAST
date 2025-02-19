@@ -1,96 +1,99 @@
 <template>
   <v-dialog v-model="$props.open" max-width="500">
     <v-card>
-      <v-card-title
-        ><v-icon>mdi-account-edit</v-icon>
-        <span class="title">Modifier un utilisateur</span></v-card-title
-      >
-      <v-card-text>
-        <v-row dense>
-          <v-col cols="12">
-            <v-text-field
-              v-model="user.lastName"
-              color="primary"
-              label="Nom"
-              variant="outlined"
-              density="compact"
-              :rules="validationRules.required"
-            ></v-text-field>
-          </v-col>
+      <v-form ref="formRef" @update:model-value="validateForm">
+        <v-card-title
+          ><v-icon>mdi-account-edit</v-icon>
+          <span class="title">Modifier un utilisateur</span></v-card-title
+        >
+        <v-card-text>
+          <v-row dense>
+            <v-col cols="12">
+              <v-text-field
+                v-model="user.lastName"
+                color="primary"
+                label="Nom"
+                variant="outlined"
+                density="compact"
+                :rules="validationRules.required"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="12">
-            <v-text-field
-              v-model="user.firstName"
-              color="primary"
-              label="Prénoms"
-              variant="outlined"
-              density="compact"
-              :rules="validationRules.required"
-            ></v-text-field>
-          </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="user.firstName"
+                color="primary"
+                label="Prénoms"
+                variant="outlined"
+                density="compact"
+                :rules="validationRules.required"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="12">
-            <v-text-field
-              v-model="user.email"
-              color="primary"
-              label="Email"
-              variant="outlined"
-              :rules="validationRules.email"
-              density="compact"
-            ></v-text-field>
-          </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="user.email"
+                color="primary"
+                label="Email"
+                variant="outlined"
+                :rules="validationRules.email"
+                density="compact"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="12">
-            <v-text-field
-              v-model="user.phoneNumber"
-              type="number"
-              color="primary"
-              label="Téléphone"
-              variant="outlined"
-              density="compact"
-              :rules="validationRules.required"
-            ></v-text-field>
-          </v-col>
+            <v-col cols="12">
+              <v-text-field
+                v-model="user.phoneNumber"
+                type="number"
+                color="primary"
+                label="Téléphone"
+                variant="outlined"
+                density="compact"
+                :rules="validationRules.phone"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="12">
-            <v-select
-              v-model="user.roleId"
-              color="primary"
-              label="Rôle"
-              :items="roles"
-              item-title="NAME"
-              item-value="ID"
-              variant="outlined"
-              density="compact"
-              hide-details
-              :rules="validationRules.required"
-            ></v-select>
-          </v-col>
-        </v-row>
-      </v-card-text>
+            <v-col cols="12">
+              <v-select
+                v-model="user.roleId"
+                color="primary"
+                label="Rôle"
+                :items="roles"
+                item-title="NAME"
+                item-value="ID"
+                variant="outlined"
+                density="compact"
+                hide-details
+                :rules="validationRules.required"
+              ></v-select>
+            </v-col>
+          </v-row>
+        </v-card-text>
 
-      <v-divider></v-divider>
+        <v-divider></v-divider>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-spacer></v-spacer>
 
-        <v-btn
-          text="Annuler"
-          variant="flat"
-          color="secondary"
-          @click="closeModal"
-          class="text-none"
-        ></v-btn>
+          <v-btn
+            text="Annuler"
+            variant="flat"
+            color="secondary"
+            @click="closeModal"
+            class="text-none"
+          ></v-btn>
 
-        <v-btn
-          :loading="loading"
-          color="primary"
-          text="Enregistrer"
-          variant="flat"
-          @click="handleUser"
-          class="text-none"
-        ></v-btn>
-      </v-card-actions>
+          <v-btn
+            :loading="loading"
+            color="primary"
+            text="Enregistrer"
+            variant="flat"
+            @click="handleUser"
+            :disabled="!isFormValid"
+            class="text-none"
+          ></v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
 
@@ -111,6 +114,15 @@ const props = defineProps({
 });
 
 const loading = ref(false);
+const formRef = ref(null);
+const isFormValid = ref(false);
+
+const validateForm = async () => {
+  if (formRef.value) {
+    const result = await formRef.value.validate(); // Attendre la promesse
+    isFormValid.value = result.valid; // Accéder correctement à 'valid'
+  }
+};
 
 const emit = defineEmits(["update:open"]);
 
@@ -162,6 +174,8 @@ const closeModal = () => {
 
 // Enregistrement des modifications
 const handleUser = async () => {
+  validateForm(); // Vérifie la validité avant d'envoyer
+
   loading.value = true;
   console.log("user : ", user);
   try {
@@ -175,11 +189,11 @@ const handleUser = async () => {
 
     if (!response.ok) {
       loading.value = false;
-      showTextResultModifyModal.value = "Erreur lors de la modification de l'utilisateur .";
+      showTextResultModifyModal.value =
+        "Erreur lors de la modification de l'utilisateur .";
       showTypeResultModifyModal.value = "error";
       showResultModifyModal.value = true;
     }
-    
 
     // alert("Utilisateur modifié avec succès.");
     loading.value = false;
@@ -192,12 +206,12 @@ const handleUser = async () => {
   } catch (error) {
     console.error("Erreur lors de la modification de l'utilisateur :", error);
 
-    showTextResultModifyModal.value = "Erreur lors de la modification de l'utilisateur .";
+    showTextResultModifyModal.value =
+      "Erreur lors de la modification de l'utilisateur .";
     showTypeResultModifyModal.value = "error";
     showResultModifyModal.value = true;
   }
 };
-
 </script>
 <style>
 .title {

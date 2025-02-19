@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Body, Controller, Get, Post, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { Response } from 'express'
 import { AuthService } from './auth.service';
@@ -6,16 +7,16 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private authService: AuthService) {}
+    constructor(private authService: AuthService) { }
 
-    @Post('login')
-    async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    @Post('login/user')
+    async loginUser(@Body() loginDto: LoginDto, @Res() res: Response) {
         const user = await this.authService.validateUser(loginDto.email, loginDto.password);
         if (!user) {
             throw new UnauthorizedException('Identifiants invalides');
         }
-        
-        const token = await this.authService.login(user);
+
+        const token = await this.authService.loginUser(user);
 
         res.cookie('auth_token', token.accessToken, {
             httpOnly: true,
@@ -27,16 +28,47 @@ export class AuthController {
         return res.send({ message: 'Connexion réussite' })
     }
 
-    @Post('logout')
-    logout(@Res() res: Response) {
+    @Post('login/customer')
+    async loginCustomer(@Body() loginDto: LoginDto, @Res() res: Response) {
+        const customer = await this.authService.validateCustomer(loginDto.email, loginDto.password);
+        if (!customer) {
+            throw new UnauthorizedException('Identifiants invalides');
+        }
+
+        const token = await this.authService.loginCustomer(customer);
+
+        res.cookie('auth_token_customer', token.accessToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'lax',
+            maxAge: 3600000
+        });
+
+        return res.send({ message: 'Connexion réussite' })
+    }
+
+    @Post('logout/user')
+    logoutUser(@Res() res: Response) {
         res.clearCookie('auth_token');
         return res.send({ message: 'Déconnexion réussie' });
     }
 
+    @Post('logout/customer')
+    logoutCustomer(@Res() res: Response) {
+        res.clearCookie('auth_token_customer');
+        return res.send({ message: 'Déconnexion réussie' });
+    }
+
     @UseGuards(JwtAuthGuard)
-    @Get('me')
-    getProfile(@Req() req: any) {
+    @Get('me/user')
+    getProfileUser(@Req() req: any) {
         return req.user; // Retourne les infos utilisateur
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('me/customer')
+    getProfileCustomer(@Req() req: any) {
+        return req.customer; // Retourne les infos utilisateur
     }
 
 }

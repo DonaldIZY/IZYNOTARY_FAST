@@ -121,6 +121,16 @@
                   readonly
                 ></v-text-field>
               </v-col>
+              <v-col cols="12" md="4" lg="3" sm="6">
+                <v-checkbox
+                  label="Espace client"
+                  color="primary"
+                  v-model="customer.platformAccess"
+                  hide-details
+                  density="compact"
+                  readonly
+                ></v-checkbox>
+              </v-col>
             </v-row>
           </v-card-text>
           <v-divider></v-divider>

@@ -1,157 +1,159 @@
 <template>
   <v-dialog v-model="props.open" max-width="600">
     <v-card>
-      <v-card-title
-        ><v-icon>mdi-account-tie-voice</v-icon>
-        <span class="title">Créer un vendeur</span></v-card-title
-      >
-      <v-card-text>
-        <p class="indication">
-          <span>*</span> Tous les champs sont obligatoires sauf l'email.
-        </p>
-        <v-row dense>
-          <v-col cols="6">
-            <v-text-field
-              v-model="lastName"
-              color="primary"
-              label="Nom"
-              variant="outlined"
-              density="compact"
-              :rules="validationRules.required"
-            ></v-text-field>
-          </v-col>
+      <v-form ref="formRef" @update:model-value="validateForm">
+        <v-card-title
+          ><v-icon>mdi-account-tie-voice</v-icon>
+          <span class="title">Créer un vendeur</span></v-card-title
+        >
+        <v-card-text>
+          <p class="indication">
+            <span>*</span> Tous les champs sont obligatoires sauf l'email.
+          </p>
+          <v-row dense>
+            <v-col cols="6">
+              <v-text-field
+                v-model="lastName"
+                color="primary"
+                label="Nom"
+                variant="outlined"
+                density="compact"
+                :rules="validationRules.required"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="6">
-            <v-text-field
-              v-model="firstName"
-              color="primary"
-              label="Prénoms"
-              variant="outlined"
-              density="compact"
-              :rules="validationRules.required"
-            ></v-text-field>
-          </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="firstName"
+                color="primary"
+                label="Prénoms"
+                variant="outlined"
+                density="compact"
+                :rules="validationRules.required"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="6">
-            <v-select
-              v-model="gender"
-              color="primary"
-              label="Sexe"
-              :items="['Homme', 'Femme']"
-              variant="outlined"
-              density="compact"
-              :rules="validationRules.required"
-            ></v-select>
-          </v-col>
+            <v-col cols="6">
+              <v-select
+                v-model="gender"
+                color="primary"
+                label="Sexe"
+                :items="['Homme', 'Femme']"
+                variant="outlined"
+                density="compact"
+                :rules="validationRules.required"
+              ></v-select>
+            </v-col>
 
-          <v-col cols="6">
-            <v-date-input
-              v-model="birthDate"
-              color="primary"
-              prepend-icon=""
-              density="compact"
-              label="Date de naissance"
-              variant="outlined"
-              :max="maxDate"
-              :year="new Date(maxDate).getFullYear()"
-              :rules="validationRules.required"
-            >
-            </v-date-input>
-          </v-col>
+            <v-col cols="6">
+              <v-date-input
+                v-model="birthDate"
+                color="primary"
+                prepend-icon=""
+                density="compact"
+                label="Date de naissance"
+                variant="outlined"
+                :max="maxDate"
+                :year="new Date(maxDate).getFullYear()"
+                :rules="validationRules.required"
+              >
+              </v-date-input>
+            </v-col>
 
-          <v-col cols="6">
-            <v-select
-              v-model="maritalStatus"
-              color="primary"
-              label="Situation matrimoniale"
-              :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
-              variant="outlined"
-              density="compact"
-              :rules="validationRules.required"
-            ></v-select>
-          </v-col>
+            <v-col cols="6">
+              <v-select
+                v-model="maritalStatus"
+                color="primary"
+                label="Situation matrimoniale"
+                :items="['Marié', 'Célibataire', 'Divorcé', 'Veuf']"
+                variant="outlined"
+                density="compact"
+                :rules="validationRules.required"
+              ></v-select>
+            </v-col>
 
-          <v-col cols="6">
-            <v-text-field
-              v-model="email"
-              color="primary"
-              label="Email"
-              density="compact"
-              variant="outlined"
-              :rules="validationRules.email"
-            ></v-text-field>
-          </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="email"
+                color="primary"
+                label="Email"
+                density="compact"
+                variant="outlined"
+                :rules="validationRules.email"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="6">
-            <v-text-field
-              v-model="phone"
-              type="number"
-              color="primary"
-              label="Téléphone"
-              density="compact"
-              variant="outlined"
-              :rules="validationRules.phone"
-            ></v-text-field>
-          </v-col>
+            <v-col cols="6">
+              <v-text-field
+                v-model="phone"
+                type="number"
+                color="primary"
+                label="Téléphone"
+                density="compact"
+                variant="outlined"
+                :rules="validationRules.phone"
+              ></v-text-field>
+            </v-col>
 
-          <v-col cols="6">
-            <v-select
-              v-model="identification"
-              color="primary"
-              label="Pièce d'identité"
-              density="compact"
-              :items="['CNI', 'Passeport']"
-              variant="outlined"
-              :rules="validationRules.required"
-            ></v-select>
-          </v-col>
-          <v-col cols="6">
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="identificationNumber"
-                  color="primary"
-                  density="compact"
-                  label="Numéro de la pièce d'identité"
-                  variant="outlined"
-                  :rules="validationRules.indicNumber"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col cols="12">
-            <required-document
-              v-model:file="imageOfIdentification"
-              label="Ajout d'une image de la pièce d'identité"
-              icon="mdi-id-card"
-              :rules="validationRules.required"
-            ></required-document>
-          </v-col>
-        </v-row>
-      </v-card-text>
+            <v-col cols="6">
+              <v-select
+                v-model="identification"
+                color="primary"
+                label="Pièce d'identité"
+                density="compact"
+                :items="['CNI', 'Passeport']"
+                variant="outlined"
+                :rules="validationRules.required"
+              ></v-select>
+            </v-col>
+            <v-col cols="6">
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="identificationNumber"
+                    color="primary"
+                    density="compact"
+                    label="Numéro de la pièce d'identité"
+                    variant="outlined"
+                    :rules="validationRules.indicNumber"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+            </v-col>
+            <v-col cols="12">
+              <required-document
+                v-model="imageOfIdentification"
+                label="Ajout d'une image de la pièce d'identité"
+                icon="mdi-id-card"
+                :rules="[validationRules.requiredFile]"
+              ></required-document>
+            </v-col>
+          </v-row>
+        </v-card-text>
 
-      <v-divider></v-divider>
+        <v-divider></v-divider>
 
-      <v-card-actions>
-        <v-spacer></v-spacer>
+        <v-card-actions>
+          <v-spacer></v-spacer>
 
-        <v-btn
-          text="Annuler"
-          variant="flat"
-          color="secondary"
-          @click="closeModal"
-          class="text-none"
-        ></v-btn>
+          <v-btn
+            text="Annuler"
+            variant="flat"
+            color="secondary"
+            @click="closeModal"
+            class="text-none"
+          ></v-btn>
 
-        <v-btn
-          color="primary"
-          text="Enregistrer"
-          variant="flat"
-          @click="handleSeller"
-          class="text-none"
-          :disabled="!isFormValid"
-        ></v-btn>
-      </v-card-actions>
+          <v-btn
+            color="primary"
+            text="Enregistrer"
+            variant="flat"
+            @click="handleSeller"
+            class="text-none"
+            :disabled="!isFormValid"
+          ></v-btn>
+        </v-card-actions>
+      </v-form>
     </v-card>
   </v-dialog>
   <result-modal-validation
@@ -176,6 +178,7 @@ const showResultModal = ref(false);
 const showTextResultModal = ref("");
 const showTypeResultModal = ref("");
 
+const formRef = ref(null);
 const lastName = ref("");
 const firstName = ref("");
 const gender = ref(null);
@@ -186,30 +189,28 @@ const maritalStatus = ref(null);
 const identification = ref(null);
 const identificationNumber = ref("");
 const imageOfIdentification = ref(null);
+const isFormValid = ref(false);
 
-const isFormValid = computed(() => {
-  return (
-    lastName.value &&
-    firstName.value &&
-    gender.value &&
-    birthDate.value &&
-    phone.value &&
-    identification.value &&
-    maritalStatus.value &&
-    identificationNumber.value &&
-    imageOfIdentification.value
-  );
-});
-
-const required = (v) => {
-  return !!v || "Le champ est obligatoire.";
+const resetForm = () => {
+  lastName.value = "";
+  firstName.value = "";
+  gender.value = null;
+  birthDate.value = null;
+  email.value = "";
+  phone.value = "";
+  maritalStatus.value = null;
+  identification.value = null;
+  identificationNumber.value = "";
+  imageOfIdentification.value = null;
 };
 
-const emailRule = (v) => {
-  return (
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ||
-    "Veuillez entrer une adresse email valide."
-  );
+const validateForm = async () => {
+  if (formRef.value) {
+    const result = await formRef.value.validate(); // Attendre la promesse
+    isFormValid.value = result.valid; // Accéder correctement à 'valid'
+    console.log('result : ',result);
+    console.log('form valide : ',isFormValid.value);
+  }
 };
 
 const emit = defineEmits(["update:open"]);
@@ -224,8 +225,9 @@ const maxDate = new Date(
   .split("T")[0]; // Format ISO pour Vuetify
 
 const handleSeller = async () => {
-  const sellerData = new FormData();
+  await validateForm(); // Vérifie la validité avant d'envoyer
 
+  const sellerData = new FormData();
   sellerData.append("lastName", lastName.value);
   sellerData.append("firstName", firstName.value);
   sellerData.append("gender", gender.value);
@@ -269,6 +271,7 @@ const handleSeller = async () => {
 };
 
 const closeModal = () => {
+  resetForm();
   emit("update:open", false);
 };
 </script>

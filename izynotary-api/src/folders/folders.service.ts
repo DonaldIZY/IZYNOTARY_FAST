@@ -51,62 +51,70 @@ export class FoldersService {
                                 "name": "CNI du vendeur",
                                 "path": createFolderDto.requiredFiles.sellerCNI ? createFolderDto.requiredFiles.sellerCNI : '',
                                 "filled": createFolderDto.requiredFiles.sellerCNI ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "partnerCNI": {
                                 "name": "CNI du conjoint",
                                 "path": createFolderDto.requiredFiles.partnerCNI ? createFolderDto.requiredFiles.partnerCNI : '',
                                 "filled": createFolderDto.requiredFiles.partnerCNI ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "certificateOfBirthOrMarriage": {
                                 "name": "Extrait d'acte de naissance ou de mariage",
                                 "path": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? createFolderDto.requiredFiles.certificateOfBirthOrMarriage : '',
                                 "filled": createFolderDto.requiredFiles.certificateOfBirthOrMarriage ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "CIEOrSODECIInvoice": {
                                 "name": "Facture de CIE ou SODECI",
                                 "path": createFolderDto.requiredFiles.CIEOrSODECIInvoice ? createFolderDto.requiredFiles.CIEOrSODECIInvoice : '',
                                 "filled": createFolderDto.requiredFiles.CIEOrSODECIInvoice ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "taxStatusCertificate": {
                                 "name": "Attestation de situation fiscale",
                                 "path": createFolderDto.requiredFiles.taxStatusCertificate ? createFolderDto.requiredFiles.taxStatusCertificate : '',
                                 "filled": createFolderDto.requiredFiles.taxStatusCertificate ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "titleDeed": {
                                 "name": "Titre de propriété",
                                 "path": createFolderDto.requiredFiles.titleDeed ? createFolderDto.requiredFiles.titleDeed : '',
                                 "filled": createFolderDto.requiredFiles.titleDeed ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "landRegistry": {
                                 "name": "État foncier",
                                 "path": createFolderDto.requiredFiles.landRegistry ? createFolderDto.requiredFiles.landRegistry : '',
                                 "filled": createFolderDto.requiredFiles.landRegistry ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "certificateOfLocation": {
                                 "name": "Certificat de localisation",
                                 "path": createFolderDto.requiredFiles.certificateOfLocation ? createFolderDto.requiredFiles.certificateOfLocation : '',
                                 "filled": createFolderDto.requiredFiles.certificateOfLocation ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             }
                         },
                         "comment": '',
                         "startDate": new Date(),
                         "endDate":
                             createFolderDto.requiredFiles.sellerCNI &&
-                                createFolderDto.requiredFiles.partnerCNI &&
-                                createFolderDto.requiredFiles.certificateOfBirthOrMarriage &&
-                                createFolderDto.requiredFiles.CIEOrSODECIInvoice &&
-                                createFolderDto.requiredFiles.taxStatusCertificate &&
-                                createFolderDto.requiredFiles.titleDeed &&
-                                createFolderDto.requiredFiles.landRegistry &&
-                                createFolderDto.requiredFiles.certificateOfLocation ? new Date() : null
+                            createFolderDto.requiredFiles.partnerCNI &&
+                            createFolderDto.requiredFiles.certificateOfBirthOrMarriage &&
+                            createFolderDto.requiredFiles.CIEOrSODECIInvoice &&
+                            createFolderDto.requiredFiles.taxStatusCertificate &&
+                            createFolderDto.requiredFiles.titleDeed &&
+                            createFolderDto.requiredFiles.landRegistry &&
+                            createFolderDto.requiredFiles.certificateOfLocation ? new Date() : null
                     },
                     {
                         "stepNum": '2',
@@ -224,37 +232,43 @@ export class FoldersService {
                                 "name": "CNI du client",
                                 "path": createFolderDto.requiredFiles.customerCNI ? createFolderDto.requiredFiles.customerCNI : '',
                                 "filled": createFolderDto.requiredFiles.customerCNI ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "criminalRecord": {
                                 "name": "Casier judiciaire",
                                 "path": createFolderDto.requiredFiles.criminalRecord ? createFolderDto.requiredFiles.criminalRecord : '',
                                 "filled": createFolderDto.requiredFiles.criminalRecord ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "lease": {
                                 "name": "Bail",
                                 "path": createFolderDto.requiredFiles.lease ? createFolderDto.requiredFiles.lease : '',
                                 "filled": createFolderDto.requiredFiles.lease ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "sketchOfGeoLocation": {
                                 "name": "Croquis de la situation géographique",
                                 "path": createFolderDto.requiredFiles.sketchOfGeoLocation ? createFolderDto.requiredFiles.sketchOfGeoLocation : '',
                                 "filled": createFolderDto.requiredFiles.sketchOfGeoLocation ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "formForCompanyFormation": {
                                 "name": "Fiche à renseigner de la société à consulter",
                                 "path": createFolderDto.requiredFiles.formForCompanyFormation ? createFolderDto.requiredFiles.formForCompanyFormation : '',
                                 "filled": createFolderDto.requiredFiles.formForCompanyFormation ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
                             "capitalToBeReleased": {
                                 "name": "Capital à libérer",
                                 "path": createFolderDto.requiredFiles.capitalToBeReleased ? createFolderDto.requiredFiles.capitalToBeReleased : '',
                                 "filled": createFolderDto.requiredFiles.capitalToBeReleased ? true : false,
-                                "editBy": ''
+                                "editBy": '',
+                                "allowed": false
                             },
 
                         },

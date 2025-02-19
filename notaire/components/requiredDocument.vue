@@ -12,6 +12,7 @@
       prepend-icon=""
       :prepend-inner-icon="icon"
       density="compact"
+      :rules="rules"
     ></v-file-input>
 
     <!-- Bouton pour afficher le modal -->
@@ -104,9 +105,10 @@ const props = defineProps({
     type: String,
     default: "mdi-paperclip",
   },
+  rules: Array,
 });
 
-const emit = defineEmits(["update:file"]);
+const emit = defineEmits(["update:modelValue"]);
 
 const open = ref(false);
 const file = ref(null);
@@ -163,7 +165,7 @@ const onFileChange = async () => {
         previewContent.value = "Type de fichier non supporté.";
       }
 
-      emit("update:file", selectFile);
+      emit("update:modelValue", selectFile);
     } catch (error) {
       console.error("Erreur lors de la prévisualisation du fichier :", error);
       previewContent.value = "Erreur lors du traitement du fichier.";

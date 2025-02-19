@@ -1,13 +1,14 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { EntityManager, Repository } from 'typeorm';
-import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Identifier } from 'src/identifier/entities/identifier.entity';
-import { Password } from 'src/utils/password.util';
-import { Role } from 'src/roles/entities/role.entity';
 import { EmailService } from 'src/mail/email.service';
+import { Role } from 'src/roles/entities/role.entity';
+import { Password } from 'src/utils/password.util';
+import { EntityManager, Repository } from 'typeorm';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -17,18 +18,18 @@ export class UsersService {
 		@InjectRepository(Role) private readonly rolesRepository: Repository<Role>,
 		private readonly entityManager: EntityManager,
 		private readonly emailService: EmailService
-	) {}
+	) { }
 
 
 	async create(createUserDto: CreateUserDto) {
 
 		const password = await Password.generateRandomPassword(14);
 
-		console.log('Le mot de passe : ',password);
+		console.log('Le mot de passe : ', password);
 
 		const hashedValue = await Password.hashPassword(password);
 
-		const identifier = new Identifier({...hashedValue});
+		const identifier = new Identifier({ ...hashedValue });
 
 		const role = await this.rolesRepository.findOneBy({ id: createUserDto.roleId });
 
@@ -69,8 +70,8 @@ export class UsersService {
 
 	async findAll() {
 		return await this.usersRepository.find({
-			where: { superUser:false }, 
-			relations: { role:true },
+			where: { superUser: false },
+			relations: { role: true },
 		});
 	}
 
@@ -102,12 +103,12 @@ export class UsersService {
 			where: { id },
 			relations: { identifier: true }, // Charge explicitement l'identifier
 		});
-	
+
 		if (!user) {
 			throw new Error("Utilisateur non trouvé");
 		}
-	
+
 		await this.usersRepository.remove(user);
 	}
-  
+
 }
