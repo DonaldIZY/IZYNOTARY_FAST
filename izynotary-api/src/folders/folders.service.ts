@@ -100,13 +100,13 @@ export class FoldersService {
                         "startDate": new Date(),
                         "endDate":
                             createFolderDto.requiredFiles.sellerCNI &&
-                                createFolderDto.requiredFiles.partnerCNI &&
-                                createFolderDto.requiredFiles.certificateOfBirthOrMarriage &&
-                                createFolderDto.requiredFiles.CIEOrSODECIInvoice &&
-                                createFolderDto.requiredFiles.taxStatusCertificate &&
-                                createFolderDto.requiredFiles.titleDeed &&
-                                createFolderDto.requiredFiles.landRegistry &&
-                                createFolderDto.requiredFiles.certificateOfLocation ? new Date() : null
+                            createFolderDto.requiredFiles.partnerCNI &&
+                            createFolderDto.requiredFiles.certificateOfBirthOrMarriage &&
+                            createFolderDto.requiredFiles.CIEOrSODECIInvoice &&
+                            createFolderDto.requiredFiles.taxStatusCertificate &&
+                            createFolderDto.requiredFiles.titleDeed &&
+                            createFolderDto.requiredFiles.landRegistry &&
+                            createFolderDto.requiredFiles.certificateOfLocation ? new Date() : null
                     },
                     {
                         "stepNum": '2',

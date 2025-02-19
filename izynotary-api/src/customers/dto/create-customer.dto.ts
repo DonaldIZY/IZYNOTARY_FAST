@@ -9,4 +9,5 @@
     identificationNumber: string;
     imageOfIdentification: string;
     maritalStatus: string;
+    platformAccess: boolean | string;
 }

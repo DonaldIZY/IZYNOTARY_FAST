@@ -11,7 +11,7 @@ export class Folder {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ unique: true })
     folderNum: string;
 
     @Column({ type: "enum", enum: ["Vente", "Constitution de société", "Modification de société", "Succession de biens mobiliers", "Succession de biens immobiliers", "Crédit"] })

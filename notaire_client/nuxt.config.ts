@@ -1,7 +1,7 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+  ssr: false, // Désactive le SSR pour passer en CSR
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   build: {
@@ -19,17 +19,12 @@ export default defineNuxtConfig({
   ],
   vite: {
     server: {
-      port: process.env.PORT ? parseInt(process.env.PORT, 10) : 2610,
+      port: 2611,
     },
     vue: {
       template: {
         transformAssetUrls,
       },
-    },
-  },
-  runtimeConfig: {
-    public: {
-      baseUrl: process.env.API_BASE_URL,
     },
   },
 })

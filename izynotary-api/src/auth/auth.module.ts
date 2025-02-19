@@ -1,16 +1,18 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './jwt.strategy';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Customer } from 'src/customers/entities/customer.entity';
+import { User } from 'src/users/entities/user.entity';
+import { AuthController } from './auth.controller';
+import { AuthService } from './auth.service';
+import { JwtStrategy, JwtStrategy_customer } from './jwt.strategy';
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([User]),
+		TypeOrmModule.forFeature([User, Customer]),
 		PassportModule.register({ defaultStrategy: 'jwt' }),
 		JwtModule.registerAsync({
 			imports: [ConfigModule],
@@ -18,12 +20,12 @@ import { JwtStrategy } from './jwt.strategy';
 			useFactory: (configService: ConfigService) => ({
 				secret: configService.get('JWT_SECRET'),
 				signOptions: { expiresIn: `${configService.get('JWT_EXPIRATION')}s` },
-				
+
 			}),
 		})
 	],
-	exports: [JwtStrategy, PassportModule],
-	providers: [AuthService, JwtStrategy],
+	exports: [JwtStrategy, JwtStrategy_customer, PassportModule],
+	providers: [AuthService, JwtStrategy, JwtStrategy_customer],
 	controllers: [AuthController]
 })
-export class AuthModule {}
+export class AuthModule { }

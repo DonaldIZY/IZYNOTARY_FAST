@@ -1,8 +1,10 @@
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { join } from 'path';
-import * as fs from 'fs';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
+import * as fs from 'fs';
+import { join } from 'path';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
 
@@ -18,7 +20,7 @@ async function bootstrap() {
   const companyModificationDir = join(procedureDir, 'companyModification');
   const transferOfMovablePropertyDir = join(procedureDir, 'transferOfMovableProperty');
   const transferOfRealEstateDir = join(procedureDir, 'transferOfRealEstate');
-  
+
   fs.mkdirSync(customerDir, { recursive: true });
   fs.mkdirSync(sellerDir, { recursive: true });
   fs.mkdirSync(sellinngDir, { recursive: true });
@@ -26,20 +28,33 @@ async function bootstrap() {
   fs.mkdirSync(companyModificationDir, { recursive: true });
   fs.mkdirSync(transferOfMovablePropertyDir, { recursive: true });
   fs.mkdirSync(transferOfRealEstateDir, { recursive: true });
-  
-  
+
+
   const app = await NestFactory.create(AppModule);
 
   app.use(cookieParser());
 
   app.enableCors({
-    origin: ["http://localhost:2610", "http://localhost:2611", "http://izynotary.izydr.net", "https://izynotary.izydr.net"], // Origine autorisée (frontend)
+    origin: ["http://localhost:2610", "http://localhost:2611", "http://localhost:3000", "http://izynotary.izydr.net", "https://izynotary.izydr.net"], // Origine autorisée (frontend)
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true, // Si vous avez besoin d'envoyer des cookies ou des headers d'authentification
   });
 
   app.use(cookieParser()); // Middleware pour gérer les cookies
+
+  // Configuration Swagger
+  const config = new DocumentBuilder()
+    .setTitle('API IzyNotary')
+    .setDescription('Documentation de l\'API pour le backend de IzyNotary')
+    .setVersion('1.0')
+    .addBearerAuth() // Ajoute un champ pour l'authentification via token
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config, {
+    deepScanRoutes: true,
+  });
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(process.env.APP_PORT ?? 3000);
 }

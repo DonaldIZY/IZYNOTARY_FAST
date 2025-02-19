@@ -22,16 +22,16 @@ export class Seller {
     @Column()
     birthDate: Date;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
 
-    @Column()
+    @Column({ unique: true })
     phone: string;
 
     @Column()
     identification: string;
 
-    @Column()
+    @Column({ unique: true })
     identificationNumber: string;
 
     @Column()

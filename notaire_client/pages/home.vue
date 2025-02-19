@@ -5,7 +5,7 @@
   <div class="w-full d-flex justify-center">
     <div class="w-75 ma-2 center">
       <v-row>
-        <v-col cols="12" sm="6" md="4">
+        <v-col cols="12" sm="6">
           <v-card
             class="mx-auto rounded-lg hover-card"
             to="/selling"
@@ -23,7 +23,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" sm="6" md="4">
+        <v-col cols="12" sm="6">
           <v-card
             class="mx-auto rounded-lg hover-card"
             :to="'/companyFormation'"
@@ -37,74 +37,6 @@
             ></v-img>
             <v-card-title class="my-1 text-center titleCardText">
               Constitution de société
-            </v-card-title>
-          </v-card>
-        </v-col>
-
-        <v-col cols="12" sm="6" md="4">
-          <v-card
-            class="mx-auto rounded-lg hover-card"
-            @click="setSelectedData(companyModificationData)"
-            to="/modificationCompany"
-          >
-            <v-img
-              src="~/assets/img/modifSoc.png"
-              class="mb-2 mt-2 mx-2 rounded-lg"
-              cover
-              alt="Procédure de modification de société"
-            ></v-img>
-            <v-card-title class="my-1 text-center titleCardText">
-              Modification de société
-            </v-card-title>
-          </v-card>
-        </v-col>
-
-        <v-col cols="12" sm="6" md="4">
-          <v-card
-            class="mx-auto rounded-lg hover-card"
-            @click="setSelectedData(movablePropertyData)"
-            to="/transferOfMovableProperty"
-          >
-            <v-img
-              src="~/assets/img/succBienMob.png"
-              class="mb-2 mt-2 mx-2 rounded-lg"
-              cover
-              alt="Procédure de succession de biens mobiliers"
-            ></v-img>
-            <v-card-title class="my-1 text-center titleCardText">
-              Succession de biens mobiliers
-            </v-card-title>
-          </v-card>
-        </v-col>
-
-        <v-col cols="12" sm="6" md="4">
-          <v-card
-            class="mx-auto rounded-lg hover-card"
-            @click="setSelectedData(realEstateData)"
-            to="/transferOfRealEstate"
-          >
-            <v-img
-              src="~/assets/img/succBienImmob.png"
-              class="mb-2 mt-2 mx-2 rounded-lg"
-              cover
-              alt="Procédures de succession de biens immobiliers"
-            ></v-img>
-            <v-card-title class="my-1 text-center titleCardText">
-              Succession de biens immobiliers
-            </v-card-title>
-          </v-card>
-        </v-col>
-
-        <v-col cols="12" sm="6" md="4">
-          <v-card class="mx-auto rounded-lg hover-card" to="" disabled>
-            <v-img
-              src="~/assets/img/credit.png"
-              class="mb-2 mt-2 mx-2 rounded-lg"
-              cover
-              alt="Procédure de crédit"
-            ></v-img>
-            <v-card-title class="my-1 text-center titleCardText">
-              Crédit
             </v-card-title>
           </v-card>
         </v-col>
@@ -124,13 +56,18 @@ const sellingData = ref([]);
 
 const store = useCardStore();
 
+const authStore = useAuthStore();
+const customerId = authStore.customerId;
+
 const setSelectedData = (data) => {
   store.setSelectedData(data);
 };
 
 onMounted(async () => {
   try {
-    const customerFetch = await $fetch(API_SERVER_URL + `/customers/2`);
+    const customerFetch = await $fetch(
+      API_SERVER_URL + `/customers/${customerId}`
+    );
 
     console.log("datas : ", customerFetch);
 
@@ -150,12 +87,6 @@ onMounted(async () => {
     sellingData.value = customerFetch.folders.filter(
       (procedure) => procedure.procedureType == "Vente"
     );
-
-    console.log("companyFormationData : ", companyFormationData);
-    console.log("companyModificationData : ", companyModificationData);
-    console.log("movablePropertyData : ", movablePropertyData);
-    console.log("realEstateData : ", realEstateData);
-    console.log("sellingData : ", sellingData);
   } catch (err) {
     //error.value = err.message;
     console.error(err);

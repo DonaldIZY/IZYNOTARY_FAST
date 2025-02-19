@@ -1,48 +1,68 @@
-// import { defineStore } from 'pinia';
-// import Cookie from 'js-cookie';
-// import { jwtDecode } from 'jwt-decode';
+import { defineStore } from 'pinia';
+import { API_SERVER_URL } from "~/utils/constants";
 
-// export const useAuthStore = defineStore('auth', {
-//     state: () => ({
-//         token: null as string | null,
-//         userId: null as number | null,
-//         userName: null as string | null,
-//         userEmail: null as string | null,
-//         userRole: null as string | null
-//     }),
+export const useAuthStore = defineStore('auth', {
+    state: () => ({
+        customerId: null as number | null,
+        customerName: null as string | null,
+        customerEmail: null as string | null,
+        isAuthenticated: false
+    }),
 
-//     actions: {
+    actions: {
 
-//         setToken(token: string) {
-//             this.token = token;
-//             const decoded = jwtDecode(token) as { userId: number, userName: string, userEmail: string, userRole: string };
-//             this.userId = decoded.userId;
-//             this.userName = decoded.userName;
-//             this.userEmail = decoded.userEmail; // Assuming email is a field in the JWT payload. Replace with the actual field name.
-//             this.userRole = decoded.userRole;
-//             Cookie.set('auth_token', token, { expires: 1 }); // Stocker le token dans un cookie (valable 1 jour)
-//         },
+        async fetchCustomer() {
+            try {
+                const data = await $fetch<{ customerId: number, customerName: string, customerEmail: string }>(`${API_SERVER_URL}/auth/me/customer`, { credentials: 'include' });
 
-//         clearToken() {
-//             this.token = null;
-//             this.userId = null;
-//             this.userName = null;
-//             this.userEmail = null;  // Assuming email is a field in the JWT payload. Replace with the actual field name.
-//             this.userRole = null;
-//             Cookie.remove('auth_token'); // Supprimer le cookie
-//         },
+                if (data) {
+                    this.customerId = data.customerId;
+                    this.customerName = data.customerName;
+                    this.customerEmail = data.customerEmail;
+                    this.isAuthenticated = true;
+                }
 
-//         initializeToken() {
-//             const token = Cookie.get('auth_token');
-//             if (token) {
-//                 const decoded = jwtDecode(token) as { userId: number, userName: string, userEmail: string, userRole: string };
-//                 this.token = token;
-//                 this.userId = decoded.userId;
-//                 this.userName = decoded.userName;
-//                 this.userEmail = decoded.userEmail; // Assuming email is a field in the JWT payload. Replace with the actual field name.
-//                 this.userRole = decoded.userRole;
-//             }
-//         },
+                console.log("Data customer : ", data);
 
-//     },
-// });
+            } catch (error) {
+                console.error('Erreur lors de la récupération des infos client', error);
+                this.clearCustomer();
+            }
+        },
+
+        async login(credentials: { email: string, password: string }) {
+            try {
+                const router = useRouter();
+                const data = await $fetch(`${API_SERVER_URL}/auth/login/customer`, {
+                    method: 'POST',
+                    body: credentials,
+                    credentials: 'include', // Nécessaire pour envoyer/recevoir les cookies HTTP-Only
+                });
+
+                if (data) {
+                    await this.fetchCustomer(); // Récupère les infos utilisateur après connexion
+                    router.push("/home");
+                }
+            } catch (error) {
+                console.error('Erreur de connexion', error);
+            }
+        },
+
+        async logout() {
+            const router = useRouter();
+
+            await $fetch(`${API_SERVER_URL}/auth/logout/customer`, { method: 'POST', credentials: 'include' });
+            this.clearCustomer();
+
+            router.push("/login");
+        },
+
+        clearCustomer() {
+            this.customerId = null;
+            this.customerName = null;
+            this.customerEmail = null;
+            this.isAuthenticated = false;
+        }
+
+    },
+});

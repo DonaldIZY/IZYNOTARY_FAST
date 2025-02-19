@@ -7,6 +7,25 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as fs from 'fs';
 
+function formatProcedureType (val: String) {
+  let result: String;
+
+  if(val.toLowerCase() == "constitution de société") {
+    result = "companyFormation";
+  }else if(val.toLowerCase() == "modification de société") {
+    result = "companyModification";
+  }else if(val.toLowerCase() == "vente") {
+    result = "selling";
+  }else if(val.toLowerCase() == "succession de biens mobiliers") {
+    result = "transferOfMovableProperty";
+  }else if(val.toLowerCase() == "succession de biens immobiliers") {
+    result = "transferOfRealEstate";
+  }/*else if(val.toLowerCase() == "crédit") {
+
+  }*/
+  return result;
+}
+
 
 @Controller('steps')
 export class StepsController {
@@ -38,24 +57,7 @@ export class StepsController {
       storage: diskStorage({
         destination: (req, file, cb) => {
 
-          function formatProcedureType (val: String) {
-            let result: String;
-
-            if(val.toLowerCase() == "constitution de société") {
-              result = "companyFormation";
-            }else if(val.toLowerCase() == "modification de société") {
-              result = "companyModification";
-            }else if(val.toLowerCase() == "vente") {
-              result = "selling";
-            }else if(val.toLowerCase() == "succession de biens mobiliers") {
-              result = "transferOfMovableProperty";
-            }else if(val.toLowerCase() == "succession de biens immobiliers") {
-              result = "transferOfRealEstate";
-            }/*else if(val.toLowerCase() == "crédit") {
-
-            }*/
-            return result;
-          }
+          
 
           // req.body.procedureType = formatProcedureType(req.body.procedureType);
 
@@ -90,7 +92,7 @@ export class StepsController {
       const uploadedFiles = {};
       var filenameList = [];
       files.forEach((file) => {
-        uploadedFiles[file.fieldname] = `/uploads/procedures/${updateStepDto.procedureType}/${updateStepDto.folderNum}/${file.filename}`;
+        uploadedFiles[file.fieldname] = `/uploads/procedures/${formatProcedureType(updateStepDto.procedureType)}/${updateStepDto.folderNum}/${file.filename}`;
         filenameList.push(file.fieldname);
       });
 
@@ -102,7 +104,13 @@ export class StepsController {
       updateStepDto.documents =  [];
     }
 
+
+
     console.log("Final folder: ", updateStepDto);
+    // if(updateStepDto['subStepStatus'] == 'null') {
+    //   delete updateStepDto['subStepStatus'];
+    //   console.log("Final folder after deletion : ", updateStepDto);
+    // }
 
     return this.stepsService.updateTwo(+id, updateStepDto);
   }

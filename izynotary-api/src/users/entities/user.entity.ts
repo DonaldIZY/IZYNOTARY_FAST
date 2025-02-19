@@ -16,10 +16,10 @@ export class User {
     @Column()
     firstName: string;
 
-    @Column()
+    @Column({ unique: true })
     email: string;
 
-    @Column({ nullable: true })
+    @Column({ nullable: true, unique: true })
     phoneNumber: string;
 
     @OneToOne(() => Identifier, identifier => identifier.user, { cascade: true })
