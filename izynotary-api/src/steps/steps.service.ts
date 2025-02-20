@@ -200,38 +200,58 @@ export class StepsService {
         ? updateStepDto.contact
         : '225' + updateStepDto.contact
     }`;
-    var message: string = "";
+    var message: string = 
+`Acte notarié de ${updateStepDto.procedureType}
+Numéro : ${updateStepDto.folderNum}.`;
 
-    if(updateStepDto["subStepStatus"]) {
-      if(Object.keys(updateStepDto.uploadedFiles).length > 0) {
-        message = 
-`Acte notarié de ${updateStepDto.procedureType}
-Numéro : ${updateStepDto.folderNum}.
-${updateStepDto.documents.length > 1 ? 'vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).
-La procédure est désormais ${updateStepDto["subStepStatus"]}`;
+    if(!['fourniture des pièces', 'signature des actes'].includes(updateStepDto['action'].toLowerCase())) {
+      if(updateStepDto["subStepStatus"]) {
+        if(Object.keys(updateStepDto.uploadedFiles).length > 0) {
+          message += 
+`
+${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).
+La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
+        }else{
+          message += 
+`
+La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
+        }
       }else{
-        message = 
-`Acte notarié de ${updateStepDto.procedureType}
-Numéro : ${updateStepDto.folderNum}.
-La procédure est désormais ${updateStepDto["subStepStatus"]}`;
+        message += 
+`
+${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
       }
-    }else{
-      message = 
-`Acte notarié de ${updateStepDto.procedureType}
-Numéro : ${updateStepDto.folderNum}.
-${updateStepDto.documents.length > 1 ? 'vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
+    }
+
+    if(updateStepDto['action'].toLowerCase() == "signature des actes") {
+      if(updateStepDto["subStepStatus"]) {
+        if(Object.keys(updateStepDto.uploadedFiles).length > 0) {
+          message += 
+`
+Vos actes sont maintenant disponibles, veuillez vous rendre chez le notaire pour procéder à la signature.
+La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
+        }else{
+          message += 
+`
+La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
+        }
+      }else{
+        message += 
+`
+${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
+      }
     }
 
     if(updateStepDto.allowedFilesList && updateStepDto.allowedFilesList.length > 0) {
       message += 
 `
-Les documents ${updateStepDto.allowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ont été validés.`;
-    }
+${updateStepDto.allowedFilesList.length > 1 ? 'Les documents' : 'Le document'} ${updateStepDto.allowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ${updateStepDto.allowedFilesList.length > 1 ? 'ont été validés' : 'a été validé'}.`;
+  }
 
     if(updateStepDto.disallowedFilesList && updateStepDto.disallowedFilesList.length > 0) {
       message += 
 `
-Les documents ${updateStepDto.disallowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ont été refusés, veuillez en fournir d'autres.`;
+${updateStepDto.allowedFilesList.length > 1 ? 'Les documents' : 'Le document'} ${updateStepDto.disallowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ${updateStepDto.allowedFilesList.length > 1 ? 'ont été refusés' : 'a été refusé'}, veuillez en fournir ${updateStepDto.allowedFilesList.length > 1 ? "d'autres" : 'un autre'}.`;
     }
 
   
