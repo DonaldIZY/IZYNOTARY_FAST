@@ -18,8 +18,8 @@
     </v-row>
 
     <v-row>
-      <v-col cols="12" lg="3" style="height: 100%">
-        <v-sheet :elevation="3" rounded class="pa-2">
+      <v-col cols="12" lg="3">
+        <v-sheet :elevation="3" rounded class="pa-2" style="height: 100%">
           <h4 class="mb-3">Recherche avancée</h4>
           <v-form v-model="form">
             <v-row>
