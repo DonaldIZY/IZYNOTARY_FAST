@@ -251,15 +251,17 @@ ${updateStepDto.allowedFilesList.length > 1 ? 'Les documents' : 'Le document'} $
     if(updateStepDto.disallowedFilesList && updateStepDto.disallowedFilesList.length > 0) {
       message += 
 `
-${updateStepDto.allowedFilesList.length > 1 ? 'Les documents' : 'Le document'} ${updateStepDto.disallowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ${updateStepDto.allowedFilesList.length > 1 ? 'ont été refusés' : 'a été refusé'}, veuillez en fournir ${updateStepDto.allowedFilesList.length > 1 ? "d'autres" : 'un autre'}.`;
+${updateStepDto.disallowedFilesList.length > 1 ? 'Les documents' : 'Le document'} ${updateStepDto.disallowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ${updateStepDto.disallowedFilesList.length > 1 ? 'ont été refusés' : 'a été refusé'}, veuillez en fournir ${updateStepDto.disallowedFilesList.length > 1 ? "d'autres" : 'un autre'}.`;
     }
 
   
     var encodedMessage = encodeURIComponent(message);
     const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 
-    let a = await fetch(smsUrl);
-    console.log('sms response : ', a);
+    if((updateStepDto['action'].toLowerCase() == "fourniture des pièces" && Object.keys(updateStepDto.uploadedFiles).length > 0 && (updateStepDto.allowedFilesList.length > 0 || updateStepDto.disallowedFilesList.length > 0)) || updateStepDto['action'].toLowerCase() != "fourniture des pièces" && Object.keys(updateStepDto.uploadedFiles).length > 0) {
+      let a = await fetch(smsUrl);
+      console.log('sms response : ', a);
+    }
 
     return {
       status: true,

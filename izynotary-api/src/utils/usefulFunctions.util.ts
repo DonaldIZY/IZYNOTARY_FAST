@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export const translateFieldNameToFrench = function (val: string) {
   if (["customerCNI", "customerCNI"].includes(val)) {
-    return "CNI du client";
+    return "CNI";
   } else if (val == "criminalRecord") {
     return "Casier judiciaire";
   } else if (val == "lease") {
