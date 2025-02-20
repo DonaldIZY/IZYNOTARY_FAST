@@ -64,6 +64,11 @@ export class StepsService {
           step.steps[searchedStepIndex].documents[docName].allowed = true;
         }
       }
+      if(updateStepDto.disallowedFilesList && updateStepDto.disallowedFilesList.length > 0) {
+        for(const docName of updateStepDto.disallowedFilesList) {
+          step.steps[searchedStepIndex].documents[docName].disallowedFilesList = true;
+        }
+      }
     }
 
     if(Object.keys(updateStepDto.uploadedFiles).length > 0) {

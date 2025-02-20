@@ -8,4 +8,5 @@ export class UpdateStepDto extends PartialType(CreateStepDto) {
   uploadedFiles: any;
   documents: any;
   allowedFilesList?: string[];
+  disallowedFilesList?: string[];
 }
