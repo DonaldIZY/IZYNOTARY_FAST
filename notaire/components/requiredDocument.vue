@@ -108,7 +108,7 @@ const props = defineProps({
   rules: Array,
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:file"]);
 
 const open = ref(false);
 const file = ref(null);
@@ -165,7 +165,7 @@ const onFileChange = async () => {
         previewContent.value = "Type de fichier non supporté.";
       }
 
-      emit("update:modelValue", selectFile);
+      emit("update:file", selectFile);
     } catch (error) {
       console.error("Erreur lors de la prévisualisation du fichier :", error);
       previewContent.value = "Erreur lors du traitement du fichier.";
