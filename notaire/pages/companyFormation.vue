@@ -405,9 +405,7 @@ const handleProcedure = async () => {
     }
   }
 
-  for (const key in requiredFiles) {
-    procedureData.get(key);
-  }
+  console.log("key value : ", procedureData.entries());
 
   try {
     const data = await $fetch(API_SERVER_URL + `/folders/companyFormation`, {

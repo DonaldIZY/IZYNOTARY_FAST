@@ -92,7 +92,13 @@
           variant="flat"
           text="Enregistrer"
           :disabled="isSaveDisabled"
-          @click="updateProcedure(procedureData)"
+          @click="updateProcedure({
+                          ...newProcedureData,
+                          contact: procedureData.customer.phone,
+                          folderNum: procedureData.folderNum,
+                          procedureType: procedureData.procedureType,
+                          id: procedureData.step.id,
+                        })" 
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -181,6 +187,12 @@
       >
     </v-card>
   </v-dialog>
+  <result-modal-validation
+    :text="showTextResultModifyModal"
+    :open="showResultModifyModal"
+    :type="showTypeResultModifyModal"
+    @update:open="showResultModifyModal = $event"
+  />
 </template>
 
 <script setup>
@@ -195,11 +207,23 @@ const stepList = ref([]);
 const loading = ref(false);
 const selectedFile = ref(null);
 
+const showTextResultModifyModal = ref(null);
+const showTypeResultModifyModal = ref(null);
+const showResultModifyModal = ref(false);
+
 const handleFileChange = (file, key) => {
   if (file) {
     selectedFile.value = file;
-    console.log("Fichier sélectionné pour", key, ":", file);
+
+    console.log("file : ", file);
+    if(!newProcedureData.action) {
+      newProcedureData.action = procedureData.value.step.steps[0].action;
+    }
+    newProcedureData.documents[key] = file;
+    console.log("newProcedureData : ", newProcedureData);
+    console.log("procedureData : ", procedureData.value);
   }
+
 };
 
 const open = ref(false);
@@ -289,18 +313,8 @@ watchEffect(() => {
 });
 
 const newProcedureData = reactive({
-  action: computed(() => procedureData.value?.step?.steps?.[0]?.action || ""),
-  documents: computed(() => {
-    const documents = {};
-    if (procedureData.value?.step?.steps?.[0]?.documents) {
-      for (const docName of Object.keys(
-        procedureData.value.step.steps[0].documents
-      )) {
-        documents[docName] = null;
-      }
-    }
-    return documents;
-  }),
+  action: null,//computed(() => procedureData.value?.step?.steps?.[0]?.action || ""),
+  documents: {},
 });
 
 const closeModal = () => {
@@ -328,26 +342,13 @@ const updateProcedure = async (val) => {
   try {
     var dataToSend = new FormData();
 
-    // dataToSend.append("action", val.action);
+    dataToSend.append("action", val.action);
     dataToSend.append("folderNum", val.folderNum);
     dataToSend.append("procedureType", val.procedureType);
-    // dataToSend.append("contact", val.contact);
+    dataToSend.append("contact", val.contact);
 
-    if (val.allowedFilesList) {
-      for (const fileKey of Object.keys(val.allowedFilesList)) {
-        dataToSend.append("allowedFilesList", val.allowedFilesList[fileKey]);
-      }
-    }
 
-    // if (Object.keys(val).includes("comment")) {
-    //   dataToSend.append("comment", val.comment);
-    // }
-
-    if (Object.keys(val).includes("subStepStatus")) {
-      dataToSend.append("subStepStatus", val.subStepStatus);
-    }
-
-    if (val.documents) {
+    if (val.documents && Object.keys(val.documents).length > 0) {
       for (const fileKey of Object.keys(val.documents)) {
         dataToSend.append(fileKey, val.documents[fileKey]);
       }
@@ -388,7 +389,7 @@ const updateProcedure = async (val) => {
         showResultModifyModal.value = true;
       }
 
-      loadProcedures();
+      loadProcedure();
       closeModal();
     }
     console.log("back response : ", resultOfProcedureUpdate);
