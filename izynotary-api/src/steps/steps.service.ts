@@ -238,7 +238,7 @@ La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
       }else{
         message += 
 `
-${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
+${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont maintenant disponibles' : 'Votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est maintenant disponible'}.`;
       }
     }
 
@@ -258,7 +258,7 @@ ${updateStepDto.disallowedFilesList.length > 1 ? 'Les documents' : 'Le document'
     var encodedMessage = encodeURIComponent(message);
     const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 
-    if((updateStepDto['action'].toLowerCase() == "fourniture des pièces" && Object.keys(updateStepDto.uploadedFiles).length > 0 && (updateStepDto.allowedFilesList.length > 0 || updateStepDto.disallowedFilesList.length > 0)) || updateStepDto['action'].toLowerCase() != "fourniture des pièces" && Object.keys(updateStepDto.uploadedFiles).length > 0) {
+    if((updateStepDto['action'].toLowerCase() == "fourniture des pièces" && (updateStepDto.allowedFilesList.length > 0 || updateStepDto.disallowedFilesList.length > 0 || updateStepDto["subStepStatus"])) || (updateStepDto['action'].toLowerCase() != "fourniture des pièces" && (Object.keys(updateStepDto.uploadedFiles).length > 0 || updateStepDto["subStepStatus"]))) {
       let a = await fetch(smsUrl);
       console.log('sms response : ', a);
     }
