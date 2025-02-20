@@ -209,7 +209,7 @@ Numéro : ${updateStepDto.folderNum}.`;
         if(Object.keys(updateStepDto.uploadedFiles).length > 0) {
           message += 
 `
-${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).
+${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre document ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).
 La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
         }else{
           message += 
@@ -219,7 +219,7 @@ La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
       }else{
         message += 
 `
-${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
+${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre document ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
       }
     }
 
