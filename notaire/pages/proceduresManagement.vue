@@ -19,7 +19,7 @@
 
     <v-row>
       <v-col cols="12" lg="3">
-        <v-sheet :elevation="3" rounded class="pa-2">
+        <v-sheet :elevation="3" rounded class="pa-2" style="height: 100%">
           <h4 class="mb-3">Recherche avancée</h4>
           <v-form v-model="form">
             <v-row>
@@ -297,7 +297,7 @@ const openConf = ref(false);
 
 const fireAlert = (val) => {
   alert(val);
-}
+};
 
 const toggleConfModal = (item) => {
   openConf.value = !openConf.value;
@@ -475,27 +475,30 @@ const updateProcedure = async (val) => {
     dataToSend.append("contact", val.contact);
     dataToSend.append("sender", "notairesquad");
 
-    if(val.allowedFilesList && val.allowedFilesList.length > 0) {
+    if (val.allowedFilesList && val.allowedFilesList.length > 0) {
       for (const fileKey of Object.keys(val.allowedFilesList)) {
         dataToSend.append("allowedFilesList", val.allowedFilesList[fileKey]);
       }
     }
 
-    if(val.disallowedFilesList && val.disallowedFilesList.length > 0) {
+    if (val.disallowedFilesList && val.disallowedFilesList.length > 0) {
       for (const fileKey of Object.keys(val.disallowedFilesList)) {
-        dataToSend.append("disallowedFilesList", val.disallowedFilesList[fileKey]);
+        dataToSend.append(
+          "disallowedFilesList",
+          val.disallowedFilesList[fileKey]
+        );
       }
     }
 
-    if(Object.keys(val).includes("comment")) {
+    if (Object.keys(val).includes("comment")) {
       dataToSend.append("comment", val.comment);
     }
 
-    if(Object.keys(val).includes("subStepStatus")) {
+    if (Object.keys(val).includes("subStepStatus")) {
       dataToSend.append("subStepStatus", val.subStepStatus);
     }
-  
-    if(val.documents && Object.keys(val.documents).length > 0) {
+
+    if (val.documents && Object.keys(val.documents).length > 0) {
       for (const fileKey of Object.keys(val.documents)) {
         dataToSend.append(fileKey, val.documents[fileKey]);
       }
