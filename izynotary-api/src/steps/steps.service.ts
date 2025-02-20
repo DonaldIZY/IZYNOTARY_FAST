@@ -60,13 +60,16 @@ export class StepsService {
 
     if(updateStepDto['action'] == 'Fourniture des pièces') {
       if(updateStepDto.allowedFilesList && updateStepDto.allowedFilesList.length > 0) {
+        console.log('SUBSTEP DOC : ', step.steps[searchedStepIndex].documents);
         for(const docName of updateStepDto.allowedFilesList) {
+          
           step.steps[searchedStepIndex].documents[docName].allowed = true;
         }
       }
       if(updateStepDto.disallowedFilesList && updateStepDto.disallowedFilesList.length > 0) {
+        console.log('SUBSTEP DOC : ', step.steps[searchedStepIndex].documents);
         for(const docName of updateStepDto.disallowedFilesList) {
-          step.steps[searchedStepIndex].documents[docName].disallowedFilesList = true;
+          step.steps[searchedStepIndex].documents[docName].disallowed = true;
         }
       }
     }

@@ -104,6 +104,13 @@ export class StepsController {
       updateStepDto.documents =  [];
     }
 
+    if(updateStepDto.allowedFilesList && !(updateStepDto.allowedFilesList instanceof Array)) {
+      updateStepDto.allowedFilesList = [updateStepDto.allowedFilesList];
+    }
+
+    if(updateStepDto.disallowedFilesList && !(updateStepDto.disallowedFilesList instanceof Array)) {
+      updateStepDto.disallowedFilesList = [updateStepDto.disallowedFilesList];
+    }
 
 
     console.log("Final folder: ", updateStepDto);

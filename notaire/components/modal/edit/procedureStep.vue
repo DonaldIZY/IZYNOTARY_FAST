@@ -46,7 +46,7 @@ console.log(
 </script>
 
 <template>
-  <v-dialog v-model="props.show" max-width="600">
+  <v-dialog v-model="props.show" max-width="900">
     <v-card>
       <v-card-title
         class="titleModification d-flex justify-space-between align-center"
@@ -166,9 +166,13 @@ console.log(
                         } 
                       }
                     "
-                    :disabled="step.action == 'Fourniture des pièces' && step.documents[doc].allowed"
+                    :disabled="step.action == 'Fourniture des pièces' && (step.documents[doc].allowed || step.documents[doc].disallowed)"
                   />
-                  <v-chip v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled">{{ step.documents[doc].name }}</v-chip>
+                  <v-chip 
+                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && !step.documents[doc].disallowed && step.documents[doc].filled" 
+                    :style="{marginBottom: '25px'}"
+                  >{{ step.documents[doc].name }}</v-chip>
+                  
                   <required-document-customized
                     v-if="
                       step.documents[doc].path != '' ||
@@ -178,6 +182,9 @@ console.log(
                     :filePath="API_SERVER_URL + step.documents[doc].path"
                     :receivedFile="newProcedureData.documents[doc]"
                   />
+
+                  <v-icon v-if="step.action == 'Fourniture des pièces' && step.documents[doc].allowed && !step.documents[doc].disallowed && step.documents[doc].filled" icon="mdi-check-decagram" color="green" size="35"></v-icon>
+                  <v-icon v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].disallowed && step.documents[doc].filled" icon="mdi-close-circle" color="red" size="35"></v-icon>
                   <!-- <v-switch 
                     v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled"
                     v-model="allowedFilesList"
@@ -191,7 +198,7 @@ console.log(
                     }"
                   /> -->
                   <v-btn 
-                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled && !disallowedFilesList.includes(doc)"
+                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && !step.documents[doc].disallowed && step.documents[doc].filled && !disallowedFilesList.includes(doc)"
                     color="green"
                     :text="allowedFilesList.includes(doc) ? 'Validé!' : 'Valider ?'"
                     variant="tonal" 
@@ -216,7 +223,7 @@ console.log(
                     }"
                   /> -->
                   <v-btn 
-                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].disallowed && step.documents[doc].filled && !allowedFilesList.includes(doc)"
+                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].disallowed && !step.documents[doc].allowed && step.documents[doc].filled && !allowedFilesList.includes(doc)"
                     color="red"
                     :text="disallowedFilesList.includes(doc) ? 'Refusé!' : 'Refuser ?'"
                     variant="tonal" 

@@ -494,7 +494,7 @@ const updateProcedure = async (val) => {
       dataToSend.append("subStepStatus", val.subStepStatus);
     }
   
-    if(val.documents) {
+    if(val.documents && Object.keys(val.documents).length > 0) {
       for (const fileKey of Object.keys(val.documents)) {
         dataToSend.append(fileKey, val.documents[fileKey]);
       }

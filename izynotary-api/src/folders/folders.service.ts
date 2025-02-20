@@ -241,42 +241,48 @@ export class FoldersService {
                                 "path": createFolderDto.requiredFiles.customerCNI ? createFolderDto.requiredFiles.customerCNI : '',
                                 "filled": createFolderDto.requiredFiles.customerCNI ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "criminalRecord": {
                                 "name": "Casier judiciaire",
                                 "path": createFolderDto.requiredFiles.criminalRecord ? createFolderDto.requiredFiles.criminalRecord : '',
                                 "filled": createFolderDto.requiredFiles.criminalRecord ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "lease": {
                                 "name": "Bail",
                                 "path": createFolderDto.requiredFiles.lease ? createFolderDto.requiredFiles.lease : '',
                                 "filled": createFolderDto.requiredFiles.lease ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "sketchOfGeoLocation": {
                                 "name": "Croquis de la situation géographique",
                                 "path": createFolderDto.requiredFiles.sketchOfGeoLocation ? createFolderDto.requiredFiles.sketchOfGeoLocation : '',
                                 "filled": createFolderDto.requiredFiles.sketchOfGeoLocation ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "formForCompanyFormation": {
                                 "name": "Fiche à renseigner de la société à consulter",
                                 "path": createFolderDto.requiredFiles.formForCompanyFormation ? createFolderDto.requiredFiles.formForCompanyFormation : '',
                                 "filled": createFolderDto.requiredFiles.formForCompanyFormation ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
                             "capitalToBeReleased": {
                                 "name": "Capital à libérer",
                                 "path": createFolderDto.requiredFiles.capitalToBeReleased ? createFolderDto.requiredFiles.capitalToBeReleased : '',
                                 "filled": createFolderDto.requiredFiles.capitalToBeReleased ? true : false,
                                 "editBy": '',
-                                "allowed": false
+                                "allowed": false,
+                                "disallowed": false
                             },
 
                         },
