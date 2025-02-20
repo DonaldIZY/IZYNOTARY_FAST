@@ -193,7 +193,7 @@ export class StepsService {
         ? updateStepDto.contact
         : '225' + updateStepDto.contact
     }`;
-    var message: string;
+    var message: string = "";
 
     if(updateStepDto["subStepStatus"]) {
       if(Object.keys(updateStepDto.uploadedFiles).length > 0) {
