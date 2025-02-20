@@ -9,8 +9,8 @@ const props = defineProps({
     required: true,
   },
   loading: {
-    type: Boolean
-  }
+    type: Boolean,
+  },
 });
 
 const showResultModal = ref(false);
@@ -22,7 +22,7 @@ const showStoppedBtn = ref(true);
 const allowedFilesList = ref([]);
 const disallowedFilesList = ref([]);
 
-console.log('loading : ', loading.value);
+console.log("loading : ", loading.value);
 
 const tab = defineModel();
 
@@ -55,7 +55,7 @@ console.log(
           >Modification de la procédure N°
           <span class="folderNumber">{{ procedureData.folderNum }}</span></span
         >
-        <v-btn icon @click="$emit('closeModal')" size="small" variant="text">
+        <v-btn icon @click="emit('closeModal')" size="small" variant="text">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </v-card-title>
@@ -122,119 +122,194 @@ console.log(
             </v-row>
             <v-row class="scrollable-content">
               <v-col cols="12">
-                <p class="mb-5">Documents</p>
+                <p class="mb-5">
+                  Documents
+                  <span style="font-size: 0.8rem; font-style: italic">
+                    (Veuillez vérifier les documents déposés par le client.)
+                    <v-icon size="small" color="orange">
+                      mdi-alert-circle
+                    </v-icon>
+                  </span>
+                </p>
+
                 <v-row
                   dense
-                  :style="{ gap: '1rem', alignItems: 'center'}"
+                  :style="{
+                    display: 'flex',
+                    gap: '1rem',
+                    alignItems: 'center',
+                  }"
                   v-for="doc in Object.keys(step.documents)"
                 >
-                  <v-file-input
-                    v-if="(step.action == 'Fourniture des pièces' && (!step.documents[doc].allowed && !step.documents[doc].disallowed) && !step.documents[doc].filled) || (step.action == 'Fourniture des pièces' && (step.documents[doc].allowed || step.documents[doc].disallowed) && step.documents[doc].filled) || step.action != 'Fourniture des pièces'"
-                    :name="doc"
-                    :label="step.documents[doc].name"
-                    variant="outlined"
-                    density="compact"
-                    color="primary"
-                    prepend-icon=""
-                    v-model="newProcedureData.documents[doc]"
-                    prepend-inner-icon="mdi-paperclip"
-                    v-on:update:model-value="
-                      (file) => {
-                        // console.log('FILE: ', file);
-                        // const regex = /\.[a-z]{2,}$/;
-                        // const extension = file.name.match(regex)[0];
-                        // const extensionIndex = file.name.match(regex)['index'];
-                        // console.log('extension : ', extension);
-                        // console.log('extensionIndex : ', extensionIndex);
+                  <v-col cols="12" class="d-flex align-center my-1">
+                    <v-file-input
+                      class="mr-2"
+                      v-if="
+                        (step.action == 'Fourniture des pièces' &&
+                          !step.documents[doc].allowed &&
+                          !step.documents[doc].disallowed &&
+                          !step.documents[doc].filled) ||
+                        (step.action == 'Fourniture des pièces' &&
+                          (step.documents[doc].allowed ||
+                            step.documents[doc].disallowed) &&
+                          step.documents[doc].filled) ||
+                        step.action != 'Fourniture des pièces'
+                      "
+                      :name="doc"
+                      :label="step.documents[doc].name"
+                      variant="outlined"
+                      density="compact"
+                      color="primary"
+                      prepend-icon=""
+                      hide-details
+                      v-model="newProcedureData.documents[doc]"
+                      prepend-inner-icon="mdi-paperclip"
+                      v-on:update:model-value="
+                        (file) => {
+                          // console.log('FILE: ', file);
+                          // const regex = /\.[a-z]{2,}$/;
+                          // const extension = file.name.match(regex)[0];
+                          // const extensionIndex = file.name.match(regex)['index'];
+                          // console.log('extension : ', extension);
+                          // console.log('extensionIndex : ', extensionIndex);
 
-                        if(file.name.length > 45) {
-                          // $emit('alert', `le nom du fichier uploadé est long (${file.name.length} caractères), veuillez utiliser un nom de moins de 45 caractères`);
-                          showTextResultModal = `le nom du fichier uploadé est long (${file.name.length} caractères), veuillez utiliser un nom de moins de 45 caractères`;
-                          showTypeResultModal = 'warning';
-                          showResultModal = true;
-                          newProcedureData.documents[doc] = null;
-                        }else{
-                          if (newProcedureData.action == step.action) {
-                            newProcedureData.documents[doc] = file;
+                          if (file.name.length > 45) {
+                            // emit('alert', `le nom du fichier uploadé est long (${file.name.length} caractères), veuillez utiliser un nom de moins de 45 caractères`);
+                            showTextResultModal = `le nom du fichier uploadé est long (${file.name.length} caractères), veuillez utiliser un nom de moins de 45 caractères`;
+                            showTypeResultModal = 'warning';
+                            showResultModal = true;
+                            newProcedureData.documents[doc] = null;
                           } else {
-                            newProcedureData = {
-                              action: step.action,
-                              documents: { [doc]: file },
-                            };
+                            if (newProcedureData.action == step.action) {
+                              newProcedureData.documents[doc] = file;
+                            } else {
+                              newProcedureData = {
+                                action: step.action,
+                                documents: { [doc]: file },
+                              };
+                            }
+                            console.log(
+                              'newProcedureData : ',
+                              newProcedureData
+                            );
                           }
-                          console.log('newProcedureData : ', newProcedureData);
-                        } 
-                      }
-                    "
-                    :disabled="step.action == 'Fourniture des pièces' && (step.documents[doc].allowed || step.documents[doc].disallowed)"
-                  />
-                  <v-chip 
-                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && !step.documents[doc].disallowed && step.documents[doc].filled" 
-                    :style="{marginBottom: '25px'}"
-                  >{{ step.documents[doc].name }}</v-chip>
-                  
-                  <required-document-customized
-                    v-if="
-                      step.documents[doc].path != '' ||
-                      newProcedureData.documents[doc]
-                    "
-                    :label="step.documents[doc].name"
-                    :filePath="API_SERVER_URL + step.documents[doc].path"
-                    :receivedFile="newProcedureData.documents[doc]"
-                  />
+                        }
+                      "
+                      :disabled="
+                        step.action == 'Fourniture des pièces' &&
+                        (step.documents[doc].allowed ||
+                          step.documents[doc].disallowed)
+                      "
+                    />
+                    <v-text-field
+                      v-if="
+                        step.action == 'Fourniture des pièces' &&
+                        !step.documents[doc].allowed &&
+                        !step.documents[doc].disallowed &&
+                        step.documents[doc].filled
+                      "
+                      density="compact"
+                      variant="outlined"
+                      prepend-inner-icon="mdi-paperclip"
+                      class="mr-1"
+                      disabled
+                      hide-details
+                      >{{ step.documents[doc].name }}</v-text-field
+                    >
+                    <!-- Boutons pour la validation -->
+                    <v-btn
+                      v-if="
+                        step.action == 'Fourniture des pièces' &&
+                        !step.documents[doc].allowed &&
+                        !step.documents[doc].disallowed &&
+                        step.documents[doc].filled &&
+                        !disallowedFilesList.includes(doc)
+                      "
+                      color="green"
+                      variant="outlined"
+                      class="text-none mx-1"
+                      density="comfortable"
+                      title="Valider le document"
+                      :icon="
+                        allowedFilesList.includes(doc) ? 'Validé!' : 'mdi-check'
+                      "
+                      @click="
+                        () => {
+                          if (!allowedFilesList.includes(doc)) {
+                            allowedFilesList.push(doc);
+                          }
+                          console.log('allowedFilesList : ', allowedFilesList);
+                        }
+                      "
+                      :disabled="allowedFilesList.includes(doc)"
+                    ></v-btn>
+                    <v-btn
+                      v-if="
+                        step.action == 'Fourniture des pièces' &&
+                        !step.documents[doc].disallowed &&
+                        !step.documents[doc].allowed &&
+                        step.documents[doc].filled &&
+                        !allowedFilesList.includes(doc)
+                      "
+                      class="text-none mr-2"
+                      color="red"
+                      title="Refuser le document"
+                      :icon="
+                        disallowedFilesList.includes(doc)
+                          ? 'Refusé!'
+                          : 'mdi-cancel'
+                      "
+                      variant="outlined"
+                      density="comfortable"
+                      @click="
+                        () => {
+                          if (!disallowedFilesList.includes(doc)) {
+                            disallowedFilesList.push(doc);
+                          }
+                          console.log(
+                            'disallowedFilesList : ',
+                            disallowedFilesList
+                          );
+                        }
+                      "
+                      :disabled="disallowedFilesList.includes(doc)"
+                    ></v-btn>
+                    <required-document-customized
+                      v-if="
+                        step.documents[doc].path != '' ||
+                        newProcedureData.documents[doc]
+                      "
+                      :label="step.documents[doc].name"
+                      :filePath="API_SERVER_URL + step.documents[doc].path"
+                      :receivedFile="newProcedureData.documents[doc]"
+                    />
 
-                  <v-icon v-if="step.action == 'Fourniture des pièces' && step.documents[doc].allowed && !step.documents[doc].disallowed && step.documents[doc].filled" icon="mdi-check-decagram" color="green" size="35"></v-icon>
-                  <v-icon v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].disallowed && step.documents[doc].filled" icon="mdi-close-circle" color="red" size="35"></v-icon>
-                  <!-- <v-switch 
-                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && step.documents[doc].filled"
-                    v-model="allowedFilesList"
-                    color="primary"
-                    :label="allowedFilesList.includes(step.documents[doc].name) ? '✅' : ''"
-                    :value="doc"
-                    hide-details 
-                    inset 
-                    v-on:update:model-value="(val) => {
-                      console.log('allowedFilesList : ', allowedFilesList);
-                    }"
-                  /> -->
-                  <v-btn 
-                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].allowed && !step.documents[doc].disallowed && step.documents[doc].filled && !disallowedFilesList.includes(doc)"
-                    color="green"
-                    :text="allowedFilesList.includes(doc) ? 'Validé!' : 'Valider ?'"
-                    variant="tonal" 
-                    @click="() => {
-                      if(!allowedFilesList.includes(doc)) {
-                        allowedFilesList.push(doc);
-                      }
-                      console.log('allowedFilesList : ', allowedFilesList);
-                    }"
-                    :disabled="allowedFilesList.includes(doc)"
-                  ></v-btn>
-                  <!-- <v-switch 
-                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].disallowed && step.documents[doc].filled"
-                    v-model="disallowedFilesList"
-                    color="primary"
-                    :label="allowedFilesList.includes(step.documents[doc].name) ? '✅' : ''"
-                    :value="doc"
-                    hide-details 
-                    inset 
-                    v-on:update:model-value="(val) => {
-                      console.log('allowedFilesList : ', allowedFilesList);
-                    }"
-                  /> -->
-                  <v-btn 
-                    v-if="step.action == 'Fourniture des pièces' && !step.documents[doc].disallowed && !step.documents[doc].allowed && step.documents[doc].filled && !allowedFilesList.includes(doc)"
-                    color="red"
-                    :text="disallowedFilesList.includes(doc) ? 'Refusé!' : 'Refuser ?'"
-                    variant="tonal" 
-                    @click="() => {
-                      if(!disallowedFilesList.includes(doc)) {
-                        disallowedFilesList.push(doc);
-                      }
-                      console.log('disallowedFilesList : ', disallowedFilesList);
-                    }"
-                    :disabled="disallowedFilesList.includes(doc)"
-                  ></v-btn>
+                    <!-- Icône indiquant le statut -->
+                    <v-icon
+                      v-if="
+                        step.action == 'Fourniture des pièces' &&
+                        step.documents[doc].allowed &&
+                        !step.documents[doc].disallowed &&
+                        step.documents[doc].filled
+                      "
+                      icon="mdi-check-circle"
+                      color="green"
+                      size="small"
+                      class="ml-2"
+                    ></v-icon>
+                    <v-icon
+                      v-if="
+                        step.action == 'Fourniture des pièces' &&
+                        !step.documents[doc].allowed &&
+                        step.documents[doc].disallowed &&
+                        step.documents[doc].filled
+                      "
+                      icon="mdi-close-circle"
+                      color="red"
+                      size="small"
+                      class="ml-2"
+                    ></v-icon>
+                  </v-col>
                 </v-row>
               </v-col>
               <v-col cols="12">
@@ -243,7 +318,7 @@ console.log(
                   style="font-size: 0.8rem; font-style: italic; color: gray"
                   v-if="
                     procedureData.steps.find((elem) => elem.action == tab)
-                      .status == 'En cours'
+                      ?.status == 'En cours'
                   "
                 >
                   Il faut obligatoirement faire un commentaire pour suspendre ou
@@ -275,7 +350,7 @@ console.log(
                   class="suspendedBtn text-none"
                   v-if="
                     procedureData.steps.find((elem) => elem.action == tab)
-                      .status == 'En cours' && showSuspendedBtn
+                      ?.status == 'En cours' && showSuspendedBtn
                   "
                   color="secondary"
                   text="Suspendre l'étape"
@@ -289,13 +364,15 @@ console.log(
                       ) {
                         newProcedureData.subStepStatus = 'Suspendu';
 
-                        for(const key of Object.keys(newProcedureData.documents)) {
-                          if(!newProcedureData.documents[key]) {
+                        for (const key of Object.keys(
+                          newProcedureData.documents
+                        )) {
+                          if (!newProcedureData.documents[key]) {
                             delete newProcedureData.documents[key];
                           }
                         }
 
-                        $emit('submit', {
+                        emit('submit', {
                           ...newProcedureData,
                           contact: procedureData.customer.phone,
                           folderNum: procedureData.folderNum,
@@ -317,7 +394,7 @@ console.log(
                   class="stoppedBtn text-none"
                   v-if="
                     procedureData.steps.find((elem) => elem.action == tab)
-                      .status == 'En cours' && showStoppedBtn
+                      ?.status == 'En cours' && showStoppedBtn
                   "
                   color="primary"
                   text="Arrêter l'étape"
@@ -331,13 +408,15 @@ console.log(
                       ) {
                         newProcedureData.subStepStatus = 'Arrêté';
 
-                        for(const key of Object.keys(newProcedureData.documents)) {
-                          if(!newProcedureData.documents[key]) {
+                        for (const key of Object.keys(
+                          newProcedureData.documents
+                        )) {
+                          if (!newProcedureData.documents[key]) {
                             delete newProcedureData.documents[key];
                           }
                         }
 
-                        $emit('submit', {
+                        emit('submit', {
                           ...newProcedureData,
                           contact: procedureData.customer.phone,
                           folderNum: procedureData.folderNum,
@@ -402,7 +481,7 @@ console.log(
           variant="flat"
           @click="
             () => {
-              $emit('closeModal');
+              emit('closeModal');
               for (const docName of Object.keys(newProcedureData.documents)) {
                 newProcedureData.documents[docName] = null;
               }
@@ -422,13 +501,13 @@ console.log(
               showStoppedBtn = false;
               showSuspendedBtn = false;
 
-              for(const key of Object.keys(newProcedureData.documents)) {
-                if(!newProcedureData.documents[key]) {
+              for (const key of Object.keys(newProcedureData.documents)) {
+                if (!newProcedureData.documents[key]) {
                   delete newProcedureData.documents[key];
                 }
               }
 
-              $emit('submit', {
+              emit('submit', {
                 ...newProcedureData,
                 allowedFilesList: allowedFilesList,
                 disallowedFilesList: disallowedFilesList,
@@ -438,11 +517,14 @@ console.log(
                 id: procedureData.stepId,
               });
               newProcedureData = {};
-              // console.log('loading : ', loading);
             }
           "
-          class="text-none" 
-          :disabled="newProcedureData.status && (showStoppedBtn || showSuspendedBtn) ? true : false"
+          class="text-none"
+          :disabled="
+            newProcedureData.status && (showStoppedBtn || showSuspendedBtn)
+              ? true
+              : false
+          "
         ></v-btn>
         <v-btn
           :loading="loading"
@@ -457,7 +539,7 @@ console.log(
                 newProcedureData.comment.trim() != ''
               ) {
                 newProcedureData.subStepStatus = 'En cours';
-                $emit('submit', {
+                emit('submit', {
                   ...newProcedureData,
                   contact: procedureData.customer.phone,
                   folderNum: procedureData.folderNum,
