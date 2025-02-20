@@ -90,7 +90,7 @@
           class="text-none"
           color="primary"
           variant="flat"
-          text="Enregister"
+          text="Enregistrer"
           :disabled="isSaveDisabled"
           @click="updateProcedure(procedureData)"
         ></v-btn>

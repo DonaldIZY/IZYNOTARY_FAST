@@ -8,7 +8,7 @@
   <div class="w-full d-flex justify-center">
     <div class="w-75 ma-2 center">
       <v-row>
-        <v-col cols="12" sm="6" md="4">
+        <v-col cols="12" sm="6">
           <v-card class="mx-auto rounded-lg hover-card" to="/selling">
             <v-img
               src="~/assets/img/vente.png"
@@ -22,7 +22,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" sm="6" md="4">
+        <v-col cols="12" sm="6">
           <v-card class="mx-auto rounded-lg hover-card" to="/companyFormation">
             <v-img
               src="~/assets/img/constSoc.png"
@@ -36,7 +36,7 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" sm="6" md="4">
+        <!-- <v-col cols="12" sm="6" md="4">
           <v-card
             class="mx-auto rounded-lg hover-card"
             to="/companyModification"
@@ -99,7 +99,7 @@
               crédit
             </v-card-title>
           </v-card>
-        </v-col>
+        </v-col> -->
       </v-row>
     </div>
   </div>

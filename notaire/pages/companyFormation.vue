@@ -128,7 +128,7 @@
             </v-col>
             <v-col cols="12">
               <required-document
-                label="Bail"
+                label="Contrat de bail"
                 v-model:file="lease"
               ></required-document>
             </v-col>
@@ -403,6 +403,10 @@ const handleProcedure = async () => {
     if (requiredFiles[key]) {
       procedureData.append(`${key}`, requiredFiles[key]);
     }
+  }
+
+  for (const key in requiredFiles) {
+    procedureData.get(key);
   }
 
   try {
