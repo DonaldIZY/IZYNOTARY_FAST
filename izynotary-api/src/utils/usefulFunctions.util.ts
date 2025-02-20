@@ -5,7 +5,7 @@ export const translateFieldNameToFrench = function (val: string) {
   } else if (val == "criminalRecord") {
     return "Casier judiciaire";
   } else if (val == "lease") {
-    return "Bail";
+    return "Contrat de bail";
   } else if (val == "sketchOfGeoLocation") {
     return "Croquis de la situation géographique";
   } else if (val == "formForCompanyFormation") {
@@ -13,7 +13,7 @@ export const translateFieldNameToFrench = function (val: string) {
   } else if (val == "capitalToBeReleased") {
     return "Capital à libérer";
   } else if (val == "writingTheStatus") {
-    return "Rédaction des status";
+    return "Rédaction des statuts";
   } else if (val == "paymentOfFees") {
     return "Règlement des frais";
   } else if (val == "documentsSigned") {
