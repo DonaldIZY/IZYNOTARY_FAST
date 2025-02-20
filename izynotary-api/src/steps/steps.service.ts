@@ -87,6 +87,13 @@ export class StepsService {
         step.steps[searchedStepIndex].documents[key].path =
           updateStepDto.uploadedFiles[key]; //to change the path of the doc in the database, each key is a document name
         step.steps[searchedStepIndex].documents[key].filled = true;
+        if(updateStepDto["sender"] && updateStepDto["sender"] == "notairesquad") { //Don't change this until you change the front change (the sender key in formdata)
+          step.steps[searchedStepIndex].documents[key].allowed = true;
+        }
+        if(step.steps[searchedStepIndex].documents[key].disallowed) {
+          step.steps[searchedStepIndex].documents[key].disallowed = false;
+        }
+        
       }
 
       var count = 0;
@@ -215,8 +222,19 @@ Numéro : ${updateStepDto.folderNum}.
 ${updateStepDto.documents.length > 1 ? 'vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'votre documnent ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
     }
 
-    
+    if(updateStepDto.allowedFilesList && updateStepDto.allowedFilesList.length > 0) {
+      message += 
+`
+Les documents ${updateStepDto.allowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ont été validés.`;
+    }
 
+    if(updateStepDto.disallowedFilesList && updateStepDto.disallowedFilesList.length > 0) {
+      message += 
+`
+Les documents ${updateStepDto.disallowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ont été refusés, veuillez en fournir d'autres.`;
+    }
+
+  
     var encodedMessage = encodeURIComponent(message);
     const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 

@@ -390,6 +390,7 @@ const handleProcedure = async () => {
   procedureData.append("customerId", selectedCustomer.value.ID);
   procedureData.append("assignedToId", selectedUser.value.ID);
 
+
   const requiredFiles = {
     customerCNI: customerCNI.value,
     criminalRecord: criminalRecord.value,
@@ -402,8 +403,12 @@ const handleProcedure = async () => {
   for (const key in requiredFiles) {
     if (requiredFiles[key]) {
       procedureData.append(`${key}`, requiredFiles[key]);
+      
     }
   }
+
+  console.log("key value : ", procedureData.entries());
+
 
   try {
     const data = await $fetch(API_SERVER_URL + `/folders/companyFormation`, {

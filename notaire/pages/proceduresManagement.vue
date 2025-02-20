@@ -473,6 +473,7 @@ const updateProcedure = async (val) => {
     dataToSend.append("folderNum", val.folderNum);
     dataToSend.append("procedureType", val.procedureType);
     dataToSend.append("contact", val.contact);
+    dataToSend.append("sender", "notairesquad");
 
     if(val.allowedFilesList && val.allowedFilesList.length > 0) {
       for (const fileKey of Object.keys(val.allowedFilesList)) {
