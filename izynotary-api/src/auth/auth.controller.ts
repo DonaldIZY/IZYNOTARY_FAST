@@ -67,10 +67,10 @@ export class AuthController {
         return req.user; // Retourne les infos utilisateur
     }
 
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard_customer)
     @Get('me/customer')
     getProfileCustomer(@Req() req: any) {
-        return req.customer; // Retourne les infos utilisateur
+        return req.user; // Retourne les infos client
     }
 
 }

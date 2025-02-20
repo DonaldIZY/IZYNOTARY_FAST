@@ -60,7 +60,10 @@
               >{{ item.STATUS }}</v-chip
             >
           </td>
-          <td style="text-align: center">
+          <td
+            style="display: flex; justify-content: center; align-items: center"
+          >
+            <modal-edit-file-client :id="item.id"></modal-edit-file-client>
             <v-btn
               class="actionBtn"
               title="Voir les détails"
@@ -101,7 +104,7 @@
 <script setup>
 import { useCardStore } from "~/stores/cardStore";
 import { useSelectedDataStore } from "~/stores/selectedDataStore";
-const loading = ref(true);
+const loading = ref(false);
 
 const receiveDatas = ref([]);
 const companyFormations = ref([]);
@@ -192,6 +195,10 @@ const headers = ref([
 .ga-4 {
   margin-top: 1.5rem;
   margin-bottom: 0.5rem;
+}
+
+.actionBtn {
+  margin: 0 0.3rem;
 }
 
 .no-data-container {

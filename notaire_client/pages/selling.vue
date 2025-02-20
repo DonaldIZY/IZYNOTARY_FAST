@@ -57,7 +57,10 @@
               >{{ item.STATUS }}</v-chip
             >
           </td>
-          <td style="text-align: center">
+          <td
+            style="display: flex; justify-content: center; align-items: center"
+          >
+            <modal-edit-file-client :id="item.id"></modal-edit-file-client>
             <v-btn
               class="actionBtn"
               title="Voir les détails"
