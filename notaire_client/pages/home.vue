@@ -88,7 +88,6 @@ onMounted(async () => {
       (procedure) => procedure.procedureType == "Vente"
     );
   } catch (err) {
-    //error.value = err.message;
     console.error(err);
   }
 });
