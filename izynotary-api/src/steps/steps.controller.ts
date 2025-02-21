@@ -93,7 +93,7 @@ export class StepsController {
     console.log("ID : ", id);
     console.log('FILES : ', files);
 
-    if (files.length > 0) {
+    if (files?.length > 0) {
       // Construction de l'objet uploadedFiles avec les chemins des fichiers
       const uploadedFiles = {};
       var filenameList = [];
