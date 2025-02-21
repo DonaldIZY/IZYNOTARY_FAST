@@ -144,7 +144,7 @@ export class StepsService {
             if (documentsList.every(elem => elem["filled"] == true)) {
               step.steps[searchedStepIndex].status = "Terminé";
               //WHEN A STEP HAS A STATUS OF DONE (Terminé), THE NEXT SHOULD HAVE A STATUS OF CURRENT (En cours)
-              if (searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminé") {
+              if (searchedStepIndex < step.steps?.length - 1 && step.steps[searchedStepIndex].status == "Terminé") {
                 step.steps[searchedStepIndex + 1].status = "En cours";
               }
             } else {
@@ -172,7 +172,7 @@ export class StepsService {
       if (Object.values(step.steps[searchedStepIndex].documents).every(subStep => subStep["filled"] == true)) {
         step.steps[searchedStepIndex].status = "Terminé";
         //WHEN A STEP HAS A STATUS OF DONE (Terminé), THE NEXT SHOULD HAVE A STATUS OF CURRENT (En cours)
-        if (searchedStepIndex < step.steps.length - 1 && step.steps[searchedStepIndex].status == "Terminé") {
+        if (searchedStepIndex < step.steps?.length - 1 && step.steps[searchedStepIndex].status == "Terminé") {
           step.steps[searchedStepIndex + 1].status = "En cours";
         }
       }
@@ -210,10 +210,10 @@ Numéro : ${updateStepDto.folderNum}.`;
 
     if (!['fourniture des pièces', 'signature des actes'].includes(updateStepDto['action'].toLowerCase())) {
       if (updateStepDto["subStepStatus"]) {
-        if (Object.keys(updateStepDto.uploadedFiles).length > 0) {
+        if (Object.keys(updateStepDto.uploadedFiles)?.length > 0) {
           message +=
             `
-${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre document ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).
+${updateStepDto.documents?.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre document ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).
 La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
         } else {
           message +=
@@ -223,13 +223,13 @@ La procédure est désormais ${updateStepDto["subStepStatus"]}.`;
       } else {
         message +=
           `
-${updateStepDto.documents.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre document ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
+${updateStepDto.documents?.length > 1 ? 'Vos documents ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem)).join(', ') + ' sont ' : 'Votre document ' + updateStepDto.documents.map((elem: string) => translateFieldNameToFrench(elem))[0] + ' est '} maintenant disponible(s).`;
       }
     }
 
     if (updateStepDto['action'].toLowerCase() == "signature des actes") {
       if (updateStepDto["subStepStatus"]) {
-        if (Object.keys(updateStepDto.uploadedFiles).length > 0) {
+        if (Object.keys(updateStepDto.uploadedFiles)?.length > 0) {
           message +=
             `
 Vos actes sont maintenant disponibles, veuillez vous rendre chez le notaire pour procéder à la signature.
@@ -255,14 +255,14 @@ ${updateStepDto.allowedFilesList?.length > 1 ? 'Les documents' : 'Le document'} 
     if (updateStepDto.disallowedFilesList && updateStepDto.disallowedFilesList?.length > 0) {
       message +=
         `
-${updateStepDto.disallowedFilesList?.length > 1 ? 'Les documents' : 'Le document'} ${updateStepDto.disallowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ${updateStepDto.disallowedFilesList?.length > 1 ? 'ont été refusés' : 'a été refusé'}, veuillez en fournir ${updateStepDto.disallowedFilesList.length > 1 ? "d'autres" : 'un autre'}.`;
+${updateStepDto.disallowedFilesList?.length > 1 ? 'Les documents' : 'Le document'} ${updateStepDto.disallowedFilesList.map((elem: string) => translateFieldNameToFrench(elem)).join(', ')} ${updateStepDto.disallowedFilesList?.length > 1 ? 'ont été refusés' : 'a été refusé'}, veuillez en fournir ${updateStepDto.disallowedFilesList?.length > 1 ? "d'autres" : 'un autre'}.`;
     }
 
 
     var encodedMessage = encodeURIComponent(message);
     const smsUrl = `http://smspro.svam-ci.com:8080/svam/mmg/Outgoing?username=${username}&password=${userPassword}&apikey=${apiKey}&src=${sender}&dst=${receiver}&text=${encodedMessage}&refnumber=parcAutoPAC&type=web`;
 
-    if ((updateStepDto['action'].toLowerCase() == "fourniture des pièces" && (updateStepDto.allowedFilesList?.length > 0 || updateStepDto.disallowedFilesList?.length > 0 || updateStepDto["subStepStatus"])) || (updateStepDto['action'].toLowerCase() != "fourniture des pièces" && (Object.keys(updateStepDto.uploadedFiles).length > 0 || updateStepDto["subStepStatus"]))) {
+    if ((updateStepDto['action'].toLowerCase() == "fourniture des pièces" && (updateStepDto.allowedFilesList?.length > 0 || updateStepDto.disallowedFilesList?.length > 0 || updateStepDto["subStepStatus"])) || (updateStepDto['action'].toLowerCase() != "fourniture des pièces" && (Object.keys(updateStepDto.uploadedFiles)?.length > 0 || updateStepDto["subStepStatus"]))) {
       let a = await fetch(smsUrl);
       console.log('sms response : ', a);
     }

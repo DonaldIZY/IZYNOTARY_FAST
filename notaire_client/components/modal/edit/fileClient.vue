@@ -35,7 +35,7 @@
       <v-card-text class="py-1 mb-3 scrollable-content">
         <v-row v-for="(doc, key) in stepList[0].documents" :key="key">
           <v-col cols="12" class="d-flex align-center">
-            <p>{{ doc }}</p>
+            <!-- <p>{{ doc }}</p> -->
             <v-file-input
               class="mr-2"
               :label="doc.name"
