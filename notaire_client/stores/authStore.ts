@@ -21,9 +21,6 @@ export const useAuthStore = defineStore('auth', {
                     this.customerEmail = data.customerEmail;
                     this.isAuthenticated = true;
                 }
-
-                console.log("Data customer : ", data);
-
             } catch (error) {
                 console.error('Erreur lors de la récupération des infos client', error);
                 this.clearCustomer();
@@ -42,9 +39,11 @@ export const useAuthStore = defineStore('auth', {
                 if (data) {
                     await this.fetchCustomer(); // Récupère les infos utilisateur après connexion
                     router.push("/home");
+                    return { success: true, message: "Connexion réussie" };
                 }
             } catch (error) {
                 console.error('Erreur de connexion', error);
+                return { success: false, message: error?.data?.message || "Une erreur est survenue lors de la connexion." };
             }
         },
 

@@ -44,31 +44,38 @@
             <img
               :src="previewContent ?? filePath /*testFilePath*/"
               alt="Prévisualisation"
-              style="width: 150px"
+              style="width: 100%"
             />
           </template>
           <template v-else-if="fileType === 'pdf'">
-
-            <!-- <iframe
+            <iframe
               :src="previewContent ?? filePath"
-              style="width: 100%; height: 400px; border: 3px solid red"
+              style="width: 100%; height: 30rem; border: 1px solid gray"
               frameborder="0"
-            ></iframe> -->
-            <v-btn variant="tonal" >
+            ></iframe>
+            <v-btn variant="elevated" class="my-2 mx-auto">
               <a
-              :href="previewContent ?? filePath /*previewContent*/"
-              download target="_blank"
-              class="v-btn v-btn--outlined primary text-none"
-            >
-              Cliquer pour voir le fichier
-            </a>
+                :href="previewContent ?? filePath /*previewContent*/"
+                download
+                target="_blank"
+                class="v-btn v-btn--outlined text-none"
+              >
+                Cliquer ici pour visualiser le fichier dans un autre onglet
+              </a>
             </v-btn>
           </template>
           <template v-else-if="fileType === 'txt'">
             <pre
               v-if="previewContent"
-              style="white-space: pre-wrap; max-height: 400px; overflow: auto"
-            >{{ previewContent }}</pre>
+              style="
+                white-space: pre-wrap;
+                height: 24rem;
+                border: 1px solid gray;
+                padding: 1rem;
+                overflow: auto;
+              "
+              >{{ previewContent }}</pre
+            >
             <iframe
               v-else
               :src="filePath"
@@ -80,7 +87,7 @@
             <!-- <div v-html="previewContent"></div> -->
             <iframe
               :src="previewContent ?? filePath"
-              style="width: 100%; height: 400px"
+              style="width: 100%; height: 30rem"
               frameborder="0"
             ></iframe>
           </template>
@@ -212,8 +219,8 @@ const generateFile = async () => {
   //   previewContent.value = await result.text();
   // }
 
-  console.log("fileExtension : ", fileExtension);
-  console.log("fileType : ", fileType.value);
+  // console.log("fileExtension : ", fileExtension);
+  // console.log("fileType : ", fileType.value);
 
   /*let result = await fetch(props.filePath);
   let resultToBlob = await result.blob();

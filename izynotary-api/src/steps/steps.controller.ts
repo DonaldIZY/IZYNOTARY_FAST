@@ -1,4 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles} from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-var */
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-wrapper-object-types */
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { AnyFilesInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 import { StepsService } from './steps.service';
 import { CreateStepDto } from './dto/create-step.dto';
@@ -7,18 +13,18 @@ import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as fs from 'fs';
 
-function formatProcedureType (val: String) {
+function formatProcedureType(val: String) {
   let result: String;
 
-  if(val.toLowerCase() == "constitution de société") {
+  if (val.toLowerCase() == "constitution de société") {
     result = "companyFormation";
-  }else if(val.toLowerCase() == "modification de société") {
+  } else if (val.toLowerCase() == "modification de société") {
     result = "companyModification";
-  }else if(val.toLowerCase() == "vente") {
+  } else if (val.toLowerCase() == "vente") {
     result = "selling";
-  }else if(val.toLowerCase() == "succession de biens mobiliers") {
+  } else if (val.toLowerCase() == "succession de biens mobiliers") {
     result = "transferOfMovableProperty";
-  }else if(val.toLowerCase() == "succession de biens immobiliers") {
+  } else if (val.toLowerCase() == "succession de biens immobiliers") {
     result = "transferOfRealEstate";
   }/*else if(val.toLowerCase() == "crédit") {
 
@@ -29,7 +35,7 @@ function formatProcedureType (val: String) {
 
 @Controller('steps')
 export class StepsController {
-  constructor(private readonly stepsService: StepsService) {}
+  constructor(private readonly stepsService: StepsService) { }
 
   @Post()
   async create(@Body() createStepDto: CreateStepDto) {
@@ -57,7 +63,7 @@ export class StepsController {
       storage: diskStorage({
         destination: (req, file, cb) => {
 
-          
+
 
           // req.body.procedureType = formatProcedureType(req.body.procedureType);
 
@@ -78,16 +84,16 @@ export class StepsController {
       }),
     }),
   )
-  
+
   async updateTwo(
     @Param('id') id: string,
     @UploadedFiles() files: Express.Multer.File[],
     @Body() updateStepDto: UpdateStepDto,
   ) {
     console.log("ID : ", id);
-    console.log('FILES : ',files);
+    console.log('FILES : ', files);
 
-    if(files.length > 0) {
+    if (files.length > 0) {
       // Construction de l'objet uploadedFiles avec les chemins des fichiers
       const uploadedFiles = {};
       var filenameList = [];
@@ -99,16 +105,16 @@ export class StepsController {
       // Assignation du champ uploadedFiles au DTO
       updateStepDto.uploadedFiles = uploadedFiles;
       updateStepDto.documents = filenameList;
-    }else{
+    } else {
       updateStepDto.uploadedFiles = {};
-      updateStepDto.documents =  [];
+      updateStepDto.documents = [];
     }
 
-    if(updateStepDto.allowedFilesList && !(updateStepDto.allowedFilesList instanceof Array)) {
+    if (updateStepDto.allowedFilesList && !(updateStepDto.allowedFilesList instanceof Array)) {
       updateStepDto.allowedFilesList = [updateStepDto.allowedFilesList];
     }
 
-    if(updateStepDto.disallowedFilesList && !(updateStepDto.disallowedFilesList instanceof Array)) {
+    if (updateStepDto.disallowedFilesList && !(updateStepDto.disallowedFilesList instanceof Array)) {
       updateStepDto.disallowedFilesList = [updateStepDto.disallowedFilesList];
     }
 

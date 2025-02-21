@@ -119,11 +119,8 @@ const onSubmit = async () => {
       showTypeResultModal.value = "error";
       showResultModal.value = true;
     }
-
-    console.log("response : ", response);
   } catch (error) {
     console.error("Erreur de connexion :", error);
-    // alert("Échec de la connexion. Veuillez vérifier vos informations.");
     showTextResultModal.value =
       "Échec de la connexion. Veuillez vérifier vos informations.";
     showTypeResultModal.value = "error";
