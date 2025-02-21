@@ -574,23 +574,33 @@ const showTextResultDeleteModal = ref("");
 const showTypeResultDeleteModal = ref("");
 
 const deleteProcedure = async (id) => {
-  console.log(id);
   try {
     await $fetch(API_SERVER_URL + `/folders/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
-    procedures.value = [];
-    selectedProcedure.value = null;
-    showTextResultDeleteModal.value = "Procédure supprimée avec succès !";
-    showTypeResultDeleteModal.value = "success";
-    showResultDeleteModal.value = true;
+    // procedures.value = [];
+    if (response.status === 200) {
+      showTextResultDeleteModal.value = "Procédure supprimée avec succès.";
+      showTypeResultDeleteModal.value = "success";
+      openResultDeleteModal.value = true;
+      loadProcedures();
+    } else {
+      showTextResultDeleteModal.value =
+        "Une erreur est survenue lors de la suppression.";
+      showTypeResultDeleteModal.value = "error";
+      openResultDeleteModal.value = true;
+    }
   } catch (err) {
     console.error("Erreur lors de la suppression de la procédure :", err);
     showTextResultDeleteModal.value =
       "Erreur lors de la suppression de la procédure.";
     showTypeResultDeleteModal.value = "error";
+    // showResultDeleteModal.value = true;
+  } finally {
+    openConf.value = false;
     showResultDeleteModal.value = true;
+    selectedProcedure.value = null;
   }
 };
 

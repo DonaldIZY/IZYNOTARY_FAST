@@ -118,33 +118,79 @@ const redirectRegardingProcedure = (procedure) => {
   return "/companyIncorporationDetails";
 };
 
-onMounted(() => {
+const store = useCardStore();
+const authStore = useAuthStore();
+const companyFormationFolders = ref([]);
+
+// watchEffect(async () => {
+//   try {
+//     const customerFetch = await $fetch(
+//       API_SERVER_URL + `/customers/${authStore.customerId}`
+//     );
+//     companyFormationFolders.value = customerFetch.folders.filter(
+//       (procedure) => procedure.procedureType == "Constitution de société"
+//     );
+//     console.log("customerFetch : ", companyFormationFolders.value);
+//     if (companyFormationFolders.value.length > 0) {
+//       store.setSelectedData(companyFormationFolders.value);
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
+
+onMounted(async () => {
+  loading.value = true;
   try {
-    const store = useCardStore();
+    const customerFetch = await $fetch(
+      API_SERVER_URL + `/customers/${authStore.customerId}`
+    );
+    companyFormationFolders.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Constitution de société"
+    );
+
+    // Mise à jour automatique du store avec les nouvelles données
+    store.setSelectedData(companyFormationFolders.value);
+
+    // Peupler companyFormations après la mise à jour du store
     receiveDatas.value = store.selectedData;
 
-    watchEffect(() => {
-      if (receiveDatas.value) {
-        receiveDatas.value.forEach((procedure) => {
-          companyFormations.value.push({
-            id: procedure.id,
-            NUM: procedure.folderNum,
-            CREATE_AT: procedure.createAt.toString(),
-            SUPPLY_OF_PARTS: procedure.step.steps[0]?.status,
-            WRITING_DEED_OF_SALE: procedure.step.steps[1].status,
-            SETTLEMENT_OF_FEES: procedure.step.steps[2].status,
-            SIGNATURE_OF_ACTS: procedure.step.steps[3].status,
-            SIGNED_DOCUMENT_DEPOSITED: procedure.step.steps[4].status,
-            DELIVERABLES: procedure.step.steps[5].status,
-            PERCENTAGE: parseFloat(procedure.progression),
-            STATUS: procedure.status,
-          });
-        });
-        loading.value = false;
-      }
-    });
+    if (receiveDatas.value) {
+      companyFormations.value = receiveDatas.value.map((procedure) => ({
+        id: procedure.id,
+        NUM: procedure.folderNum,
+        CREATE_AT: procedure.createAt.toString(),
+        SUPPLY_OF_PARTS: procedure.step.steps[0]?.status,
+        WRITING_DEED_OF_SALE: procedure.step.steps[1]?.status,
+        SETTLEMENT_OF_FEES: procedure.step.steps[2]?.status,
+        SIGNATURE_OF_ACTS: procedure.step.steps[3]?.status,
+        SIGNED_DOCUMENT_DEPOSITED: procedure.step.steps[4]?.status,
+        DELIVERABLES: procedure.step.steps[5]?.status,
+        PERCENTAGE: parseFloat(procedure.progression),
+        STATUS: procedure.status,
+      }));
+    }
+
+    // if (receiveDatas.value) {
+    //   receiveDatas.value.forEach((procedure) => {
+    //     companyFormations.value.push({
+    //       id: procedure.id,
+    //       NUM: procedure.folderNum,
+    //       CREATE_AT: procedure.createAt.toString(),
+    //       SUPPLY_OF_PARTS: procedure.step.steps[0]?.status,
+    //       WRITING_DEED_OF_SALE: procedure.step.steps[1].status,
+    //       SETTLEMENT_OF_FEES: procedure.step.steps[2].status,
+    //       SIGNATURE_OF_ACTS: procedure.step.steps[3].status,
+    //       SIGNED_DOCUMENT_DEPOSITED: procedure.step.steps[4].status,
+    //       DELIVERABLES: procedure.step.steps[5].status,
+    //       PERCENTAGE: parseFloat(procedure.progression),
+    //       STATUS: procedure.status,
+    //     });
+    //   });
   } catch (error) {
     console.error("Erreur de parsing des données :", error);
+  } finally {
+    loading.value = false;
   }
 });
 

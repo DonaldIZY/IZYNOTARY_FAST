@@ -87,6 +87,39 @@ const statusColor = computed(() => {
       return "#AD1919"; // Couleur par défaut
   }
 });
+
+const store = useCardStore();
+const authStore = useAuthStore();
+const companyFormationFolders = ref([]);
+
+watchEffect(async () => {
+  try {
+    const customerFetch = await $fetch(
+      API_SERVER_URL + `/customers/${authStore.customerId}`
+    );
+    console.log("customerFetch : ", customerFetch);
+    companyFormationFolders.value = customerFetch.folders.filter(
+      (procedure) => procedure.procedureType == "Constitution de société"
+    );
+  } catch (err) {
+    console.error(err);
+  }
+
+  store.selectedData(companyFormationFolders);
+  // onMounted(async () => {
+  // try {
+  //   const customerFetch = await $fetch(
+  //     API_SERVER_URL + `/customers/${customerId}`
+  //   );
+
+  //   console.log("datas : ", customerFetch);
+
+  // } catch (err) {
+  //   console.error(err);
+  // }
+  // });
+  loadProcedures(); // Recharger les utilisateurs quand le modal est fermé
+});
 </script>
 
 <template>

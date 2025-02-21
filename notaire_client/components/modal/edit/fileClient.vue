@@ -35,6 +35,7 @@
       <v-card-text class="py-1 mb-3 scrollable-content">
         <v-row v-for="(doc, key) in stepList[0].documents" :key="key">
           <v-col cols="12" class="d-flex align-center">
+            <p>{{ doc }}</p>
             <v-file-input
               class="mr-2"
               :label="doc.name"
@@ -42,13 +43,23 @@
               prepend-icon=""
               prepend-inner-icon="mdi-paperclip"
               variant="outlined"
-              :show-size="doc.path !== ''"
-              :disabled="doc.path && doc.allowed ? true : false"
+              :show-size="doc.path !== '' && !doc.filled"
+              :disabled="
+                doc.path && doc.allowed
+                  ? true
+                  : (doc.path !== '') & !doc.allowed & !doc.disallowed
+                  ? true
+                  : false
+              "
               density="compact"
               hide-details
               @update:modelValue="handleFileChange($event, key)"
             ></v-file-input>
             <v-btn
+              v-if="
+                (!doc.disallowed && !doc.allowed && doc.path == '') ||
+                (typeof doc.path === 'object' && doc.path !== null)
+              "
               class="text-none mr-2"
               size="small"
               variant="tonal"
@@ -62,14 +73,41 @@
               "
               >Aperçu
             </v-btn>
+            <required-document-customized
+              class="my-2 mr-2"
+              v-if="
+                newProcedureData.documents[doc] ||
+                typeof doc.path !== 'object' ||
+                doc.path === null
+              "
+              :label="doc.name"
+              :filePath="API_SERVER_URL + doc.path"
+              :receivedFile="newProcedureData.documents[doc]"
+            />
             <v-chip
               size="x-small"
               rounded="md"
               variant="flat"
               label
-              :color="doc.allowed ? 'green' : doc.disallowed ? 'red' : 'white'"
+              :color="
+                doc.allowed
+                  ? 'green'
+                  : doc.disallowed
+                  ? 'red'
+                  : (doc.path !== '') & !doc.allowed & !doc.disallowed
+                  ? 'yellow'
+                  : 'white'
+              "
             >
-              {{ doc.allowed ? "Validé" : doc.disallowed ? "Refusé" : "" }}
+              {{
+                doc.allowed
+                  ? "Validé"
+                  : doc.disallowed
+                  ? "Refusé"
+                  : (doc.path !== "") & !doc.allowed & !doc.disallowed
+                  ? "Traitement en cours"
+                  : ""
+              }}
             </v-chip>
           </v-col>
         </v-row>
@@ -92,13 +130,15 @@
           variant="flat"
           text="Enregistrer"
           :disabled="isSaveDisabled"
-          @click="updateProcedure({
-                          ...newProcedureData,
-                          contact: procedureData.customer.phone,
-                          folderNum: procedureData.folderNum,
-                          procedureType: procedureData.procedureType,
-                          id: procedureData.step.id,
-                        })" 
+          @click="
+            updateProcedure({
+              ...newProcedureData,
+              contact: procedureData.customer.phone,
+              folderNum: procedureData.folderNum,
+              procedureType: procedureData.procedureType,
+              id: procedureData.step.id,
+            })
+          "
         ></v-btn>
       </v-card-actions>
     </v-card>
@@ -118,13 +158,13 @@
           <img
             :src="previewContent ?? filePath /*testFilePath*/"
             alt="Prévisualisation"
-            style="width: 150px"
+            style="width: 100%"
           />
         </template>
         <template v-else-if="fileType === 'pdf'">
           <iframe
             :src="previewContent ?? filePath"
-            style="width: 100%; height: 400px; border: 3px solid red"
+            style="width: 100%; height: 30rem; border: 1px solid gray"
             frameborder="0"
           ></iframe>
           <!-- <v-btn variant="tonal">
@@ -141,7 +181,13 @@
         <template v-else-if="fileType === 'txt'">
           <pre
             v-if="previewContent"
-            style="white-space: pre-wrap; max-height: 400px; overflow: auto"
+            style="
+              white-space: pre-wrap;
+              height: 24rem;
+              border: 1px solid gray;
+              padding: 1rem;
+              overflow: auto;
+            "
             >{{ previewContent }}</pre
           >
           <iframe
@@ -187,10 +233,11 @@
       >
     </v-card>
   </v-dialog>
-  <result-modal-validation
+  <result-modal-redirection
     :text="showTextResultModifyModal"
     :open="showResultModifyModal"
     :type="showTypeResultModifyModal"
+    destination="/companyFormation"
     @update:open="showResultModifyModal = $event"
   />
 </template>
@@ -216,14 +263,13 @@ const handleFileChange = (file, key) => {
     selectedFile.value = file;
 
     console.log("file : ", file);
-    if(!newProcedureData.action) {
+    if (!newProcedureData.action) {
       newProcedureData.action = procedureData.value.step.steps[0].action;
     }
     newProcedureData.documents[key] = file;
     console.log("newProcedureData : ", newProcedureData);
     console.log("procedureData : ", procedureData.value);
   }
-
 };
 
 const open = ref(false);
@@ -276,15 +322,11 @@ const generateFile = async (file) => {
       } else {
         previewContent.value = "Type de fichier non supporté.";
       }
-      console.log("previewContent : ", previewContent.value);
     } catch (error) {
       console.error("Erreur lors de la prévisualisation du fichier :", error);
       previewContent.value = "Erreur lors du traitement du fichier.";
     }
   }
-
-  console.log("fileExtension : ", fileExtension);
-  console.log("fileType : ", fileType.value);
 };
 
 const loadProcedure = async () => {
@@ -313,7 +355,7 @@ watchEffect(() => {
 });
 
 const newProcedureData = reactive({
-  action: null,//computed(() => procedureData.value?.step?.steps?.[0]?.action || ""),
+  action: null, //computed(() => procedureData.value?.step?.steps?.[0]?.action || ""),
   documents: {},
 });
 
@@ -346,7 +388,6 @@ const updateProcedure = async (val) => {
     dataToSend.append("folderNum", val.folderNum);
     dataToSend.append("procedureType", val.procedureType);
     dataToSend.append("contact", val.contact);
-
 
     if (val.documents && Object.keys(val.documents).length > 0) {
       for (const fileKey of Object.keys(val.documents)) {
